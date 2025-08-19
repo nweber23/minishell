@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 17:59:03 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/19 18:49:04 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef enum s_token_type
 	APPEND,
 	INFILE,
 	OUTFILE,
-	AND_IF,
+	AND,
 	OR,
 	PARENTHESIS,
 }	t_token_type;
@@ -63,5 +63,7 @@ t_token_type	get_type(char *str);
 /*                  TOKENIZER                    */
 /*************************************************/
 void			create_token(t_shell_data *shell, char *str);
+int				or_handling(t_shell_data *shell, char *str, int i);
+int				and_handling(t_shell_data *shell, char *str, int i);
 
 #endif

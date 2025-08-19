@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 16:18:33 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 17:59:19 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/19 18:24:09 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,17 @@ void	set_token_position(t_list *list)
 			token->position = i;
 		list = list->next;
 		i++;
+	}
+}
+
+void	free_token(void *content)
+{
+	t_token	*token;
+
+	token = (t_token *)content;
+	if (token)
+	{
+		free(token->value);
+		free(token);
 	}
 }
