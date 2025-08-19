@@ -1,37 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   handling.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/19 16:18:33 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 17:59:19 by nweber           ###   ########.fr       */
+/*   Created: 2025/08/19 17:53:56 by nweber            #+#    #+#             */
+/*   Updated: 2025/08/19 17:54:04 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_token_type	get_type(char *str)
-{
-	if (ft_strcmp(str, "|"))
-		return (PIPE);
-	else
-		return (WORD);
-}
-
-void	set_token_position(t_list *list)
-{
-	int		i;
-	t_token	*token;
-
-	i = 0;
-	while (list)
-	{
-		token = (t_token *)list->content;
-		if (token)
-			token->position = i;
-		list = list->next;
-		i++;
-	}
-}
