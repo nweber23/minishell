@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_functions.c                                     :+:      :+:    :+:   */
+/*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:53:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 16:16:14 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/19 17:30:27 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ bool	is_meta(char c)
 	char	*charset;
 	int		i;
 
+	i = 0;
 	charset = "<>|()";
 	while (charset[i])
 	{
@@ -50,7 +51,7 @@ bool	is_expandable(char	*token)
 	quotes = false;
 	while (is_space(token[i]))
 		i++;
-	if (token[i] == NULL)
+	if (token[i] == '\0')
 		return (false);
 	while (token[i])
 	{
@@ -60,7 +61,7 @@ bool	is_expandable(char	*token)
 			i++;
 			continue ;
 		}
-		if (token[i] == '$' && (token[i] == '?' || token[i + 1] == \
+		if (token[i] == '$' && (token[i + 1] == '?' || \
 			ft_isalnum(token[i + 1])))
 			return (true);
 		if (!quotes && (is_space(token[i]) || is_meta(token[i])))
