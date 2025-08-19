@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 10:03:08 by nweber           ###   ########.fr       */
+/*   Created: 2025/07/05 10:38:07 by nweber            #+#    #+#             */
+/*   Updated: 2025/07/07 12:50:33 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include "../libft/libft.h"
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <stdbool.h>
-# include <fcntl.h>
-# include <sys/wait.h>
+// deletes and frees the given node with del and free
+void	ft_lstclear(t_list **lst, void (*del)(void*))
+{
+	t_list	*current;
+	t_list	*next_node;
 
-#endif
+	if (!lst || !del)
+		return ;
+	current = *lst;
+	while (current)
+	{
+		next_node = current->next;
+		ft_lstdelone(current, del);
+		current = next_node;
+	}
+	*lst = NULL;
+}
