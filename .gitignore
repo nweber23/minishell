@@ -1,6 +1,6 @@
 *.out
 *.a
 *.o
-DS_Store
+.DS_Store
 .vscode
 minishell
