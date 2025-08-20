@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/20 10:09:05 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/20 11:16:05 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ typedef struct s_token
 /*************************************************/
 /*                    Utils                      */
 /*************************************************/
+int				check_quotes(t_shell_data *shell, \
+	char **value, char *str, int i);
+int				join_quotes(t_shell_data *shell, char **value, char *str, int i);
+int				join_no_quotes(t_shell_data *shell, char **value, char *str, int i);
 bool			is_quote(char c);
 bool			is_space(char c);
 bool			is_meta(char c);

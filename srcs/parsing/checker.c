@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:53:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 17:30:27 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/20 11:05:52 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_quote(char c)
 {
-	if (c == '"')
+	if (c == '"' || c == '\'')
 		return (true);
 	return (false);
 }
