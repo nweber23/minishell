@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 17:53:56 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/20 11:04:29 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/20 11:40:48 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,13 @@ int	or_handling(t_shell_data *shell, char *str, int i)
 	value = ft_strdup("||");
 	i += 2;
 	if (!value)
-		return (error_malloc("or_handling"));
+		error_malloc("or_handling", shell);
 	token = malloc(sizeof(t_token));
 	if (!token)
-		return (free(value), error_malloc("or_handling"));
+	{
+		free(value);
+		error_malloc("or_handling", shell);
+	}
 	token->value = value;
 	token->state = GENERAL;
 	token->type = OR;
@@ -41,10 +44,13 @@ int	and_handling(t_shell_data *shell, char *str, int i)
 	value = ft_strdup("&&");
 	i += 2;
 	if (!value)
-		return (error_malloc("and_handling"));
+		error_malloc("and_handling", shell);
 	token = malloc(sizeof(t_token));
 	if (!token)
-		return (free(value), error_malloc("and_handling"));
+	{
+		free(value);
+		error_malloc("and_handling", shell);
+	}
 	token->value = value;
 	token->state = GENERAL;
 	token->type = AND;
@@ -60,7 +66,7 @@ int	pipe_handling(t_shell_data *shell, char *str, int i)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		error_malloc("pipe_handling");
+		error_malloc("pipe_handling", shell);
 	token->value = str[i];
 	token->type = PIPE;
 	token->state = GENERAL;
@@ -76,7 +82,7 @@ int	redirect_handling(t_shell_data *shell, char *str, int i)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		error_malloc("redirect_hanlding");
+		error_malloc("redirect_handling", shell);
 	if (str[i] == ">" && str[i + 1] == ">")
 		i = append(shell, token, str, i);
 	else if (str[i] == "<" && str[i + 1] == "<")
@@ -97,12 +103,12 @@ int	words_handling(t_shell_data *shell, char *str, int i)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		error_malloc("words_handling");
+		error_malloc("words_handling", shell);
 	while (str[i] && !is_space(str[i]) && !is_meta(str[i]))
 		i = check_quotes(shell, &value, str, i);
 	token->value = value;
 	if (!token->value)
-		error_malloc("words_handling");
+		error_malloc("words_handling", shell);
 	token->type = WORD;
 	token->state = GENERAL;
 	ft_lstadd_back(&shell->tokens, ft_lstnew(token));
