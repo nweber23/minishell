@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 17:37:02 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 17:59:10 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/20 10:09:28 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	create_token(t_shell_data *shell, char *str)
 		else if (str[i] == '|' && str[i + 1] == '|')
 			i = or_handling(shell, str, i);
 		else
-			i = handle_words(shell, str, i);
+			i = words_handling(shell, str, i);
 		set_token_position(shell->tokens);
 	}
 }

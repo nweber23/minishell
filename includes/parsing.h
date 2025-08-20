@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 18:49:04 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/20 10:09:05 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ typedef struct s_token
 }					t_token;
 
 /*************************************************/
-/*                     Lexer                     */
+/*                    Lexer                      */
 /*************************************************/
 
 /*************************************************/
-/*                  Utils                        */
+/*                    Utils                      */
 /*************************************************/
 bool			is_quote(char c);
 bool			is_space(char c);
@@ -65,5 +65,7 @@ t_token_type	get_type(char *str);
 void			create_token(t_shell_data *shell, char *str);
 int				or_handling(t_shell_data *shell, char *str, int i);
 int				and_handling(t_shell_data *shell, char *str, int i);
+int				pipe_handling(t_shell_data *shell, char *str, int i);
+int				redirect_handling(t_shell_data *shell, char *str, int i);
 
 #endif
