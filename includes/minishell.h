@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 11:24:07 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/20 12:09:26 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,13 @@
 # include <stdbool.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+
+/*************************************************/
+/*                  ERROR_HANDLING               */
+/*************************************************/
+void	free_shell(t_shell_data *shell);
+void	free_env(t_list *env);
+void	free_token(void *content);
+void	error_malloc(const char *function, t_shell_data *shell);
 
 #endif

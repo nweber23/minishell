@@ -1,38 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   error_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/19 16:18:33 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/20 12:00:13 by nweber           ###   ########.fr       */
+/*   Created: 2025/08/20 11:58:51 by nweber            #+#    #+#             */
+/*   Updated: 2025/08/20 12:04:34 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token_type	get_type(char *str)
+void	error_malloc(const char *function, t_shell_data *shell)
 {
-	if (ft_strcmp(str, "|"))
-		return (PIPE);
-	else
-		return (WORD);
+	ft_putstr_fd("Error: Memory allocation failed in ", STDERR_FILENO);
+	ft_putendl_fd(function, STDERR_FILENO);
+	free_env(shell->env);
+	free_shell(shell);
+	exit(1);
 }
-
-void	set_token_position(t_list *list)
-{
-	int		i;
-	t_token	*token;
-
-	i = 0;
-	while (list)
-	{
-		token = (t_token *)list->content;
-		if (token)
-			token->position = i;
-		list = list->next;
-		i++;
-	}
-}
-
