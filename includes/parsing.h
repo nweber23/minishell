@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/20 11:47:46 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/21 13:57:01 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,14 @@ int				join_quotes(t_shell_data *shell, char **value,\
 	char *str, int i);
 int				join_no_quotes(t_shell_data *shell,\
 	char **value, char *str, int i);
+int				simple(t_shell_data *shell, t_token *token, char *str, int i);
+int				heredoc(t_shell_data *shell, t_token *token, char *str, int i);
+int				append(t_shell_data *shell, t_token *token, char *str, int i);
 bool			is_quote(char c);
 bool			is_space(char c);
 bool			is_meta(char c);
 bool			is_expandable(char	*token);
+bool			is_wildcard(char **argv);
 void			set_token_position(t_list *list);
 t_token_type	get_type(char *str);
 

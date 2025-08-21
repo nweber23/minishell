@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/19 16:18:33 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/21 13:51:21 by nweber           ###   ########.fr       */
+/*   Created: 2025/08/21 13:46:28 by nweber            #+#    #+#             */
+/*   Updated: 2025/08/21 13:56:23 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token_type	get_type(char *str)
+bool	is_wildcard(char **argv)
 {
-	if (ft_strcmp(str, "|"))
-		return (PIPE);
-	else
-		return (WORD);
-}
-
-void	set_token_position(t_list *list)
-{
-	int		i;
-	t_token	*token;
+	int	i;
 
 	i = 0;
-	while (list)
+	if (!argv || !argv[i])
+		return (false);
+	while (argv[i])
 	{
-		token = (t_token *)list->content;
-		if (token)
-			token->position = i;
-		list = list->next;
+		if (ft_strchr(argv[i], '*') && (ft_strcmp(argv[i], "*") == 0))
+			return (true);
 		i++;
 	}
+	return (false);
 }
