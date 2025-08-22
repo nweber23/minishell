@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 17:53:56 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/20 11:40:48 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/22 14:31:35 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	pipe_handling(t_shell_data *shell, char *str, int i)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		error_malloc("pipe_handling", shell);
-	token->value = str[i];
+	token->value = &str[i];
 	token->type = PIPE;
 	token->state = GENERAL;
 	ft_lstadd_back(&shell->tokens, ft_lstnew(token));
@@ -83,9 +83,9 @@ int	redirect_handling(t_shell_data *shell, char *str, int i)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		error_malloc("redirect_handling", shell);
-	if (str[i] == ">" && str[i + 1] == ">")
+	if (str[i] == '>' && str[i + 1] == '>')
 		i = append(shell, token, str, i);
-	else if (str[i] == "<" && str[i + 1] == "<")
+	else if (str[i] == '<' && str[i + 1] == '<')
 		i = heredoc(shell, token, str, i);
 	else
 		i = simple(shell, token, str, i);

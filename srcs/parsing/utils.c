@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 16:18:33 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/21 13:51:21 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/22 10:09:07 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,11 @@ void	set_token_position(t_list *list)
 		list = list->next;
 		i++;
 	}
+}
+
+int	remove_spaces(char *str, int i)
+{
+	while (is_space(str[i]))
+		i++;
+	return (i);
 }
