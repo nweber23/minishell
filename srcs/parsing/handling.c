@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 17:53:56 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/22 14:31:35 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/22 16:27:51 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	pipe_handling(t_shell_data *shell, char *str, int i)
 	token->type = PIPE;
 	token->state = GENERAL;
 	ft_lstadd_back(&shell->tokens, ft_lstnew(token));
+	i++;
 	while (is_space(str[i]))
 		i++;
 	return (i);

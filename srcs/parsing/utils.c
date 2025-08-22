@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 16:18:33 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/22 10:09:07 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/22 16:29:19 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_token_type	get_type(char *str)
 {
-	if (ft_strcmp(str, "|"))
+	if (ft_strcmp(str, "|") == 0)
 		return (PIPE);
 	else
 		return (WORD);

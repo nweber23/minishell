@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:19:53 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/22 14:29:03 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/22 16:18:04 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	closing(t_shell_data *shell, char *str, int i, bool valid)
 		return (i);
 	}
 	else
-		return (i = remove_spaces(str, i), i);
+		return (i = remove_spaces(str, i), i + 1);
 }
 
 static int	opening(t_shell_data *shell, char *str, int i, bool valid)
@@ -125,7 +125,7 @@ int	parenthesis_handling(t_shell_data *shell, char *str, int i)
 	}
 	start = i;
 	i = parenthesis_balancing(str, i);
-	sub = ft_substr(&str[i + 1], 0, i - start - 1);
+	sub = ft_substr(str, start + 1, i - start - 1);
 	if (!sub)
 		error_malloc("parenthesis_handling", shell);
 	valid = sub_checker(sub);
@@ -135,7 +135,7 @@ int	parenthesis_handling(t_shell_data *shell, char *str, int i)
 		return (i);
 	if (str[start] && str[start] == '(')
 		start++;
-	while (is_space(str[i]))
+	while (is_space(str[start]))
 		start++;
 	return (start);
 }
