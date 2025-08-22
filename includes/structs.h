@@ -6,14 +6,12 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/19 16:10:58 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/22 14:50:17 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
-
-# include "minishell.h"
 
 typedef struct s_shell_data
 {

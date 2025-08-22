@@ -6,15 +6,15 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/21 13:57:01 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/22 14:54:32 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
 
-# include "minishell.h"
 # include <stdbool.h>
+# include "structs.h"
 
 typedef enum s_token_state
 {
@@ -46,17 +46,14 @@ typedef struct s_token
 }					t_token;
 
 /*************************************************/
-/*                    Lexer                      */
-/*************************************************/
-
-/*************************************************/
 /*                    Utils                      */
 /*************************************************/
-int				check_quotes(t_shell_data *shell,\
+int				remove_spaces(char *str, int i);
+int				check_quotes(t_shell_data *shell, \
 	char **value, char *str, int i);
-int				join_quotes(t_shell_data *shell, char **value,\
+int				join_quotes(t_shell_data *shell, char **value, \
 	char *str, int i);
-int				join_no_quotes(t_shell_data *shell,\
+int				join_no_quotes(t_shell_data *shell, \
 	char **value, char *str, int i);
 int				simple(t_shell_data *shell, t_token *token, char *str, int i);
 int				heredoc(t_shell_data *shell, t_token *token, char *str, int i);
@@ -77,5 +74,7 @@ int				or_handling(t_shell_data *shell, char *str, int i);
 int				and_handling(t_shell_data *shell, char *str, int i);
 int				pipe_handling(t_shell_data *shell, char *str, int i);
 int				redirect_handling(t_shell_data *shell, char *str, int i);
+int				words_handling(t_shell_data *shell, char *str, int i);
+int				parenthesis_handling(t_shell_data *shell, char *str, int i);
 
 #endif
