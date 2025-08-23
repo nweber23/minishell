@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:00:14 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/20 11:46:00 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/22 17:37:07 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ int	join_quotes(t_shell_data *shell, char **value, char *str, int i)
 	start = i++;
 	while (str[i] && str[i] != quote_char)
 		i++;
-	joined = ft_substr(str, start, i - start - 1);
+	joined = ft_substr(str, start + 1, i - start - 1);
 	if (!joined)
 		error_malloc("join_quotes", shell);
 	*value = ft_strjoin(*value, joined);
 	free(joined);
-	if (!value)
+	if (!*value)
 		error_malloc("join_quotes", shell);
 	return (i + 1);
 }
@@ -54,7 +54,7 @@ int	join_no_quotes(t_shell_data *shell, char **value, char *str, int i)
 		error_malloc("join_no_quotes", shell);
 	*value = ft_strjoin(*value, joined);
 	free(joined);
-	if (!value)
+	if (!*value)
 		error_malloc("join_no_quotes", shell);
 	return (i);
 }

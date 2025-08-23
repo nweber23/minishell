@@ -5,7 +5,9 @@ INC_DIR     = includes
 LIBFT_DIR   = libft
 LIBFT       = $(LIBFT_DIR)/libft.a
 
-SRCS =
+PARSING_SRCS = $(wildcard $(SRC_DIR)/parsing/*.c)
+UTILS_SRCS = $(wildcard $(SRC_DIR)/utils/*.c)
+SRCS = $(PARSING_SRCS) $(UTILS_SRCS)
 
 OBJ_DIR = obj
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

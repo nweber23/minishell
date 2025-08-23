@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 17:53:56 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/22 16:27:51 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/23 19:51:11 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,18 @@ int	and_handling(t_shell_data *shell, char *str, int i)
 int	pipe_handling(t_shell_data *shell, char *str, int i)
 {
 	t_token	*token;
+	char	*value;
 
+	value = ft_strdup("|");
+	if (!value)
+		error_malloc("pipe_handling", shell);
 	token = malloc(sizeof(t_token));
 	if (!token)
+	{
+		free(value);
 		error_malloc("pipe_handling", shell);
-	token->value = &str[i];
+	}
+	token->value = value;
 	token->type = PIPE;
 	token->state = GENERAL;
 	ft_lstadd_back(&shell->tokens, ft_lstnew(token));
@@ -102,9 +109,15 @@ int	words_handling(t_shell_data *shell, char *str, int i)
 	t_token	*token;
 	char	*value;
 
+	value = ft_strdup("");
+	if (!value)
+		error_malloc("words_handling", shell);
 	token = malloc(sizeof(t_token));
 	if (!token)
+	{
+		free(value);
 		error_malloc("words_handling", shell);
+	}
 	while (str[i] && !is_space(str[i]) && !is_meta(str[i]))
 		i = check_quotes(shell, &value, str, i);
 	token->value = value;
