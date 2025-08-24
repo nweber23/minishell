@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/22 14:54:32 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/24 19:48:03 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdbool.h>
 # include "structs.h"
 
-typedef enum s_token_state
+typedef enum e_token_state
 {
 	SINGLE_Q,
 	DOUBLE_Q,
@@ -24,7 +24,7 @@ typedef enum s_token_state
 	EXPAND,
 }	t_token_state;
 
-typedef enum s_token_type
+typedef enum e_token_type
 {
 	WORD,
 	PIPE,
@@ -49,6 +49,7 @@ typedef struct s_token
 /*                    Utils                      */
 /*************************************************/
 int				remove_spaces(char *str, int i);
+int				remove_quotes(char *str, int i);
 int				check_quotes(t_shell_data *shell, \
 	char **value, char *str, int i);
 int				join_quotes(t_shell_data *shell, char **value, \
@@ -58,6 +59,7 @@ int				join_no_quotes(t_shell_data *shell, \
 int				simple(t_shell_data *shell, t_token *token, char *str, int i);
 int				heredoc(t_shell_data *shell, t_token *token, char *str, int i);
 int				append(t_shell_data *shell, t_token *token, char *str, int i);
+int				is_redirect(char *str);
 bool			is_quote(char c);
 bool			is_space(char c);
 bool			is_meta(char c);

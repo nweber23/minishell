@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:53:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/20 11:48:27 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/24 19:16:36 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,10 @@ bool	is_meta(char c)
 	return (false);
 }
 
-bool	is_expandable(char	*token)
+bool	is_expandable(char *token)
 {
 	int		i;
 	bool	quotes;
-
 	i = 0;
 	quotes = false;
 	while (is_space(token[i]))
@@ -69,4 +68,21 @@ bool	is_expandable(char	*token)
 		i++;
 	}
 	return (false);
+}
+
+int	is_redirect(char *str)
+{
+	if (str[0] == '<')
+	{
+		if (str[1] == '<')
+			return (2);
+		return (1);
+	}
+	if (str[0] == '>')
+	{
+		if (str[0] == '>')
+			return (2);
+		return (1);
+	}
+	return (0);
 }

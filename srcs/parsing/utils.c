@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 16:18:33 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/22 16:29:19 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/24 19:10:33 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,16 @@ int	remove_spaces(char *str, int i)
 {
 	while (is_space(str[i]))
 		i++;
+	return (i);
+}
+
+int	remove_quotes(char *str, int i)
+{
+	if (str[i] && is_quote(str[i]))
+	{
+		i++;
+		while (str[i] && !is_quote(str[i]))
+			i++;
+	}
 	return (i);
 }
