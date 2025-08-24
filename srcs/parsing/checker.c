@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:53:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/24 19:16:36 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/24 20:07:44 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ bool	is_expandable(char *token)
 {
 	int		i;
 	bool	quotes;
+
 	i = 0;
 	quotes = false;
 	while (is_space(token[i]))
