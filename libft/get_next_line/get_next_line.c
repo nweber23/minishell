@@ -6,30 +6,11 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/07/29 11:48:31 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/24 17:47:57 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	unsigned char		*d;
-	const unsigned char	*s;
-	size_t				i;
-
-	if (!dest && !src)
-		return (NULL);
-	d = (unsigned char *)dest;
-	s = (const unsigned char *)src;
-	i = 0;
-	while (i < n)
-	{
-		d[i] = s[i];
-		i++;
-	}
-	return (dest);
-}
 
 static char	*ft_read(int fd, char *buffer, char *line, int *b_read)
 {
