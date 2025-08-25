@@ -1,32 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_exit.c                                       :+:      :+:    :+:   */
+/*   check_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/20 11:58:51 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/25 17:15:17 by nweber           ###   ########.fr       */
+/*   Created: 2025/08/25 15:12:36 by nweber            #+#    #+#             */
+/*   Updated: 2025/08/25 15:12:47 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	error_malloc(char *function, t_shell_data *shell)
-{
-	ft_putstr_fd("Error: Memory allocation failed in ", STDERR_FILENO);
-	ft_putendl_fd(function, STDERR_FILENO);
-	free_env(shell->env);
-	free_shell(shell);
-	exit(1);
-}
-
-int	exit_code(int *code)
-{
-	static int	new = 0;
-
-	if (code == -1)
-		return (0);
-	new = code;
-	return (new);
-}

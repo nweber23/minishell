@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/24 19:48:03 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/25 16:53:55 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,10 @@ int				pipe_handling(t_shell_data *shell, char *str, int i);
 int				redirect_handling(t_shell_data *shell, char *str, int i);
 int				words_handling(t_shell_data *shell, char *str, int i);
 int				parenthesis_handling(t_shell_data *shell, char *str, int i);
+
+/*************************************************/
+/*                    PARSING                    */
+/*************************************************/
+bool			validate_input(t_shell_data *shell);
 
 #endif
