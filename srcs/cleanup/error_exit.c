@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:58:51 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/25 17:15:17 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/25 19:41:23 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	error_malloc(char *function, t_shell_data *shell)
 	exit(1);
 }
 
-int	exit_code(int *code)
+int	exit_code(int code)
 {
 	static int	new = 0;
 

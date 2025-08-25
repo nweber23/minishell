@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/25 17:15:46 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/25 19:41:57 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	free_shell(t_shell_data *shell);
 void	free_env(t_list *env);
 void	free_token(void *content);
 void	error_malloc(char *function, t_shell_data *shell);
-int		exit_code(int *code);
+int		exit_code(int code);
 bool	error_message(char *str);
 
 #endif
