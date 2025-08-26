@@ -19,3 +19,11 @@ bool	error_message(char *str)
 		ft_putendl_fd(str, 2);
 	return (true);
 }
+
+void	balance_message(int balance)
+{
+	if (balance < 0)
+		ft_putendl_fd(CLOSE_MSG, 2);
+	else if (balance > 0)
+		ft_putendl_fd(OPEN_MSG, 2);
+}

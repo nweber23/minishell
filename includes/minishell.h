@@ -34,5 +34,6 @@ void	free_token(void *content);
 void	error_malloc(char *function, t_shell_data *shell);
 int		exit_code(int code);
 bool	error_message(char *str);
+void	balance_message(int balance);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 16:18:33 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/24 20:07:36 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/26 10:04:25 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,12 @@ int	remove_quotes(char *str, int i)
 			i++;
 	}
 	return (i);
+}
+
+void	quote_toggling(char c, bool *double_q, bool *single_q)
+{
+	if (c == '\'' && !*double_q)
+		*single_q = !*single_q;
+	else if (c == '\"' && !*single_q)
+		*double_q = !*double_q;
 }

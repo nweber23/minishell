@@ -33,3 +33,26 @@ bool	validate_input(t_shell_data *shell)
 		return (exit_code(2));
 	return (false);
 }
+
+bool	error_redirect(char *str, int *i, int len)
+{
+	char	*error_msg;
+
+	if (str[*i + 1] == '|')
+		return (error_message(PIPE_MSG), false);
+	*i += len;
+	while (str[*i] && is_space(str[*i]))
+		(*i)++;
+	if (is_redirect(str) || is_meta(str[*i]))
+	{
+		if (str[*i] == '>' && str[*i + 1] == '>')
+			error_msg = "near unexpected token `>>'";
+		else if (str[*i] == '<')
+			error_msg = "near unexpected token `<'";
+		else
+			error_msg = "near unexpected token `>'";
+		error_message(error_msg);
+		return (false);
+	}
+	return (true);
+}
