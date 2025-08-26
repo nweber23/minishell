@@ -14,7 +14,6 @@
 
 bool	error_message(char *str)
 {
-	ft_putstr_fd(SYNTAX_ERROR, 2);
 	if (str)
 		ft_putendl_fd(str, 2);
 	return (true);
