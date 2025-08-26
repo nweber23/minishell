@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/25 16:53:55 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/26 10:30:37 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,6 @@
 
 # include <stdbool.h>
 # include "structs.h"
-
-typedef enum e_token_state
-{
-	SINGLE_Q,
-	DOUBLE_Q,
-	GENERAL,
-	EXPAND,
-}	t_token_state;
-
-typedef enum e_token_type
-{
-	WORD,
-	PIPE,
-	HERE_DOC,
-	APPEND,
-	INFILE,
-	OUTFILE,
-	AND,
-	OR,
-	PARENTHESIS,
-}	t_token_type;
-
-typedef struct s_token
-{
-	int				position;
-	char			*value;
-	t_token_state	state;
-	t_token_type	type;
-}					t_token;
 
 /*************************************************/
 /*                    Utils                      */
@@ -65,7 +36,9 @@ bool			is_space(char c);
 bool			is_meta(char c);
 bool			is_expandable(char	*token);
 bool			is_wildcard(char **argv);
+bool			error_redirect(char *str, int *i, int len);
 void			set_token_position(t_list *list);
+void			quote_toggling(char c, bool *double_q, bool *single_q);
 t_token_type	get_type(char *str);
 
 /*************************************************/
@@ -83,5 +56,10 @@ int				parenthesis_handling(t_shell_data *shell, char *str, int i);
 /*                    PARSING                    */
 /*************************************************/
 bool			validate_input(t_shell_data *shell);
+bool			pipe_check(char *str);
+bool			quote_check(char *str);
+bool			quote_position_check(char *str);
+bool			redirect_check(char *str);
+bool			parenthesis_check(char *str);
 
 #endif
