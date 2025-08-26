@@ -1,34 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_iface.c                                   :+:      :+:    :+:   */
+/*   exec_tokstream.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/16 19:56:04 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/19 09:56:46 by yyudi            ###   ########.fr       */
+/*   Created: 2025/08/26 12:01:37 by yyudi             #+#    #+#             */
+/*   Updated: 2025/08/26 12:01:38 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
+#include "execution.h"
 
-#include "minishell.h"
-#include <stdio.h>
-
-int	is_builtin_name(const char *s)
+t_token	*peek(t_tokarr *ta)
 {
-	(void)s;
-	return (0);
+	if (ta->i >= ta->n)
+		return (NULL);
+	return (ta->v[ta->i]);
 }
 
-int	run_builtin_parent(t_cmd *c)
+t_token	*next(t_tokarr *ta)
 {
-	(void)c;
-	return (0);
+	t_token	*t;
+
+	t = peek(ta);
+	if (t)
+		ta->i++;
+	return (t);
 }
 
-int	run_builtin_child(t_cmd *c)
+int	is_cmd_end(t_token *t)
 {
-	(void)c;
+	if (!t)
+		return (1);
+	if (t->type == PIPE || t->type == AND || t->type == OR)
+		return (1);
+	if (is_rparen(t))
+		return (1);
 	return (0);
 }
