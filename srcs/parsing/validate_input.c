@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:15:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/25 17:42:55 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/28 17:30:53 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 
 bool	validate_input(t_shell_data *shell)
 {
-	if (!shell->input[0])
-		return (true);
-	shell->trimmed = ft_strtrim(shell->input, "\t ");
+	if (!shell->input || !shell->input[0])
+		return (false);
+	shell->trimmed = ft_strtrim(shell->input, "\t \n\r");
 	if (!shell->trimmed)
 		error_malloc("validate_input", shell);
 	if (!shell->trimmed[0])
-		return (true);
+		return (false);
 	if (!pipe_check(shell->trimmed))
-		return (error_message(PIPE_MSG), exit_code(2));
+		return (error_message(PIPE_MSG), exit_code(2), true);
 	if (!quote_check(shell->trimmed))
-		return (error_message(QUOTE_MSG), exit_code(2));
+		return (error_message(QUOTE_MSG), exit_code(2), true);
 	if (!quote_position_check(shell->trimmed))
-		return (error_message(SYNTAX_MSG), exit_code(2));
+		return (error_message(SYNTAX_MSG), exit_code(2), true);
 	if (!redirect_check(shell->trimmed))
-		return (exit_code(2));
+		return (exit_code(2), true);
 	if (!parenthesis_check(shell->trimmed))
-		return (exit_code(2));
+		return (exit_code(2), true);
 	return (false);
 }
 
