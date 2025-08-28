@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 17:37:02 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/24 19:09:45 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/28 18:20:45 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,10 @@ void	create_token(t_shell_data *shell, char *str)
 		set_token_position(shell->tokens);
 		i = remove_spaces(str, i);
 	}
+}
+
+void	lexer(t_shell_data *shell, char *input)
+{
+	shell->tokens = NULL;
+	create_token(shell, input);
 }

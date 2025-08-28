@@ -6,12 +6,11 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 17:42:38 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/28 17:43:39 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/28 18:20:12 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 static bool	handle_parenthesis(char c, int *balance)
 {
