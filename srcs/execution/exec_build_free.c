@@ -6,10 +6,9 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:00:57 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 12:01:04 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/08/26 12:14:06 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "execution.h"
 
@@ -71,7 +70,7 @@ static void	free_redirs(t_redir *r)
 
 void	free_tree(t_node *n)
 {
-	int i;
+	int	i;
 
 	if (!n)
 		return ;

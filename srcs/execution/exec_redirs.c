@@ -6,10 +6,9 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:28 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 12:01:29 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/08/29 11:29:53 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "execution.h"
 
@@ -32,31 +31,47 @@ static int	assign_fd(int *slot, int fd)
 	return (0);
 }
 
+static int	open_redir_fd(t_redir *r, int *out_fd)
+{
+	int	fd;
+
+	if (r->type == R_IN)
+		fd = open(r->word, open_mode(r->type));
+	else
+		fd = open(r->word, open_mode(r->type), 0644);
+	if (fd < 0)
+	{
+		perror(r->word);
+		return (1);
+	}
+	*out_fd = fd;
+	return (0);
+}
+
+static void	apply_fd_to_slot(t_redir *r, int fd, int *fdin, int *fdout)
+{
+	if (r->type == R_IN)
+		assign_fd(fdin, fd);
+	else
+		assign_fd(fdout, fd);
+}
+
 int	apply_redirs_files(t_cmd *c, int *fdin, int *fdout)
 {
-	int		fd;
 	t_redir	*r;
+	int		fd;
 
 	*fdin = -1;
 	*fdout = -1;
 	r = c->redirs;
 	while (r)
 	{
-		if (r->type == R_HEREDOC)
+		if (r->type != R_HEREDOC)
 		{
-			r = r->next;
-			continue ;
+			if (open_redir_fd(r, &fd))
+				return (1);
+			apply_fd_to_slot(r, fd, fdin, fdout);
 		}
-		if (r->type == R_IN)
-			fd = open(r->word, open_mode(r->type));
-		else
-			fd = open(r->word, open_mode(r->type), 0644);
-		if (fd < 0)
-			return (perror(r->word), 1);
-		if (r->type == R_IN)
-			assign_fd(fdin, fd);
-		else
-			assign_fd(fdout, fd);
 		r = r->next;
 	}
 	return (0);

@@ -16,6 +16,16 @@
 # include "minishell.h"
 # include <dirent.h>
 
+
+typedef struct s_fdpack
+{
+	int	in;
+	int	out;
+	int	save_in;
+	int	save_out;
+}	t_fdpack;
+
+
 /* Node types for the execution tree */
 typedef enum e_ndtype
 {
@@ -107,7 +117,7 @@ t_node	*parse_and_or(t_shell_data *sh, t_tokarr *ta);
 int		apply_redirs_files(t_cmd *c, int *fdin, int *fdout);
 int		apply_redirs_heredoc(t_cmd *c, int *fdin);
 char	*find_in_path(t_shell_data *sh, const char *cmd);
-int		run_exec_node(t_shell_data *sh, t_node *n, int in_fd, int out_fd, int is_top);
+int		run_exec_node(t_shell_data *sh, t_node *n, int fds[2], int is_top);
 int		run_pipe(t_shell_data *sh, t_node *n, int is_top);
 int		run_node(t_shell_data *sh, t_node *n, int is_top);
 
