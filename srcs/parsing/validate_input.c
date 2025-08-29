@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:15:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/28 17:30:53 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/29 09:28:02 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ bool	error_redirect(char *str, int *i, int len)
 	if (is_redirect(str) || is_meta(str[*i]))
 	{
 		if (str[*i] == '>' && str[*i + 1] == '>')
-			error_msg = "near unexpected token `>>'";
+			error_msg = "syntax error near unexpected token `>>'";
 		else if (str[*i] == '<')
-			error_msg = "near unexpected token `<'";
+			error_msg = "syntax error near unexpected token `<'";
 		else
-			error_msg = "near unexpected token `>'";
+			error_msg = "syntax error near unexpected token `>'";
 		error_message(error_msg);
 		return (false);
 	}
