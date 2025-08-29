@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/26 10:30:37 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/29 15:36:58 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,13 @@ bool			is_quote(char c);
 bool			is_space(char c);
 bool			is_meta(char c);
 bool			is_expandable(char	*token);
+bool			is_parenthesis(t_list *node);
 bool			is_wildcard(char **argv);
+bool			token_check(t_list *node);
 bool			error_redirect(char *str, int *i, int len);
 void			set_token_position(t_list *list);
 void			quote_toggling(char c, bool *double_q, bool *single_q);
+t_list			*remove_parenthesis(t_list *temp);
 t_token_type	get_type(char *str);
 
 /*************************************************/
@@ -61,5 +64,12 @@ bool			quote_check(char *str);
 bool			quote_position_check(char *str);
 bool			redirect_check(char *str);
 bool			parenthesis_check(char *str);
+
+/*************************************************/
+/*                   LOGIC_TREE                  */
+/*************************************************/
+void			*build_tree(t_shell_data *shell, t_list *tokens);
+void			*create_and(t_shell_data *shell, void *left, void *right);
+void			*create_or(t_shell_data *shell, void *left, void *right);
 
 #endif

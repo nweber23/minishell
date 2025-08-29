@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:19:18 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/29 11:24:44 by nweber           ###   ########.fr       */
+/*   Updated: 2025/08/29 15:24:20 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,69 @@
 
 void	*build_tree(t_shell_data *shell, t_list *tokens)
 {
-	(void)shell;
-	(void)tokens;
-	return (NULL);
+	t_list	*temp;
+	void	*root;
+
+	temp = tokens;
+	root = NULL;
+	while (temp)
+	{
+		root = insert_nodes(shell, root, temp);
+		if (token_check(temp) && !is_parenthesis(temp))
+			temp = new_token(temp);
+		else
+		{
+			if (is_parenthesis(temp))
+				temp = remove_parenthesis(temp);
+			else
+			{
+				temp = temp->next;
+				while (token_check(temp) && !is_parenthesis(temp))
+					temp = temp->next;
+			}
+		}
+	}
+	return (root);
 }
 
-void insert_left_node(t_shell_data *shell, void *left_node, t_list *tokens)
+void	*insert_nodes(t_shell_data *shell, void *left_node, t_list *tokens)
 {
 	(void)shell;
 	(void)left_node;
 	(void)tokens;
 }
 
-void	create_and(t_shell_data *shell, void *left, void *right)
+void	*create_and(t_shell_data *shell, void *left, void *right)
 {
-	(void)shell;
-	(void)left;
-	(void)right;
+	t_and_point	*node;
+
+	node = malloc(sizeof(t_and_point));
+	if (!node)
+		error_malloc("create_and", shell);
+	node->type = N_AND;
+	node->left = left;
+	node->right = right;
+	return (node);
 }
 
-void	create_or(t_shell_data *shell, void *left, void *right)
+void	*create_or(t_shell_data *shell, void *left, void *right)
 {
-	(void)shell;
-	(void)left;
-	(void)right;
+	t_or_point	*node;
+
+	node = malloc(sizeof(t_or_point));
+	if (!node)
+		error_malloc("create_or", shell);
+	node->type = N_OR;
+	node->left = left;
+	node->right = right;
+	return (node);
 }
 
-void	build_subtree(t_shell_data *shell, t_list *tokens)
+void	*build_subtree(t_shell_data *shell, t_list *tokens)
 {
-	(void)shell;
-	(void)tokens;
+	void	*subtree;
+
+	if (!tokens)
+		return (NULL);
+	subtree = build_binary_tree(shell, tokens);
 }
