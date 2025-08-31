@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:26 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 12:19:00 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/08/31 11:01:38 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*find_in_path(t_shell_data *sh, const char *cmd)
 	int			i;
 
 	(void)sh;
-	path = getenv("PATH");
+	path = env_get(sh->env,"PATH");
 	if (!path)
 		return (NULL);
 	split = ft_split(path, ':');

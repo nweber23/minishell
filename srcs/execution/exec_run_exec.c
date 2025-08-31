@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/29 15:38:20 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/08/31 11:03:07 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int	exec_external(t_shell_data *sh, t_cmd *c)
 {
 	char	*path;
+	char	**envp;
 
 	(void)sh;
 	if (!c->argv || !c->argv[0])
@@ -30,6 +31,7 @@ static int	exec_external(t_shell_data *sh, t_cmd *c)
 		ft_putendl_fd(": command not found", 2);
 		return (127);
 	}
+	envp = env_list_to_array(sh->env);
 	execve(path, c->argv, NULL);
 	perror("execve");
 	free(path);

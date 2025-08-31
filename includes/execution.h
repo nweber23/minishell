@@ -121,4 +121,8 @@ int		run_exec_node(t_shell_data *sh, t_node *n, int fds[2], int is_top);
 int		run_pipe(t_shell_data *sh, t_node *n, int is_top);
 int		run_node(t_shell_data *sh, t_node *n, int is_top);
 
+// utils env helpers (header)
+char   **env_list_to_array(t_list *env);      // malloc'd, NULL-terminated
+char   *env_get(t_list *env, const char *key); // returns pointer into node->content (after '='), or NULL
+
 #endif
