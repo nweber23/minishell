@@ -6,48 +6,47 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:26 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/31 11:01:38 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/08/31 11:17:08 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static char	*join_path(const char *a, const char *b)
+static char	*join_path(const char *prefix, const char *name)
 {
-	char	*tmp;
-	char	*res;
+	char	*with_slash;
+	char	*full_path;
 
-	tmp = ft_strjoin(a, "/");
-	if (!tmp)
+	with_slash = ft_strjoin(prefix, "/");
+	if (!with_slash)
 		return (NULL);
-	res = ft_strjoin(tmp, b);
-	free(tmp);
-	return (res);
+	full_path = ft_strjoin(with_slash, name);
+	free(with_slash);
+	return (full_path);
 }
 
-char	*find_in_path(t_shell_data *sh, const char *cmd)
+char	*find_in_path(t_shell_data *sh, const char *cmd_name)
 {
-	char		*path;
-	char		**split;
-	char		*candidate;
-	int			i;
+	char	*path_value;
+	char	**path_parts;
+	char	*candidate_path;
+	int		index;
 
-	(void)sh;
-	path = env_get(sh->env,"PATH");
-	if (!path)
+	path_value = env_get(sh->env, "PATH");
+	if (!path_value)
 		return (NULL);
-	split = ft_split(path, ':');
-	if (!split)
+	path_parts = ft_split(path_value, ':');
+	if (!path_parts)
 		return (NULL);
-	i = 0;
-	while (split[i])
+	index = 0;
+	while (path_parts[index])
 	{
-		candidate = join_path(split[i], cmd);
-		if (candidate && access(candidate, X_OK) == 0)
-			return (ft_free2d(split), candidate);
-		free(candidate);
-		i++;
+		candidate_path = join_path(path_parts[index], cmd_name);
+		if (candidate_path && access(candidate_path, X_OK) == 0)
+			return (ft_free2d(path_parts), candidate_path);
+		free(candidate_path);
+		index++;
 	}
-	ft_free2d(split);
+	ft_free2d(path_parts);
 	return (NULL);
 }

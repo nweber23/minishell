@@ -6,122 +6,169 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:12 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/27 10:46:12 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/08/31 11:26:24 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 #include <dirent.h>
 
-static int	listdir_open(DIR **dp)
+static int	has_star(const char *pattern)
 {
-	*dp = opendir(".");
-	if (!*dp)
-		return (0);
-	return (1);
+	int	i;
+
+	i = 0;
+	while (pattern[i])
+	{
+		if (pattern[i] == '*')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-static int	listdir_push_visibles(DIR *d, char ***v, int *c)
+static int	glob_match(const char *pattern, const char *name)
 {
-	struct dirent	*de;
-	char			*name;
-
-	de = readdir(d);
-	while (de != NULL)
+	while (*pattern && *name)
 	{
-		if (de->d_name[0] != '.')
+		if (*pattern == '*')
 		{
-			name = ft_strdup(de->d_name);
-			if (!append_word(v, c, name))
-				return (0);
+			while (*pattern == '*')
+				pattern++;
+			if (!*pattern)
+				return (1);
+			while (*name)
+			{
+				if (glob_match(pattern, name))
+					return (1);
+				name++;
+			}
+			return (0);
 		}
-		de = readdir(d);
+		if (*pattern != *name)
+			return (0);
+		pattern++;
+		name++;
+	}
+	while (*pattern == '*')
+		pattern++;
+	return (*pattern == '\0' && *name == '\0');
+}
+
+static int	should_skip_hidden(const char *pattern, const char *name)
+{
+	if (name[0] == '.' && pattern[0] != '.')
+		return (1);
+	return (0);
+}
+
+static int	push_name(char ***dst_vec, int *dst_cnt, const char *name)
+{
+	char	*dup_name;
+
+	dup_name = ft_strdup(name);
+	if (!dup_name)
+		return (0);
+	if (!append_word(dst_vec, dst_cnt, dup_name))
+	{
+		free(dup_name);
+		return (0);
 	}
 	return (1);
 }
 
-static int	listdir_nonhidden(char ***outv, int *outc)
+static int	build_match_list(const char *pattern, char ***out_vec, int *out_cnt)
 {
-	DIR		*d;
-	char	**v;
-	int		c;
+	DIR				*dir_ptr;
+	struct dirent	*dir_ent;
+	char			*entry_name;
 
-	*outv = NULL;
-	*outc = 0;
-	if (!listdir_open(&d))
+	*out_vec = NULL;
+	*out_cnt = 0;
+	dir_ptr = opendir(".");
+	if (!dir_ptr)
 		return (0);
-	v = NULL;
-	c = 0;
-	if (!listdir_push_visibles(d, &v, &c))
+	dir_ent = readdir(dir_ptr);
+	while (dir_ent)
 	{
-		closedir(d);
-		return (0);
+		entry_name = dir_ent->d_name;
+		if (!should_skip_hidden(pattern, entry_name)
+			&& glob_match(pattern, entry_name))
+		{
+			if (!push_name(out_vec, out_cnt, entry_name))
+				return (closedir(dir_ptr), ft_free2d(*out_vec), 0);
+		}
+		dir_ent = readdir(dir_ptr);
 	}
-	closedir(d);
-	*outv = v;
-	*outc = c;
+	closedir(dir_ptr);
 	return (1);
 }
 
-/* ---------- public: simple "*" expansion ---------- */
-
-static int	add_star_expand(char ***res, int *rc)
+static int	append_copy(char ***dst_vec, int *dst_cnt, const char *word)
 {
-	char	**lst;
-	int		cnt;
-	int		j;
+	char	*dup_word;
 
-	if (!listdir_nonhidden(&lst, &cnt))
+	dup_word = ft_strdup(word);
+	if (!dup_word)
 		return (0);
-	j = 0;
-	while (j < cnt)
+	if (!append_word(dst_vec, dst_cnt, dup_word))
 	{
-		if (!append_word(res, rc, lst[j]))
-			return (ft_free2d(lst), ft_free2d(*res), 0);
-		j++;
+		free(dup_word);
+		return (0);
 	}
-	free(lst);
 	return (1);
 }
 
-static int	add_normal_word(char ***res, int *rc, char *word)
+static int	expand_pattern_word(const char *pattern,
+		char ***dst_vec, int *dst_cnt)
 {
-	char	*cp;
+	char	**match_vec;
+	int		match_cnt;
+	int		i;
 
-	cp = ft_strdup(word);
-	if (!append_word(res, rc, cp))
-	{
-		ft_free2d(*res);
+	match_vec = NULL;
+	match_cnt = 0;
+	if (!build_match_list(pattern, &match_vec, &match_cnt))
 		return (0);
+	if (match_cnt == 0)
+	{
+		if (!append_copy(dst_vec, dst_cnt, pattern))
+			return (ft_free2d(match_vec), 0);
+		return (ft_free2d(match_vec), 1);
 	}
+	i = 0;
+	while (i < match_cnt)
+	{
+		if (!append_word(dst_vec, dst_cnt, match_vec[i]))
+			return (ft_free2d(match_vec), ft_free2d(*dst_vec), 0);
+		i++;
+	}
+	free(match_vec);
 	return (1);
 }
 
 char	**expand_argv_if_needed(char **argv)
 {
-	int		i;
-	int		argc;
-	char	**res;
-	int		rc;
+	int		source_index;
+	int		result_count;
+	char	**result_vec;
 
 	if (!argv)
 		return (NULL);
-	argc = 0;
-	while (argv[argc])
-		argc++;
-	res = NULL;
-	rc = 0;
-	i = 0;
-	while (i < argc)
+	source_index = 0;
+	result_count = 0;
+	result_vec = NULL;
+	while (argv[source_index])
 	{
-		if (ft_strcmp(argv[i], "*") == 0)
+		if (has_star(argv[source_index]))
 		{
-			if (!add_star_expand(&res, &rc))
+			if (!expand_pattern_word(argv[source_index],
+					&result_vec, &result_count))
 				return (NULL);
 		}
-		else if (!add_normal_word(&res, &rc, argv[i]))
+		else if (!append_copy(&result_vec, &result_count, argv[source_index]))
 			return (NULL);
-		i++;
+		source_index++;
 	}
-	return (res);
+	return (result_vec);
 }

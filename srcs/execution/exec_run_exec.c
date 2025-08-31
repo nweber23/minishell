@@ -6,39 +6,39 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/31 11:03:07 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/08/31 11:28:34 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int	exec_external(t_shell_data *sh, t_cmd *c)
+static int	exec_external(t_shell_data *sh, t_cmd *cmd)
 {
-	char	*path;
-	char	**envp;
+	char	*program_path;
+	char	**env_array;
 
-	(void)sh;
-	if (!c->argv || !c->argv[0])
+	program_path = NULL;
+	env_array = NULL;
+	if (!cmd->argv || !cmd->argv[0])
 		return (0);
-	if (ft_strchr(c->argv[0], '/'))
-		path = ft_strdup(c->argv[0]);
+	if (ft_strchr(cmd->argv[0], '/'))
+		program_path = ft_strdup(cmd->argv[0]);
 	else
-		path = find_in_path(sh, c->argv[0]);
-	if (!path)
+		program_path = find_in_path(sh, cmd->argv[0]);
+	if (!program_path)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(c->argv[0], 2);
+		ft_putstr_fd(cmd->argv[0], 2);
 		ft_putendl_fd(": command not found", 2);
 		return (127);
 	}
-	envp = env_list_to_array(sh->env);
-	execve(path, c->argv, NULL);
+	env_array = env_list_to_array(sh->env);
+	execve(program_path, cmd->argv, env_array);
 	perror("execve");
-	free(path);
+	ft_free2d(env_array);
+	free(program_path);
 	return (126);
 }
-
-/* ---------- redirs combo (≤4 var, ≤25 lines) ---------- */
 
 static int	apply_all_redirs(t_cmd *c, int *fdin, int *fdout)
 {
@@ -48,8 +48,6 @@ static int	apply_all_redirs(t_cmd *c, int *fdin, int *fdout)
 		return (1);
 	return (0);
 }
-
-/* ---------- tiny fd helpers (short, ≤25 lines) ---------- */
 
 static void	fdpack_init(t_fdpack *p)
 {
@@ -72,8 +70,6 @@ static void	fd_restore(t_fdpack *p)
 		close(p->save_out);
 	}
 }
-
-/* ---------- builtin on parent (≤4 var, ≤25 lines) ---------- */
 
 static int	run_builtin_parent(t_shell_data *sh, t_cmd *c)
 {
@@ -99,8 +95,6 @@ static int	run_builtin_parent(t_shell_data *sh, t_cmd *c)
 	fd_restore(&p);
 	return (status);
 }
-
-/* ---------- child path (≤4 var, ≤25 lines) ---------- */
 
 static void	child_exec(t_shell_data *sh, t_node *n, int fds[2])
 {
@@ -128,8 +122,6 @@ static void	child_exec(t_shell_data *sh, t_node *n, int fds[2])
 	_exit(exec_external(sh, n->cmd));
 }
 
-/* ---------- wait helper (≤4 var, ≤25 lines) ---------- */
-
 static int	wait_and_status(pid_t pid)
 {
 	int	status;
@@ -142,8 +134,6 @@ static int	wait_and_status(pid_t pid)
 		return (128 + WTERMSIG(status));
 	return (1);
 }
-
-/* ---------- public entry (≤4 args, ≤25 lines) ---------- */
 
 int	run_exec_node(t_shell_data *sh, t_node *n, int fds[2], int is_top)
 {

@@ -122,7 +122,12 @@ int		run_pipe(t_shell_data *sh, t_node *n, int is_top);
 int		run_node(t_shell_data *sh, t_node *n, int is_top);
 
 // utils env helpers (header)
-char   **env_list_to_array(t_list *env);      // malloc'd, NULL-terminated
-char   *env_get(t_list *env, const char *key); // returns pointer into node->content (after '='), or NULL
+char	*env_get(t_list *env, const char *key);
+int		env_set(t_shell_data *sh, const char *key, const char *value);
+char	**env_list_to_array(t_list *env);
+
+//String Util
+void	ft_free2d(char **array);
+char	*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 
 #endif
