@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/29 16:50:06 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/01 10:17:35 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	free_env(t_list *env);
 void	free_token(void *content);
 void	free_logic_tree(void *root);
 void	free_binary(void *root);
+void	free_pipe(t_pipe *pipe);
+void	free_exec(t_exec *exec);
 void	error_malloc(char *function, t_shell_data *shell);
 int		exit_code(int code);
 bool	error_message(char *str);

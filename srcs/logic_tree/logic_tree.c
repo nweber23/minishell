@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:19:18 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/29 15:24:20 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/01 10:18:41 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,17 @@ void	*build_tree(t_shell_data *shell, t_list *tokens)
 
 void	*insert_nodes(t_shell_data *shell, void *left_node, t_list *tokens)
 {
-	(void)shell;
-	(void)left_node;
-	(void)tokens;
+	t_token	*token;
+
+	token = (t_token *)tokens->content;
+	if (token->type == PARENTHESIS)
+		return (create_parenthesis(shell, left_node, tokens));
+	if (!left_node)
+		build_subtree(shell, tokens);
+	if (token->type == AND && !is_parenthesis(tokens->next))
+		left_node = create_and(shell, left_node, build_subtree(shell, tokens->next));
+	if (token->type == OR && !is_parenthesis(tokens->next))
+		left_node = create_or(shell, left_node, build_subtree(shell, tokens->next));
 }
 
 void	*create_and(t_shell_data *shell, void *left, void *right)
@@ -79,4 +87,7 @@ void	*build_subtree(t_shell_data *shell, t_list *tokens)
 	if (!tokens)
 		return (NULL);
 	subtree = build_binary_tree(shell, tokens);
+	if (!subtree)
+		error_malloc("build_subtree", shell);
+	return (subtree);
 }
