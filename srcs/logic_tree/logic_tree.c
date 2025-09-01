@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:19:18 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/01 10:18:41 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/01 12:38:29 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,16 @@ void	*insert_nodes(t_shell_data *shell, void *left_node, t_list *tokens)
 		build_subtree(shell, tokens);
 	if (token->type == AND && !is_parenthesis(tokens->next))
 		left_node = create_and(shell, left_node, build_subtree(shell, tokens->next));
-	if (token->type == OR && !is_parenthesis(tokens->next))
+	else if (token->type == AND && is_parenthesis(tokens->next))
+		left_node = get_and_node(shell, left_node, tokens);
+	else if (token->type == OR && !is_parenthesis(tokens->next))
 		left_node = create_or(shell, left_node, build_subtree(shell, tokens->next));
+	else if (token->type == OR && is_parenthesis(tokens->next))
+		left_node = get_or_node(shell, left_node, tokens);
+	else if (token->type == PIPE && !is_parenthesis(tokens->next))
+		left_node = create_pipe(shell, left_node, build_subtree(shell, tokens->next));
+	else if (token->type == PIPE && is_parenthesis(tokens->next))
+		left_node = get_pipe_node(shell, left_node, tokens);
 }
 
 void	*create_and(t_shell_data *shell, void *left, void *right)

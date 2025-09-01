@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/29 15:36:58 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/01 13:56:08 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,7 @@ bool			parenthesis_check(char *str);
 void			*build_tree(t_shell_data *shell, t_list *tokens);
 void			*create_and(t_shell_data *shell, void *left, void *right);
 void			*create_or(t_shell_data *shell, void *left, void *right);
+void			*get_and_node(t_shell_data *shell, void *left_node, t_list *tokens);
+void			*get_or_node(t_shell_data *shell, void *left_node, t_list *tokens);
 
 #endif
