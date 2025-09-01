@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   error_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/08 16:20:19 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/24 17:48:18 by nweber           ###   ########.fr       */
+/*   Created: 2025/08/20 11:58:51 by nweber            #+#    #+#             */
+/*   Updated: 2025/08/25 19:41:23 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "minishell.h"
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
+void	error_malloc(char *function, t_shell_data *shell)
+{
+	ft_putstr_fd("Error: Memory allocation failed in ", STDERR_FILENO);
+	ft_putendl_fd(function, STDERR_FILENO);
+	free_env(shell->env);
+	free_shell(shell);
+	exit(1);
+}
 
-# include <stdlib.h>
-# include <unistd.h>
-# include "../libft.h"
+int	exit_code(int code)
+{
+	static int	new = 0;
 
-char	*get_next_line(int fd);
-
-#endif
+	if (code == -1)
+		return (0);
+	new = code;
+	return (new);
+}

@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/08 16:20:19 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/24 17:48:18 by nweber           ###   ########.fr       */
+/*   Created: 2025/08/21 13:46:28 by nweber            #+#    #+#             */
+/*   Updated: 2025/08/22 10:09:12 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "minishell.h"
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
+bool	is_wildcard(char **argv)
+{
+	int	i;
 
-# include <stdlib.h>
-# include <unistd.h>
-# include "../libft.h"
-
-char	*get_next_line(int fd);
-
-#endif
+	i = 0;
+	if (!argv || !argv[i])
+		return (false);
+	while (argv[i])
+	{
+		if (ft_strchr(argv[i], '*') && (ft_strcmp(argv[i], "*") == 0))
+			return (true);
+		i++;
+	}
+	return (false);
+}

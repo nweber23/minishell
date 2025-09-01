@@ -5,7 +5,10 @@ INC_DIR     = includes
 LIBFT_DIR   = libft
 LIBFT       = $(LIBFT_DIR)/libft.a
 
-SRCS =
+PARSING_SRCS = $(wildcard $(SRC_DIR)/parsing/*.c)
+UTILS_SRCS = $(wildcard $(SRC_DIR)/utils/*.c)
+CLEANUP_SRCS = $(wildcard $(SRC_DIR)/cleanup/*.c)
+SRCS = $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS)
 
 OBJ_DIR = obj
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -31,19 +34,19 @@ $(NAME): $(OBJ) $(LIBFT)
 	@echo "\033[0m"
 
 $(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -s --no-print-directory -C $(LIBFT_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@$(MAKE) -C $(LIBFT_DIR) clean
+	@$(MAKE) -s --no-print-directory -C $(LIBFT_DIR) clean
 
 fclean: clean
 	@rm -f $(NAME)
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -s --no-print-directory -C $(LIBFT_DIR) fclean
 
 re:
 	$(MAKE) fclean
