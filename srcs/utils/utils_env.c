@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 11:00:41 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/31 11:44:23 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/01 09:53:51 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	env_set(t_shell_data *sh, const char *key, const char *value)
 	if (!sh || !key || !value)
 		return (1);
 	key_len = ft_strlen(key);
-	kv_pair = ft_strjoin3(key, "=", value);
+	kv_pair = ft_str3var(key, "=", value);
 	if (!kv_pair)
 		return (1);
 	node = find_key_node(sh->env, key, key_len);
@@ -153,7 +153,7 @@ char	**env_list_to_array(t_list *env)
 		return (NULL);
 	if (fill_env_array(env, array))
 	{
-		ft_free2d(array);
+		ft_array_free(array);
 		return (NULL);
 	}
 	return (array);

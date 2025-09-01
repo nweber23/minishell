@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:26 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/31 11:17:08 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/01 09:48:58 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ char	*find_in_path(t_shell_data *sh, const char *cmd_name)
 	{
 		candidate_path = join_path(path_parts[index], cmd_name);
 		if (candidate_path && access(candidate_path, X_OK) == 0)
-			return (ft_free2d(path_parts), candidate_path);
+			return (ft_array_free(path_parts), candidate_path);
 		free(candidate_path);
 		index++;
 	}
-	ft_free2d(path_parts);
+	ft_array_free(path_parts);
 	return (NULL);
 }

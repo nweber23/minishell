@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:12 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/31 11:26:24 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/01 09:48:58 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static int	build_match_list(const char *pattern, char ***out_vec, int *out_cnt)
 			&& glob_match(pattern, entry_name))
 		{
 			if (!push_name(out_vec, out_cnt, entry_name))
-				return (closedir(dir_ptr), ft_free2d(*out_vec), 0);
+				return (closedir(dir_ptr), ft_array_free(*out_vec), 0);
 		}
 		dir_ent = readdir(dir_ptr);
 	}
@@ -133,14 +133,14 @@ static int	expand_pattern_word(const char *pattern,
 	if (match_cnt == 0)
 	{
 		if (!append_copy(dst_vec, dst_cnt, pattern))
-			return (ft_free2d(match_vec), 0);
-		return (ft_free2d(match_vec), 1);
+			return (ft_array_free(match_vec), 0);
+		return (ft_array_free(match_vec), 1);
 	}
 	i = 0;
 	while (i < match_cnt)
 	{
 		if (!append_word(dst_vec, dst_cnt, match_vec[i]))
-			return (ft_free2d(match_vec), ft_free2d(*dst_vec), 0);
+			return (ft_array_free(match_vec), ft_array_free(*dst_vec), 0);
 		i++;
 	}
 	free(match_vec);

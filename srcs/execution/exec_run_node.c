@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:33 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/29 16:08:40 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/01 10:05:15 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	run_node(t_shell_data *sh, t_node *n, int is_top)
 	if (!n)
 		return (1);
 	if (n->type == ND_EXEC)
-		return (run_exec_node(sh, n, -1, is_top));
+		return (run_exec_node(sh, n, NULL, is_top));
 	if (n->type == ND_PIPE)
 		return (run_pipe(sh, n, is_top));
 	if (n->type == ND_AND)

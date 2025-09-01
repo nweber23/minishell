@@ -117,7 +117,7 @@ t_node	*parse_and_or(t_shell_data *sh, t_tokarr *ta);
 int		apply_redirs_files(t_cmd *c, int *fdin, int *fdout);
 int		apply_redirs_heredoc(t_cmd *c, int *fdin);
 char	*find_in_path(t_shell_data *sh, const char *cmd);
-int		run_exec_node(t_shell_data *sh, t_node *n, int fds[2], int is_top);
+int		run_exec_node(t_shell_data *sh, t_node *n, int *fds, int is_top);
 int		run_pipe(t_shell_data *sh, t_node *n, int is_top);
 int		run_node(t_shell_data *sh, t_node *n, int is_top);
 
@@ -127,7 +127,7 @@ int		env_set(t_shell_data *sh, const char *key, const char *value);
 char	**env_list_to_array(t_list *env);
 
 //String Util
-void	ft_free2d(char **array);
-char	*ft_strjoin3(const char *s1, const char *s2, const char *s3);
+void	ft_array_free(char **array);
+char	*ft_str3var(const char *s1, const char *s2, const char *s3);
 
 #endif

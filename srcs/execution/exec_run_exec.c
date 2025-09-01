@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/31 11:28:34 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/01 09:48:58 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	exec_external(t_shell_data *sh, t_cmd *cmd)
 	env_array = env_list_to_array(sh->env);
 	execve(program_path, cmd->argv, env_array);
 	perror("execve");
-	ft_free2d(env_array);
+	ft_array_free(env_array);
 	free(program_path);
 	return (126);
 }
