@@ -1,3 +1,4 @@
+MAKEFLAGS  += -s
 NAME        = minishell
 
 SRC_DIR     = srcs
@@ -10,7 +11,7 @@ UTILS_SRCS = $(wildcard $(SRC_DIR)/utils/*.c)
 CLEANUP_SRCS = $(wildcard $(SRC_DIR)/cleanup/*.c)
 LOGIC_TREE_SRCS = $(wildcard $(SRC_DIR)/logic_tree/*.c)
 BINARY_TREE_SRCS = $(wildcard $(SRC_DIR)/binary_tree/*.c)
-SRCS = $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS)
+SRCS = $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS)  $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS)
 
 OBJ_DIR = obj
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -18,21 +19,37 @@ OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I $(INC_DIR) -I $(LIBFT_DIR)/includes
 
-
-.SILENT:
-
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 	@echo "\033[1;31m"
-	@echo ".------..------..------..------..------..------..------..------."
-	@echo "|M.--. ||I.--. ||N.--. ||I.--. ||H.--. ||E.--. ||L.--. ||L.--. |"
-	@echo "| (\/) || (\/) || :(): || (\/) || :/\: || (\/) || :/\: || :/\: |"
-	@echo "| :\/: || :\/: || ()() || :\/: || (__) || :\/: || (__) || (__) |"
-	@echo "| '--'M|| '--'I|| '--'N|| '--'I|| '--'H|| '--'E|| '--'L|| '--'L|"
-	@echo "'------''------''------''------''------''------''------''------'"
-	@echo "                        MINIHELL"
+	@echo " ▄█     █▄     ▄████████  ▄█        ▄████████  ▄██████▄     ▄▄▄▄███▄▄▄▄      ▄████████            "; sleep 0.1
+	@echo "███     ███   ███    ███ ███       ███    ███ ███    ███  ▄██▀▀▀███▀▀▀██▄   ███    ███            "; sleep 0.1
+	@echo "███     ███   ███    █▀  ███       ███    █▀  ███    ███  ███   ███   ███   ███    █▀             "; sleep 0.1
+	@echo "███     ███  ▄███▄▄▄     ███       ███        ███    ███  ███   ███   ███  ▄███▄▄▄                "; sleep 0.1
+	@echo "███     ███ ▀▀███▀▀▀     ███       ███        ███    ███  ███   ███   ███ ▀▀███▀▀▀                "; sleep 0.1
+	@echo "███     ███   ███    █▄  ███       ███    █▄  ███    ███  ███   ███   ███   ███    █▄             "; sleep 0.1
+	@echo "███ ▄█▄ ███   ███    ███ ███▌    ▄ ███    ███ ███    ███  ███   ███   ███   ███    ███            "; sleep 0.1
+	@echo " ▀███▀███▀    ██████████ █████▄▄██ ████████▀   ▀██████▀    ▀█   ███   █▀    ██████████            "; sleep 0.1
+	@echo ""; sleep 0.4
+	@echo "                        ███      ▄██████▄                                                         "; sleep 0.1
+	@echo "                    ▀█████████▄ ███    ███                                                        "; sleep 0.1
+	@echo "                       ▀███▀▀██ ███    ███                                                        "; sleep 0.1
+	@echo "                        ███   ▀ ███    ███                                                        "; sleep 0.1
+	@echo "                        ███     ███    ███                                                        "; sleep 0.1
+	@echo "                        ███     ███    ███                                                        "; sleep 0.1
+	@echo "                        ███     ███    ███                                                        "; sleep 0.1
+	@echo "                       ▄████▀    ▀██████▀                                                         "; sleep 0.1
+	@echo ""; sleep 0.4
+	@echo "   ▄▄▄▄███▄▄▄▄    ▄█  ███▄▄▄▄    ▄█     ▄████████    ▄█    █▄       ▄████████  ▄█        ▄█       "; sleep 0.1
+	@echo " ▄██▀▀▀███▀▀▀██▄ ███  ███▀▀▀██▄ ███    ███    ███   ███    ███     ███    ███ ███       ███       "; sleep 0.1
+	@echo " ███   ███   ███ ███▌ ███   ███ ███▌   ███    █▀    ███    ███     ███    █▀  ███       ███       "; sleep 0.1
+	@echo " ███   ███   ███ ███▌ ███   ███ ███▌   ███         ▄███▄▄▄▄███▄▄  ▄███▄▄▄     ███       ███       "; sleep 0.1
+	@echo " ███   ███   ███ ███▌ ███   ███ ███▌ ▀███████████ ▀▀███▀▀▀▀███▀  ▀▀███▀▀▀     ███       ███       "; sleep 0.1
+	@echo " ███   ███   ███ ███  ███   ███ ███           ███   ███    ███     ███    █▄  ███       ███       "; sleep 0.1
+	@echo " ███   ███   ███ ███  ███   ███ ███     ▄█    ███   ███    ███     ███    ███ ███▌    ▄ ███▌    ▄ "; sleep 0.1
+	@echo "  ▀█   ███   █▀  █▀    ▀█   █▀  █▀    ▄████████▀    ███    █▀      ██████████ █████▄▄██ █████▄▄██ "; sleep 0.1
 	@echo "\033[0m"
 
 $(LIBFT):
