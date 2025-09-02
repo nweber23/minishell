@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/01 13:56:08 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/02 10:33:23 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ bool			is_wildcard(char **argv);
 bool			token_check(t_list *node);
 bool			error_redirect(char *str, int *i, int len);
 void			set_token_position(t_list *list);
+void			clear_sublist(t_list *new);
 void			quote_toggling(char c, bool *double_q, bool *single_q);
 t_list			*remove_parenthesis(t_list *temp);
+t_list			*new_token(t_list *temp);
+t_list			*create_new_sublist(t_list *tokens);
 t_token_type	get_type(char *str);
 
 /*************************************************/
@@ -68,10 +71,20 @@ bool			parenthesis_check(char *str);
 /*************************************************/
 /*                   LOGIC_TREE                  */
 /*************************************************/
+void			*build_subtree(t_shell_data *shell, t_list *tokens);
 void			*build_tree(t_shell_data *shell, t_list *tokens);
 void			*create_and(t_shell_data *shell, void *left, void *right);
 void			*create_or(t_shell_data *shell, void *left, void *right);
-void			*get_and_node(t_shell_data *shell, void *left_node, t_list *tokens);
-void			*get_or_node(t_shell_data *shell, void *left_node, t_list *tokens);
+void			*create_pipe(t_shell_data *shell, void *left, void *right);
+void			*create_parenthesis(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
+void			*insert_nodes(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
+void			*get_and_node(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
+void			*get_or_node(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
+void			*get_pipe_node(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
 
 #endif
