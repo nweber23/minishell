@@ -6,13 +6,13 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:39:02 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 10:03:26 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int exec_external(t_shell_data *sh, t_cmd *cmd)
+static int	exec_external(t_shell_data *sh, t_cmd *cmd)
 {
 	char	*program_path;
 	char	**env_array;
@@ -40,7 +40,7 @@ static int exec_external(t_shell_data *sh, t_cmd *cmd)
 	return (126);
 }
 
-static int apply_all_redirs(t_cmd *cmd, int *fdin, int *fdout)
+static int	apply_all_redirs(t_cmd *cmd, int *fdin, int *fdout)
 {
 	if (apply_redirs_files(cmd, fdin, fdout))
 		return (1);
@@ -49,7 +49,7 @@ static int apply_all_redirs(t_cmd *cmd, int *fdin, int *fdout)
 	return (0);
 }
 
-static void fdpack_init(t_fdpack *pack)
+static void	fdpack_init(t_fdpack *pack)
 {
 	pack->in = -1;
 	pack->out = -1;
@@ -57,7 +57,7 @@ static void fdpack_init(t_fdpack *pack)
 	pack->save_out = -1;
 }
 
-static void fd_restore(t_fdpack *pack)
+static void	fd_restore(t_fdpack *pack)
 {
 	if (pack->save_in != -1)
 	{
@@ -71,10 +71,10 @@ static void fd_restore(t_fdpack *pack)
 	}
 }
 
-static int run_builtin_parent(t_shell_data *sh, t_cmd *cmd)
+static int	run_builtin_parent(t_shell_data *sh, t_cmd *cmd)
 {
-	t_fdpack pack;
-	int	 status;
+	t_fdpack	pack;
+	int			status;
 
 	fdpack_init(&pack);
 	if (apply_all_redirs(cmd, &pack.in, &pack.out))
@@ -96,10 +96,10 @@ static int run_builtin_parent(t_shell_data *sh, t_cmd *cmd)
 	return (status);
 }
 
-static void child_exec(t_shell_data *sh, t_node *node, int fds[2])
+static void	child_exec(t_shell_data *sh, t_node *node, int fds[2])
 {
-	t_fdpack pack;
-	char	**expanded_argv;
+	t_fdpack	pack;
+	char		**expanded_argv;
 
 	fdpack_init(&pack);
 	if (apply_all_redirs(node->cmd, &pack.in, &pack.out))
@@ -122,9 +122,9 @@ static void child_exec(t_shell_data *sh, t_node *node, int fds[2])
 	_exit(exec_external(sh, node->cmd));
 }
 
-static int wait_and_status(pid_t pid)
+static int	wait_and_status(pid_t pid)
 {
-	int status;
+	int	status;
 
 	if (waitpid(pid, &status, 0) == -1)
 		return (perror("waitpid"), 1);
@@ -135,7 +135,7 @@ static int wait_and_status(pid_t pid)
 	return (1);
 }
 
-int run_exec_node(t_shell_data *sh, t_node *node, int fds[2], int is_top)
+int	run_exec_node(t_shell_data *sh, t_node *node, int fds[2], int is_top)
 {
 	pid_t		pid;
 	const char	*name;

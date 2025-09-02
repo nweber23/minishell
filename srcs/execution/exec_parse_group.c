@@ -6,16 +6,16 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:22 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:36:23 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:58:50 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-t_node  *parse_group(t_shell_data *sh, t_tokarr *ta)
+t_node	*parse_group(t_shell_data *sh, t_tokarr *ta)
 {
-	t_node  *group_node;
-	t_token *token;
+	t_node	*group_node;
+	t_token	*token;
 
 	(void)sh;
 	token = peek(ta);

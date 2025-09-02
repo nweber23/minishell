@@ -6,15 +6,15 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:33 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:39:29 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 10:01:47 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int run_node(t_shell_data *sh, t_node *node, int is_top)
+int	run_node(t_shell_data *sh, t_node *node, int is_top)
 {
-	int status;
+	int	status;
 
 	if (!node)
 		return (1);
@@ -41,9 +41,9 @@ int run_node(t_shell_data *sh, t_node *node, int is_top)
 	return (1);
 }
 
-int exec_line(t_shell_data *sh, t_node *root)
+int	exec_line(t_shell_data *sh, t_node *root)
 {
-	int status;
+	int	status;
 
 	status = run_node(sh, root, 1);
 	exit_code(status);

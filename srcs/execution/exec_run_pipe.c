@@ -6,28 +6,28 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:34 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:39:53 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 10:04:06 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int make_pipe(int pipe_fds[2])
+static int	make_pipe(int pipe_fds[2])
 {
 	if (pipe(pipe_fds) == -1)
 		return (perror("pipe"), 1);
 	return (0);
 }
 
-static void close_both(int pipe_fds[2])
+static void	close_both(int pipe_fds[2])
 {
 	close(pipe_fds[0]);
 	close(pipe_fds[1]);
 }
 
-static int wait_status(pid_t pid)
+static int	wait_status(pid_t pid)
 {
-	int status;
+	int	status;
 
 	if (waitpid(pid, &status, 0) == -1)
 		return (perror("waitpid"), 1);
@@ -38,10 +38,10 @@ static int wait_status(pid_t pid)
 	return (1);
 }
 
-static pid_t fork_left(t_shell_data *sh, t_node *node, int pipe_fds[2])
+static pid_t	fork_left(t_shell_data *sh, t_node *node, int pipe_fds[2])
 {
-	pid_t   pid;
-	int	 fds_left[2];
+	pid_t	pid;
+	int		fds_left[2];
 
 	pid = fork();
 	if (pid == -1)
@@ -56,10 +56,10 @@ static pid_t fork_left(t_shell_data *sh, t_node *node, int pipe_fds[2])
 	return (pid);
 }
 
-static pid_t fork_right(t_shell_data *sh, t_node *node, int pipe_fds[2])
+static pid_t	fork_right(t_shell_data *sh, t_node *node, int pipe_fds[2])
 {
-	pid_t   pid;
-	int	 fds_right[2];
+	pid_t	pid;
+	int		fds_right[2];
 
 	pid = fork();
 	if (pid == -1)
@@ -74,12 +74,12 @@ static pid_t fork_right(t_shell_data *sh, t_node *node, int pipe_fds[2])
 	return (pid);
 }
 
-int run_pipe(t_shell_data *sh, t_node *node, int is_top)
+int	run_pipe(t_shell_data *sh, t_node *node, int is_top)
 {
-	int	 pipe_fds[2];
-	pid_t   left_pid;
-	pid_t   right_pid;
-	int	 right_status;
+	int		pipe_fds[2];
+	pid_t	left_pid;
+	pid_t	right_pid;
+	int		right_status;
 
 	(void)is_top;
 	if (make_pipe(pipe_fds))

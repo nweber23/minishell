@@ -6,13 +6,13 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:19 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:36:01 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:58:34 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int is_redir_tok(t_token *token)
+static int	is_redir_tok(t_token *token)
 {
 	if (!token)
 		return (0);
@@ -23,9 +23,9 @@ static int is_redir_tok(t_token *token)
 	return (0);
 }
 
-static int argv_len(char **vector)
+static int	argv_len(char **vector)
 {
-	int length;
+	int	length;
 
 	length = 0;
 	if (!vector)
@@ -35,11 +35,11 @@ static int argv_len(char **vector)
 	return (length);
 }
 
-static int append_word_simple(char ***argv, char *word_copy)
+static int	append_word_simple(char ***argv, char *word_copy)
 {
 	char	**new_vector;
-	int	 count;
-	int	 index;
+	int		count;
+	int		index;
 
 	count = argv_len(*argv);
 	new_vector = (char **)malloc(sizeof(char *) * (count + 2));
@@ -58,9 +58,9 @@ static int append_word_simple(char ***argv, char *word_copy)
 	return (1);
 }
 
-static int handle_word(t_tokarr *ta, t_cmd *cmd)
+static int	handle_word(t_tokarr *ta, t_cmd *cmd)
 {
-	t_token *token;
+	t_token	*token;
 	char	*dup_value;
 
 	token = peek(ta);
@@ -73,11 +73,11 @@ static int handle_word(t_tokarr *ta, t_cmd *cmd)
 	return (1);
 }
 
-static int handle_redir(t_tokarr *ta, t_cmd *cmd)
+static int	handle_redir(t_tokarr *ta, t_cmd *cmd)
 {
-	t_token	 *op_token;
-	t_token	 *arg_token;
-	t_rdrtype   rdr_kind;
+	t_token		*op_token;
+	t_token		*arg_token;
+	t_rdrtype	rdr_kind;
 
 	op_token = peek(ta);
 	if (!op_token)
@@ -87,16 +87,17 @@ static int handle_redir(t_tokarr *ta, t_cmd *cmd)
 	if (!arg_token || arg_token->type != WORD)
 		return (0);
 	rdr_kind = map_rdr(op_token->type);
-	if (!add_redir(&cmd->redirs, rdr_new(rdr_kind, ft_strdup(arg_token->value))))
+	if (!add_redir(&cmd->redirs, rdr_new(rdr_kind,
+				ft_strdup(arg_token->value))))
 		return (0);
 	next(ta);
 	return (1);
 }
 
-static int parse_command_loop(t_tokarr *ta, t_cmd *cmd)
+static int	parse_command_loop(t_tokarr *ta, t_cmd *cmd)
 {
-	t_token *token;
-	int	 success;
+	t_token	*token;
+	int		success;
 
 	success = 1;
 	token = peek(ta);
@@ -115,11 +116,11 @@ static int parse_command_loop(t_tokarr *ta, t_cmd *cmd)
 	return (1);
 }
 
-t_node  *parse_command(t_shell_data *sh, t_tokarr *ta)
+t_node	*parse_command(t_shell_data *sh, t_tokarr *ta)
 {
-	t_node  *node;
-	t_cmd   *cmd;
-	int	 success;
+	t_node	*node;
+	t_cmd	*cmd;
+	int		success;
 
 	(void)sh;
 	node = nd_new(ND_EXEC);

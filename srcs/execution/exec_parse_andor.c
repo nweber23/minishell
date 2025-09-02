@@ -6,24 +6,24 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:17 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:35:28 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:56:47 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static t_node_type logic_kind(t_token *token)
+static t_node_type	logic_kind(t_token *token)
 {
 	if (token->type == AND)
 		return (ND_AND);
 	return (ND_OR);
 }
 
-t_node  *parse_and_or(t_shell_data *sh, t_tokarr *ta)
+t_node	*parse_and_or(t_shell_data *sh, t_tokarr *ta)
 {
-	t_node  *left_node;
-	t_node  *logic_node;
-	t_token *token;
+	t_node	*left_node;
+	t_node	*logic_node;
+	t_token	*token;
 
 	left_node = parse_pipeline(sh, ta);
 	if (!left_node)

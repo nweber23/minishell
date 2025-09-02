@@ -6,15 +6,15 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:23 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:37:02 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:59:41 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static t_node *parse_factor(t_shell_data *sh, t_tokarr *ta)
+static t_node	*parse_factor(t_shell_data *sh, t_tokarr *ta)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = peek(ta);
 	if (is_lparen(token))
@@ -22,11 +22,11 @@ static t_node *parse_factor(t_shell_data *sh, t_tokarr *ta)
 	return (parse_command(sh, ta));
 }
 
-t_node  *parse_pipeline(t_shell_data *sh, t_tokarr *ta)
+t_node	*parse_pipeline(t_shell_data *sh, t_tokarr *ta)
 {
-	t_node  *left_node;
-	t_node  *pipe_node;
-	t_token *token;
+	t_node	*left_node;
+	t_node	*pipe_node;
+	t_token	*token;
 
 	left_node = parse_factor(sh, ta);
 	if (!left_node)

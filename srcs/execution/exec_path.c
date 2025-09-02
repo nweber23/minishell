@@ -6,13 +6,13 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:26 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:37:39 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:59:59 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static char *join_path(const char *prefix, const char *name)
+static char	*join_path(const char *prefix, const char *name)
 {
 	char	*with_slash;
 	char	*full_path;
@@ -30,7 +30,7 @@ char	*find_in_path(t_shell_data *sh, const char *cmd_name)
 	char	*path_value;
 	char	**path_parts;
 	char	*candidate_path;
-	int	 index;
+	int		index;
 
 	path_value = env_get(sh->env, "PATH");
 	if (!path_value)

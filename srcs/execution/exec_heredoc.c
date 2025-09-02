@@ -6,23 +6,23 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:14 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:35:00 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:56:19 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int hd_open_pipe(int pipe_fds[2])
+static int	hd_open_pipe(int pipe_fds[2])
 {
 	if (pipe(pipe_fds) == -1)
 		return (perror("pipe"), 1);
 	return (0);
 }
 
-static int hd_read_until(int write_fd, const char *delimiter)
+static int	hd_read_until(int write_fd, const char *delimiter)
 {
 	char	*line;
-	size_t  len;
+	size_t	len;
 
 	line = get_next_line(STDIN_FILENO);
 	while (line != NULL)
@@ -42,17 +42,17 @@ static int hd_read_until(int write_fd, const char *delimiter)
 	return (0);
 }
 
-static void hd_replace_in(int *fdin, int newfd)
+static void	hd_replace_in(int *fdin, int newfd)
 {
 	if (*fdin != -1)
 		close(*fdin);
 	*fdin = newfd;
 }
 
-int apply_redirs_heredoc(t_cmd *cmd, int *fdin)
+int	apply_redirs_heredoc(t_cmd *cmd, int *fdin)
 {
-	int	 pipe_fds[2];
-	t_redir *redir;
+	int		pipe_fds[2];
+	t_redir	*redir;
 
 	*fdin = -1;
 	redir = cmd->redirs;

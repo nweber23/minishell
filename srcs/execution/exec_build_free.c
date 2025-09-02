@@ -6,18 +6,18 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:00:57 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:33:01 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:52:31 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static t_token **tokens_to_array(t_list *list_head, int *out_count)
+static t_token	**tokens_to_array(t_list *list_head, int *out_count)
 {
-	int	 count;
-	int	 index;
-	t_token **array;
-	t_list  *node;
+	int		count;
+	int		index;
+	t_token	**array;
+	t_list	*node;
 
 	count = 0;
 	node = list_head;
@@ -41,10 +41,10 @@ static t_token **tokens_to_array(t_list *list_head, int *out_count)
 	return (array);
 }
 
-t_node  *build_tree(t_shell_data *sh, t_list *tokens)
+t_node	*build_tree(t_shell_data *sh, t_list *tokens)
 {
 	t_tokarr	tokarr;
-	t_node	  *root;
+	t_node		*root;
 
 	tokarr.v = tokens_to_array(tokens, &tokarr.n);
 	if (!tokarr.v)
@@ -55,9 +55,9 @@ t_node  *build_tree(t_shell_data *sh, t_list *tokens)
 	return (root);
 }
 
-static void free_redirs(t_redir *redir_head)
+static void	free_redirs(t_redir *redir_head)
 {
-	t_redir *next_redir;
+	t_redir	*next_redir;
 
 	while (redir_head)
 	{
@@ -70,7 +70,7 @@ static void free_redirs(t_redir *redir_head)
 
 void	free_tree(t_node *node)
 {
-	int arg_index;
+	int	arg_index;
 
 	if (!node)
 		return ;
