@@ -9,7 +9,8 @@ PARSING_SRCS = $(wildcard $(SRC_DIR)/parsing/*.c)
 UTILS_SRCS = $(wildcard $(SRC_DIR)/utils/*.c)
 CLEANUP_SRCS = $(wildcard $(SRC_DIR)/cleanup/*.c)
 LOGIC_TREE_SRCS = $(wildcard $(SRC_DIR)/logic_tree/*.c)
-SRCS = $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS)
+BINARY_TREE_SRCS = $(wildcard $(SRC_DIR)/binary_tree/*.c)
+SRCS = $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS)
 
 OBJ_DIR = obj
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

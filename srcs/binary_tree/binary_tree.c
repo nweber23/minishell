@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:32:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/02 11:11:31 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/02 12:14:51 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,26 @@ void	*insert_node(t_shell_data *shell, void *root, t_list *temp)
 
 void	*create_execution(t_shell_data *shell, t_list *tokens)
 {
+	t_exec	*exec;
+	t_list	*current;
 
+	if (!tokens)
+		return (NULL);
+	exec = malloc(sizeof(t_exec));
+	if (!exec)
+		error_malloc("create_execution", shell);
+	exec->type = N_EXEC;
+	exec->argv = NULL;
+	exec->command = NULL;
+	exec->infile = NULL;
+	exec->outfile = NULL;
+	get_infiles(shell, tokens, &exec->infile);
+	get_outfiles(shell, tokens, &exec->outfile);
+	current = get_name(tokens);
+	if (current)
+	{
+		exec->command = ((t_token *)current)->value;
+		exec->argv = get_arguments(shell, tokens);
+	}
+	return (exec);
 }
