@@ -1,13 +1,12 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   bi_exit.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+      */
+/*                                                    +:+ +:+         +:+     */
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 10:55:00 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:45:57 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +30,9 @@ static int	is_num(const char *s)
 	return (1);
 }
 
-int bi_exit(t_shell_data *shell, char **args)
+int	bi_exit(t_shell_data *shell, char **args)
 {
-	int exit_code_value;
+	int	exit_code_value;
 
 	(void)shell;
 	ft_putendl_fd("exit", 2);
@@ -54,4 +53,3 @@ int bi_exit(t_shell_data *shell, char **args)
 	exit_code_value = ft_atoi(args[0]);
 	exit(exit_code_value);
 }
-

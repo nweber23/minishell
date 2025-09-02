@@ -6,15 +6,15 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:01 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:32:01 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:49:47 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-t_node  *nd_new(t_node_type kind)
+t_node	*nd_new(t_node_type kind)
 {
-	t_node  *node;
+	t_node	*node;
 
 	node = (t_node *)malloc(sizeof(t_node));
 	if (!node)
@@ -26,9 +26,9 @@ t_node  *nd_new(t_node_type kind)
 	return (node);
 }
 
-t_redir *rdr_new(t_rdrtype kind, char *word)
+t_redir	*rdr_new(t_rdrtype kind, char *word)
 {
-	t_redir *redir_node;
+	t_redir	*redir_node;
 
 	redir_node = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_node)
@@ -39,7 +39,7 @@ t_redir *rdr_new(t_rdrtype kind, char *word)
 	return (redir_node);
 }
 
-int is_lparen(t_token *token)
+int	is_lparen(t_token *token)
 {
 	if (!token)
 		return (0);
@@ -48,7 +48,7 @@ int is_lparen(t_token *token)
 	return (0);
 }
 
-int is_rparen(t_token *token)
+int	is_rparen(t_token *token)
 {
 	if (!token)
 		return (0);

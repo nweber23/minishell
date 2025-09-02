@@ -1,13 +1,12 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   bi_export.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+      */
+/*                                                    +:+ +:+         +:+     */
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 10:55:00 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:46:19 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +28,10 @@ static int	valid_key(const char *s)
 	return (1);
 }
 
-static void set_env_kv(t_shell_data *shell, const char *key_value_pair)
+static void	set_env_kv(t_shell_data *shell, const char *key_value_pair)
 {
-	t_list  *node;
-	size_t  key_length;
+	t_list	*node;
+	size_t	key_length;
 
 	key_length = 0;
 	while (key_value_pair[key_length] && key_value_pair[key_length] != '=')
@@ -52,9 +51,9 @@ static void set_env_kv(t_shell_data *shell, const char *key_value_pair)
 	ft_lstadd_back(&shell->env, ft_lstnew(ft_strdup(key_value_pair)));
 }
 
-int bi_export(t_shell_data *shell, char **args)
+int	bi_export(t_shell_data *shell, char **args)
 {
-	int arg_index;
+	int	arg_index;
 
 	if (!args || !args[0])
 		return (bi_env(shell));

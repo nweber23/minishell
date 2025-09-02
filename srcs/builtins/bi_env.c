@@ -1,21 +1,20 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   bi_env.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+      */
+/*                                                    +:+ +:+         +:+     */
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 10:55:00 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:44:54 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int bi_env(t_shell_data *shell)
+int	bi_env(t_shell_data *shell)
 {
-	t_list  *node;
+	t_list	*node;
 
 	node = shell->env;
 	while (node)
@@ -25,4 +24,3 @@ int bi_env(t_shell_data *shell)
 	}
 	return (0);
 }
-

@@ -1,21 +1,20 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   bi_echo.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+      */
+/*                                                    +:+ +:+         +:+     */
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 10:55:00 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:43:41 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int is_n_option(const char *arg)
+static int	is_n_option(const char *arg)
 {
-	int idx;
+	int	idx;
 
 	if (!arg || arg[0] != '-' || arg[1] != 'n')
 		return (0);
@@ -27,10 +26,10 @@ static int is_n_option(const char *arg)
 	return (1);
 }
 
-int bi_echo(char **args)
+int	bi_echo(char **args)
 {
-	int index;
-	int print_newline;
+	int	index;
+	int	print_newline;
 
 	index = 0;
 	print_newline = 1;

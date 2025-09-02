@@ -1,19 +1,18 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   bi_cd.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+      */
+/*                                                    +:+ +:+         +:+     */
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 10:55:00 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:42:47 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int update_pwd_vars(t_shell_data *shell, const char *old_pwd)
+static int	update_pwd_vars(t_shell_data *shell, const char *old_pwd)
 {
 	char	current_directory[4096];
 	char	*cwd_result;
@@ -28,7 +27,7 @@ static int update_pwd_vars(t_shell_data *shell, const char *old_pwd)
 	return (0);
 }
 
-int bi_cd(t_shell_data *shell, char **args)
+int	bi_cd(t_shell_data *shell, char **args)
 {
 	char	old_pwd[4096];
 	char	*target_directory;
