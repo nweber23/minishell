@@ -29,47 +29,47 @@ static int	valid_key(const char *s)
 	return (1);
 }
 
-static void	set_env_kv(t_shell_data *sh, const char *kv)
+static void set_env_kv(t_shell_data *shell, const char *key_value_pair)
 {
-	t_list	*p;
-	size_t	keylen;
+	t_list  *node;
+	size_t  key_length;
 
-	keylen = 0;
-	while (kv[keylen] && kv[keylen] != '=')
-		keylen++;
-	p = sh->env;
-	while (p)
+	key_length = 0;
+	while (key_value_pair[key_length] && key_value_pair[key_length] != '=')
+		key_length++;
+	node = shell->env;
+	while (node)
 	{
-		if (ft_strncmp((char *)p->content, kv, keylen) == 0
-			&& ((char *)p->content)[keylen] == '=')
+		if (ft_strncmp((char *)node->content, key_value_pair, key_length) == 0
+			&& ((char *)node->content)[key_length] == '=')
 		{
-			free(p->content);
-			p->content = ft_strdup(kv);
+			free(node->content);
+			node->content = ft_strdup(key_value_pair);
 			return ;
 		}
-		p = p->next;
+		node = node->next;
 	}
-	ft_lstadd_back(&sh->env, ft_lstnew(ft_strdup(kv)));
+	ft_lstadd_back(&shell->env, ft_lstnew(ft_strdup(key_value_pair)));
 }
 
-int	bi_export(t_shell_data *sh, char **argv)
+int bi_export(t_shell_data *shell, char **args)
 {
-	int	i;
+	int arg_index;
 
-	if (!argv || !argv[0])
-		return (bi_env(sh));
-	i = 0;
-	while (argv[i])
+	if (!args || !args[0])
+		return (bi_env(shell));
+	arg_index = 0;
+	while (args[arg_index])
 	{
-		if (!valid_key(argv[i]))
+		if (!valid_key(args[arg_index]))
 		{
 			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(argv[i], 2);
+			ft_putstr_fd(args[arg_index], 2);
 			ft_putendl_fd("': not a valid identifier", 2);
 		}
 		else
-			set_env_kv(sh, argv[i]);
-		i++;
+			set_env_kv(shell, args[arg_index]);
+		arg_index++;
 	}
 	return (0);
 }

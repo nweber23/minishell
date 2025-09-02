@@ -6,59 +6,59 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:00:59 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 12:13:45 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:31:29 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	append_word(char ***argv, int *argc, char *w)
+int append_word(char ***argv, int *argc, char *word)
 {
-	char	**newv;
-	int		i;
+	char	**new_vector;
+	int	 index;
 
-	newv = (char **)malloc(sizeof(char *) * (*argc + 2));
-	if (!newv)
+	new_vector = (char **)malloc(sizeof(char *) * (*argc + 2));
+	if (!new_vector)
 		return (0);
-	i = 0;
-	while (i < *argc)
+	index = 0;
+	while (index < *argc)
 	{
-		newv[i] = (*argv)[i];
-		i++;
+		new_vector[index] = (*argv)[index];
+		index++;
 	}
-	newv[i] = w;
-	newv[i + 1] = NULL;
+	new_vector[index] = word;
+	new_vector[index + 1] = NULL;
 	free(*argv);
-	*argv = newv;
+	*argv = new_vector;
 	*argc = *argc + 1;
 	return (1);
 }
 
-int	add_redir(t_redir **lst, t_redir *node)
+int add_redir(t_redir **list_head, t_redir *new_node)
 {
-	t_redir	*p;
+	t_redir *tail;
 
-	if (!node)
+	if (!new_node)
 		return (0);
-	if (!*lst)
+	if (!*list_head)
 	{
-		*lst = node;
+		*list_head = new_node;
 		return (1);
 	}
-	p = *lst;
-	while (p->next)
-		p = p->next;
-	p->next = node;
+	tail = *list_head;
+	while (tail->next)
+		tail = tail->next;
+	tail->next = new_node;
 	return (1);
 }
 
-t_rdrtype	map_rdr(t_token_type tt)
+t_rdrtype map_rdr(t_token_type token_type)
 {
-	if (tt == INFILE)
+	if (token_type == INFILE)
 		return (R_IN);
-	if (tt == OUTFILE)
+	if (token_type == OUTFILE)
 		return (R_OUT_TRUNC);
-	if (tt == APPEND)
+	if (token_type == APPEND)
 		return (R_OUT_APPEND);
 	return (R_HEREDOC);
 }

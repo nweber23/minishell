@@ -6,28 +6,26 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:12 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/01 09:48:58 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:34:24 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 #include <dirent.h>
 
-static int	has_star(const char *pattern)
+static int has_star(const char *pattern)
 {
-	int	i;
-
-	i = 0;
-	while (pattern[i])
+	int index = 0;
+	while (pattern[index])
 	{
-		if (pattern[i] == '*')
+		if (pattern[index] == '*')
 			return (1);
-		i++;
+		index++;
 	}
 	return (0);
 }
 
-static int	glob_match(const char *pattern, const char *name)
+static int glob_match(const char *pattern, const char *name)
 {
 	while (*pattern && *name)
 	{
@@ -55,16 +53,16 @@ static int	glob_match(const char *pattern, const char *name)
 	return (*pattern == '\0' && *name == '\0');
 }
 
-static int	should_skip_hidden(const char *pattern, const char *name)
+static int should_skip_hidden(const char *pattern, const char *name)
 {
 	if (name[0] == '.' && pattern[0] != '.')
 		return (1);
 	return (0);
 }
 
-static int	push_name(char ***dst_vec, int *dst_cnt, const char *name)
+static int push_name(char ***dst_vec, int *dst_cnt, const char *name)
 {
-	char	*dup_name;
+	char *dup_name;
 
 	dup_name = ft_strdup(name);
 	if (!dup_name)
@@ -77,10 +75,10 @@ static int	push_name(char ***dst_vec, int *dst_cnt, const char *name)
 	return (1);
 }
 
-static int	build_match_list(const char *pattern, char ***out_vec, int *out_cnt)
+static int build_match_list(const char *pattern, char ***out_vec, int *out_cnt)
 {
-	DIR				*dir_ptr;
-	struct dirent	*dir_ent;
+	DIR			 *dir_ptr;
+	struct dirent   *dir_ent;
 	char			*entry_name;
 
 	*out_vec = NULL;
@@ -104,7 +102,7 @@ static int	build_match_list(const char *pattern, char ***out_vec, int *out_cnt)
 	return (1);
 }
 
-static int	append_copy(char ***dst_vec, int *dst_cnt, const char *word)
+static int append_copy(char ***dst_vec, int *dst_cnt, const char *word)
 {
 	char	*dup_word;
 
@@ -119,15 +117,13 @@ static int	append_copy(char ***dst_vec, int *dst_cnt, const char *word)
 	return (1);
 }
 
-static int	expand_pattern_word(const char *pattern,
+static int expand_pattern_word(const char *pattern,
 		char ***dst_vec, int *dst_cnt)
 {
-	char	**match_vec;
-	int		match_cnt;
-	int		i;
+	char	**match_vec = NULL;
+	int	 match_cnt = 0;
+	int	 index;
 
-	match_vec = NULL;
-	match_cnt = 0;
 	if (!build_match_list(pattern, &match_vec, &match_cnt))
 		return (0);
 	if (match_cnt == 0)
@@ -136,12 +132,12 @@ static int	expand_pattern_word(const char *pattern,
 			return (ft_array_free(match_vec), 0);
 		return (ft_array_free(match_vec), 1);
 	}
-	i = 0;
-	while (i < match_cnt)
+	index = 0;
+	while (index < match_cnt)
 	{
-		if (!append_word(dst_vec, dst_cnt, match_vec[i]))
+		if (!append_word(dst_vec, dst_cnt, match_vec[index]))
 			return (ft_array_free(match_vec), ft_array_free(*dst_vec), 0);
-		i++;
+		index++;
 	}
 	free(match_vec);
 	return (1);
@@ -149,8 +145,8 @@ static int	expand_pattern_word(const char *pattern,
 
 char	**expand_argv_if_needed(char **argv)
 {
-	int		source_index;
-	int		result_count;
+	int	 source_index;
+	int	 result_count;
 	char	**result_vec;
 
 	if (!argv)

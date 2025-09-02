@@ -6,13 +6,13 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 11:00:41 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/01 09:53:51 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:40:47 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	key_matches(const char *entry, const char *key, size_t key_len)
+static int key_matches(const char *entry, const char *key, size_t key_len)
 {
 	if (ft_strncmp(entry, key, key_len) != 0)
 		return (0);
@@ -21,9 +21,9 @@ static int	key_matches(const char *entry, const char *key, size_t key_len)
 	return (1);
 }
 
-static t_list	*find_key_node(t_list *env, const char *key, size_t key_len)
+static t_list *find_key_node(t_list *env, const char *key, size_t key_len)
 {
-	char	*entry;
+	char *entry;
 
 	while (env)
 	{
@@ -35,9 +35,9 @@ static t_list	*find_key_node(t_list *env, const char *key, size_t key_len)
 	return (NULL);
 }
 
-static int	replace_node_kv(t_list *node, const char *kv_pair)
+static int replace_node_kv(t_list *node, const char *kv_pair)
 {
-	char	*new_str;
+	char *new_str;
 
 	if (!node)
 		return (1);
@@ -49,9 +49,9 @@ static int	replace_node_kv(t_list *node, const char *kv_pair)
 	return (0);
 }
 
-static int	append_new_kv(t_list **env, const char *kv_pair)
+static int append_new_kv(t_list **env, const char *kv_pair)
 {
-	t_list	*new_node;
+	t_list  *new_node;
 	char	*dup;
 
 	dup = ft_strdup(kv_pair);
@@ -69,7 +69,7 @@ static int	append_new_kv(t_list **env, const char *kv_pair)
 
 char	*env_get(t_list *env, const char *key)
 {
-	size_t	key_len;
+	size_t  key_len;
 	char	*entry;
 
 	if (!env || !key)
@@ -86,11 +86,11 @@ char	*env_get(t_list *env, const char *key)
 	return (NULL);
 }
 
-int	env_set(t_shell_data *sh, const char *key, const char *value)
+int env_set(t_shell_data *sh, const char *key, const char *value)
 {
-	size_t	key_len;
+	size_t  key_len;
 	char	*kv_pair;
-	t_list	*node;
+	t_list  *node;
 
 	if (!sh || !key || !value)
 		return (1);
@@ -110,9 +110,9 @@ int	env_set(t_shell_data *sh, const char *key, const char *value)
 	return (free(kv_pair), 0);
 }
 
-static int	count_env_nodes(t_list *env)
+static int count_env_nodes(t_list *env)
 {
-	int	count;
+	int count;
 
 	count = 0;
 	while (env)
@@ -123,28 +123,28 @@ static int	count_env_nodes(t_list *env)
 	return (count);
 }
 
-static int	fill_env_array(t_list *env, char **array)
+static int fill_env_array(t_list *env, char **array)
 {
-	int		i;
+	int	 index;
 	char	*dup;
 
-	i = 0;
+	index = 0;
 	while (env)
 	{
 		dup = ft_strdup((char *)env->content);
 		if (!dup)
 			return (1);
-		array[i] = dup;
-		i++;
+		array[index] = dup;
+		index++;
 		env = env->next;
 	}
-	array[i] = NULL;
+	array[index] = NULL;
 	return (0);
 }
 
 char	**env_list_to_array(t_list *env)
 {
-	int		count;
+	int	 count;
 	char	**array;
 
 	count = count_env_nodes(env);

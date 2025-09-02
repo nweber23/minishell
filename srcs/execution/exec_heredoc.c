@@ -6,23 +6,23 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:14 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/28 17:26:53 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:35:00 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int	hd_open_pipe(int pfd[2])
+static int hd_open_pipe(int pipe_fds[2])
 {
-	if (pipe(pfd) == -1)
+	if (pipe(pipe_fds) == -1)
 		return (perror("pipe"), 1);
 	return (0);
 }
 
-static int	hd_read_until(int wfd, const char *delim)
+static int hd_read_until(int write_fd, const char *delimiter)
 {
 	char	*line;
-	size_t	len;
+	size_t  len;
 
 	line = get_next_line(STDIN_FILENO);
 	while (line != NULL)
@@ -30,48 +30,48 @@ static int	hd_read_until(int wfd, const char *delim)
 		len = ft_strlen(line);
 		if (len > 0 && line[len - 1] == '\n')
 			line[len - 1] = '\0';
-		if (ft_strcmp(line, delim) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			return (0);
 		}
-		ft_putendl_fd(line, wfd);
+		ft_putendl_fd(line, write_fd);
 		free(line);
 		line = get_next_line(STDIN_FILENO);
 	}
 	return (0);
 }
 
-static void	hd_replace_in(int *fdin, int newfd)
+static void hd_replace_in(int *fdin, int newfd)
 {
 	if (*fdin != -1)
 		close(*fdin);
 	*fdin = newfd;
 }
 
-int	apply_redirs_heredoc(t_cmd *c, int *fdin)
+int apply_redirs_heredoc(t_cmd *cmd, int *fdin)
 {
-	int		pfd[2];
-	t_redir	*r;
+	int	 pipe_fds[2];
+	t_redir *redir;
 
 	*fdin = -1;
-	r = c->redirs;
-	while (r)
+	redir = cmd->redirs;
+	while (redir)
 	{
-		if (r->type == R_HEREDOC)
+		if (redir->type == R_HEREDOC)
 		{
-			if (hd_open_pipe(pfd))
+			if (hd_open_pipe(pipe_fds))
 				return (1);
-			if (hd_read_until(pfd[1], r->word))
+			if (hd_read_until(pipe_fds[1], redir->word))
 			{
-				close(pfd[0]);
-				close(pfd[1]);
+				close(pipe_fds[0]);
+				close(pipe_fds[1]);
 				return (1);
 			}
-			close(pfd[1]);
-			hd_replace_in(fdin, pfd[0]);
+			close(pipe_fds[1]);
+			hd_replace_in(fdin, pipe_fds[0]);
 		}
-		r = r->next;
+		redir = redir->next;
 	}
 	return (0);
 }

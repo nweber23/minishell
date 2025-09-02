@@ -6,90 +6,90 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:00:57 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 12:14:06 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:33:01 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-t_token	**tokens_to_array(t_list *lst, int *out_n)
+static t_token **tokens_to_array(t_list *list_head, int *out_count)
 {
-	int		n;
-	int		i;
-	t_token	**arr;
-	t_list	*p;
+	int	 count;
+	int	 index;
+	t_token **array;
+	t_list  *node;
 
-	n = 0;
-	p = lst;
-	while (p)
+	count = 0;
+	node = list_head;
+	while (node)
 	{
-		n++;
-		p = p->next;
+		count++;
+		node = node->next;
 	}
-	arr = (t_token **)malloc(sizeof(t_token *) * n);
-	if (!arr)
+	array = (t_token **)malloc(sizeof(t_token *) * count);
+	if (!array)
 		return (NULL);
-	i = 0;
-	p = lst;
-	while (p)
+	index = 0;
+	node = list_head;
+	while (node)
 	{
-		arr[i] = (t_token *)p->content;
-		i++;
-		p = p->next;
+		array[index] = (t_token *)node->content;
+		index++;
+		node = node->next;
 	}
-	*out_n = n;
-	return (arr);
+	*out_count = count;
+	return (array);
 }
 
-t_node	*build_tree(t_shell_data *sh, t_list *tokens)
+t_node  *build_tree(t_shell_data *sh, t_list *tokens)
 {
-	t_tokarr	ta;
-	t_node		*root;
+	t_tokarr	tokarr;
+	t_node	  *root;
 
-	ta.v = tokens_to_array(tokens, &ta.n);
-	if (!ta.v)
+	tokarr.v = tokens_to_array(tokens, &tokarr.n);
+	if (!tokarr.v)
 		return (NULL);
-	ta.i = 0;
-	root = parse_and_or(sh, &ta);
-	free(ta.v);
+	tokarr.i = 0;
+	root = parse_and_or(sh, &tokarr);
+	free(tokarr.v);
 	return (root);
 }
 
-static void	free_redirs(t_redir *r)
+static void free_redirs(t_redir *redir_head)
 {
-	t_redir	*n;
+	t_redir *next_redir;
 
-	while (r)
+	while (redir_head)
 	{
-		n = r->next;
-		free(r->word);
-		free(r);
-		r = n;
+		next_redir = redir_head->next;
+		free(redir_head->word);
+		free(redir_head);
+		redir_head = next_redir;
 	}
 }
 
-void	free_tree(t_node *n)
+void	free_tree(t_node *node)
 {
-	int	i;
+	int arg_index;
 
-	if (!n)
+	if (!node)
 		return ;
-	free_tree(n->left);
-	free_tree(n->right);
-	if (n->type == ND_EXEC && n->cmd)
+	free_tree(node->left);
+	free_tree(node->right);
+	if (node->type == ND_EXEC && node->cmd)
 	{
-		i = 0;
-		if (n->cmd->argv)
+		arg_index = 0;
+		if (node->cmd->argv)
 		{
-			while (n->cmd->argv[i])
+			while (node->cmd->argv[arg_index])
 			{
-				free(n->cmd->argv[i]);
-				i++;
+				free(node->cmd->argv[arg_index]);
+				arg_index++;
 			}
-			free(n->cmd->argv);
+			free(node->cmd->argv);
 		}
-		free_redirs(n->cmd->redirs);
-		free(n->cmd);
+		free_redirs(node->cmd->redirs);
+		free(node->cmd);
 	}
-	free(n);
+	free(node);
 }

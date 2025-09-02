@@ -31,26 +31,27 @@ static int	is_num(const char *s)
 	return (1);
 }
 
-int	bi_exit(t_shell_data *sh, char **argv)
+int bi_exit(t_shell_data *shell, char **args)
 {
-	int	code;
+	int exit_code_value;
 
-	(void)sh;
+	(void)shell;
 	ft_putendl_fd("exit", 2);
-	if (!argv[0])
+	if (!args[0])
 		exit(0);
-	if (!is_num(argv[0]))
+	if (!is_num(args[0]))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(argv[0], 2);
+		ft_putstr_fd(args[0], 2);
 		ft_putendl_fd(": numeric argument required", 2);
 		exit(2);
 	}
-	if (argv[1])
+	if (args[1])
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		return (1);
 	}
-	code = ft_atoi(argv[0]);
-	exit(code);
+	exit_code_value = ft_atoi(args[0]);
+	exit(exit_code_value);
 }
+

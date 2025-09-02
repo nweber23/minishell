@@ -13,14 +13,14 @@
 
 #include "execution.h"
 
-int	bi_pwd(void)
+int bi_pwd(void)
 {
-	char	buf[4096];
-	char	*p;
+	char	cwd_buffer[4096];
+	char	*cwd_result;
 
-	p = getcwd(buf, sizeof(buf));
-	if (!p)
+	cwd_result = getcwd(cwd_buffer, sizeof(cwd_buffer));
+	if (!cwd_result)
 		return (perror("pwd"), 1);
-	ft_putendl_fd(p, STDOUT_FILENO);
+	ft_putendl_fd(cwd_result, STDOUT_FILENO);
 	return (0);
 }

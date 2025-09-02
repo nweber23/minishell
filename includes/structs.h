@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/01 09:27:08 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:06:34 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ typedef struct s_shell_data
 // ABT node types for different command operations
 typedef enum e_node_type
 {
-	N_PIPE,
-	N_EXEC,
-	N_AND,
-	N_OR,
+	ND_EXEC,
+	ND_PIPE,
+	ND_AND,
+	ND_OR,
+	ND_GROUP
 }	t_node_type;
 
 // ABT node for logical OR operations with left and right operands

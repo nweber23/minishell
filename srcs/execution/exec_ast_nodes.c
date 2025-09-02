@@ -6,53 +6,53 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:01 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 12:13:50 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:32:01 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-t_node	*nd_new(t_ndtype t)
+t_node  *nd_new(t_node_type kind)
 {
-	t_node	*n;
+	t_node  *node;
 
-	n = (t_node *)malloc(sizeof(t_node));
-	if (!n)
+	node = (t_node *)malloc(sizeof(t_node));
+	if (!node)
 		return (NULL);
-	n->type = t;
-	n->left = NULL;
-	n->right = NULL;
-	n->cmd = NULL;
-	return (n);
+	node->type = kind;
+	node->left = NULL;
+	node->right = NULL;
+	node->cmd = NULL;
+	return (node);
 }
 
-t_redir	*rdr_new(t_rdrtype t, char *word)
+t_redir *rdr_new(t_rdrtype kind, char *word)
 {
-	t_redir	*r;
+	t_redir *redir_node;
 
-	r = (t_redir *)malloc(sizeof(t_redir));
-	if (!r)
+	redir_node = (t_redir *)malloc(sizeof(t_redir));
+	if (!redir_node)
 		return (NULL);
-	r->type = t;
-	r->word = word;
-	r->next = NULL;
-	return (r);
+	redir_node->type = kind;
+	redir_node->word = word;
+	redir_node->next = NULL;
+	return (redir_node);
 }
 
-int	is_lparen(t_token *t)
+int is_lparen(t_token *token)
 {
-	if (!t)
+	if (!token)
 		return (0);
-	if (t->type == PARENTHESIS && t->value && t->value[0] == '(')
+	if (token->type == PARENTHESIS && token->value && token->value[0] == '(')
 		return (1);
 	return (0);
 }
 
-int	is_rparen(t_token *t)
+int is_rparen(t_token *token)
 {
-	if (!t)
+	if (!token)
 		return (0);
-	if (t->type == PARENTHESIS && t->value && t->value[0] == ')')
+	if (token->type == PARENTHESIS && token->value && token->value[0] == ')')
 		return (1);
 	return (0);
 }

@@ -13,40 +13,40 @@
 
 #include "execution.h"
 
-static int	is_n_option(const char *s)
+static int is_n_option(const char *arg)
 {
-	int	i;
+	int idx;
 
-	if (!s || s[0] != '-' || s[1] != 'n')
+	if (!arg || arg[0] != '-' || arg[1] != 'n')
 		return (0);
-	i = 2;
-	while (s[i] == 'n')
-		i++;
-	if (s[i] != '\0')
+	idx = 2;
+	while (arg[idx] == 'n')
+		idx++;
+	if (arg[idx] != '\0')
 		return (0);
 	return (1);
 }
 
-int	bi_echo(char **argv)
+int bi_echo(char **args)
 {
-	int		i;
-	int		nl;
+	int index;
+	int print_newline;
 
-	i = 0;
-	nl = 1;
-	while (argv[i] && is_n_option(argv[i]))
+	index = 0;
+	print_newline = 1;
+	while (args[index] && is_n_option(args[index]))
 	{
-		nl = 0;
-		i++;
+		print_newline = 0;
+		index++;
 	}
-	while (argv[i])
+	while (args[index])
 	{
-		ft_putstr_fd(argv[i], STDOUT_FILENO);
-		if (argv[i + 1])
+		ft_putstr_fd(args[index], STDOUT_FILENO);
+		if (args[index + 1])
 			ft_putstr_fd(" ", STDOUT_FILENO);
-		i++;
+		index++;
 	}
-	if (nl)
+	if (print_newline)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 	return (0);
 }

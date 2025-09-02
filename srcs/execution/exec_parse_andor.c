@@ -6,40 +6,40 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:17 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/27 11:36:02 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:35:28 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static t_ndtype	logic_kind(t_token *t)
+static t_node_type logic_kind(t_token *token)
 {
-	if (t->type == AND)
+	if (token->type == AND)
 		return (ND_AND);
 	return (ND_OR);
 }
 
-t_node	*parse_and_or(t_shell_data *sh, t_tokarr *ta)
+t_node  *parse_and_or(t_shell_data *sh, t_tokarr *ta)
 {
-	t_node	*left;
-	t_node	*logic;
-	t_token	*t;
+	t_node  *left_node;
+	t_node  *logic_node;
+	t_token *token;
 
-	left = parse_pipeline(sh, ta);
-	if (!left)
+	left_node = parse_pipeline(sh, ta);
+	if (!left_node)
 		return (NULL);
 	while (1)
 	{
-		t = peek(ta);
-		if (!t || (t->type != AND && t->type != OR))
+		token = peek(ta);
+		if (!token || (token->type != AND && token->type != OR))
 			break ;
-		logic = nd_new(logic_kind(t));
-		if (!logic)
-			return (left);
+		logic_node = nd_new(logic_kind(token));
+		if (!logic_node)
+			return (left_node);
 		next(ta);
-		logic->left = left;
-		logic->right = parse_pipeline(sh, ta);
-		left = logic;
+		logic_node->left = left_node;
+		logic_node->right = parse_pipeline(sh, ta);
+		left_node = logic_node;
 	}
-	return (left);
+	return (left_node);
 }

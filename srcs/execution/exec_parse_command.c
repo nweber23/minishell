@@ -6,133 +6,133 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:19 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/28 18:25:04 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 09:36:01 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int	is_redir_tok(t_token *t)
+static int is_redir_tok(t_token *token)
 {
-	if (!t)
+	if (!token)
 		return (0);
-	if (t->type == INFILE || t->type == OUTFILE)
+	if (token->type == INFILE || token->type == OUTFILE)
 		return (1);
-	if (t->type == APPEND || t->type == HERE_DOC)
+	if (token->type == APPEND || token->type == HERE_DOC)
 		return (1);
 	return (0);
 }
 
-static int	argv_len(char **v)
+static int argv_len(char **vector)
 {
-	int	i;
+	int length;
 
-	i = 0;
-	if (!v)
+	length = 0;
+	if (!vector)
 		return (0);
-	while (v[i])
-		i++;
-	return (i);
+	while (vector[length])
+		length++;
+	return (length);
 }
 
-static int	append_word_simple(char ***argv, char *w)
+static int append_word_simple(char ***argv, char *word_copy)
 {
-	char	**newv;
-	int		n;
-	int		i;
+	char	**new_vector;
+	int	 count;
+	int	 index;
 
-	n = argv_len(*argv);
-	newv = (char **)malloc(sizeof(char *) * (n + 2));
-	if (!newv)
+	count = argv_len(*argv);
+	new_vector = (char **)malloc(sizeof(char *) * (count + 2));
+	if (!new_vector)
 		return (0);
-	i = 0;
-	while (i < n)
+	index = 0;
+	while (index < count)
 	{
-		newv[i] = (*argv)[i];
-		i++;
+		new_vector[index] = (*argv)[index];
+		index++;
 	}
-	newv[i] = w;
-	newv[i + 1] = NULL;
+	new_vector[index] = word_copy;
+	new_vector[index + 1] = NULL;
 	free(*argv);
-	*argv = newv;
+	*argv = new_vector;
 	return (1);
 }
 
-static int	handle_word(t_tokarr *ta, t_cmd *cmd)
+static int handle_word(t_tokarr *ta, t_cmd *cmd)
 {
-	t_token	*t;
-	char	*cp;
+	t_token *token;
+	char	*dup_value;
 
-	t = peek(ta);
-	if (!t || t->type != WORD)
+	token = peek(ta);
+	if (!token || token->type != WORD)
 		return (0);
-	cp = ft_strdup(t->value);
-	if (!append_word_simple(&cmd->argv, cp))
+	dup_value = ft_strdup(token->value);
+	if (!append_word_simple(&cmd->argv, dup_value))
 		return (0);
 	next(ta);
 	return (1);
 }
 
-static int	handle_redir(t_tokarr *ta, t_cmd *cmd)
+static int handle_redir(t_tokarr *ta, t_cmd *cmd)
 {
-	t_token		*op;
-	t_token		*arg;
-	t_rdrtype	rt;
+	t_token	 *op_token;
+	t_token	 *arg_token;
+	t_rdrtype   rdr_kind;
 
-	op = peek(ta);
-	if (!op)
+	op_token = peek(ta);
+	if (!op_token)
 		return (0);
 	next(ta);
-	arg = peek(ta);
-	if (!arg || arg->type != WORD)
+	arg_token = peek(ta);
+	if (!arg_token || arg_token->type != WORD)
 		return (0);
-	rt = map_rdr(op->type);
-	if (!add_redir(&cmd->redirs, rdr_new(rt, ft_strdup(arg->value))))
+	rdr_kind = map_rdr(op_token->type);
+	if (!add_redir(&cmd->redirs, rdr_new(rdr_kind, ft_strdup(arg_token->value))))
 		return (0);
 	next(ta);
 	return (1);
 }
 
-static int	parse_command_loop(t_tokarr *ta, t_cmd *cmd)
+static int parse_command_loop(t_tokarr *ta, t_cmd *cmd)
 {
-	t_token	*t;
-	int		ok;
+	t_token *token;
+	int	 success;
 
-	ok = 1;
-	t = peek(ta);
-	while (t && !is_cmd_end(t) && !is_lparen(t))
+	success = 1;
+	token = peek(ta);
+	while (token && !is_cmd_end(token) && !is_lparen(token))
 	{
-		if (t->type == WORD)
-			ok = handle_word(ta, cmd);
-		else if (is_redir_tok(t))
-			ok = handle_redir(ta, cmd);
+		if (token->type == WORD)
+			success = handle_word(ta, cmd);
+		else if (is_redir_tok(token))
+			success = handle_redir(ta, cmd);
 		else
 			break ;
-		if (!ok)
+		if (!success)
 			return (0);
-		t = peek(ta);
+		token = peek(ta);
 	}
 	return (1);
 }
 
-t_node	*parse_command(t_shell_data *sh, t_tokarr *ta)
+t_node  *parse_command(t_shell_data *sh, t_tokarr *ta)
 {
-	t_node	*n;
-	t_cmd	*cmd;
-	int		ok;
+	t_node  *node;
+	t_cmd   *cmd;
+	int	 success;
 
 	(void)sh;
-	n = nd_new(ND_EXEC);
-	if (!n)
+	node = nd_new(ND_EXEC);
+	if (!node)
 		return (NULL);
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
-		return (free(n), NULL);
+		return (free(node), NULL);
 	cmd->argv = NULL;
 	cmd->redirs = NULL;
-	ok = parse_command_loop(ta, cmd);
-	if (!ok)
-		return (free(cmd), free(n), NULL);
-	n->cmd = cmd;
-	return (n);
+	success = parse_command_loop(ta, cmd);
+	if (!success)
+		return (free(cmd), free(node), NULL);
+	node->cmd = cmd;
+	return (node);
 }

@@ -13,15 +13,16 @@
 
 #include "execution.h"
 
-int	bi_env(t_shell_data *sh)
+int bi_env(t_shell_data *shell)
 {
-	t_list	*p;
+	t_list  *node;
 
-	p = sh->env;
-	while (p)
+	node = shell->env;
+	while (node)
 	{
-		ft_putendl_fd((char *)p->content, STDOUT_FILENO);
-		p = p->next;
+		ft_putendl_fd((char *)node->content, STDOUT_FILENO);
+		node = node->next;
 	}
 	return (0);
 }
+

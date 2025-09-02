@@ -13,51 +13,51 @@
 
 #include "execution.h"
 
-static int	key_match(const char *kv, const char *key)
+static int key_match(const char *kv, const char *key)
 {
-	size_t	i;
+	size_t  name_len;
 
-	i = 0;
-	while (kv[i] && kv[i] != '=')
-		i++;
-	if (ft_strlen(key) != i)
+	name_len = 0;
+	while (kv[name_len] && kv[name_len] != '=')
+		name_len++;
+	if (ft_strlen(key) != name_len)
 		return (0);
-	if (ft_strncmp(kv, key, i) == 0)
+	if (ft_strncmp(kv, key, name_len) == 0)
 		return (1);
 	return (0);
 }
 
-int	bi_unset(t_shell_data *sh, char **argv)
+int bi_unset(t_shell_data *shell, char **args)
 {
-	t_list	*prev;
-	t_list	*cur;
-	t_list	*next;
-	int		i;
+	t_list  *previous_node;
+	t_list  *current_node;
+	t_list  *next_node;
+	int	 arg_index;
 
-	if (!argv)
+	if (!args)
 		return (0);
-	i = 0;
-	while (argv[i])
+	arg_index = 0;
+	while (args[arg_index])
 	{
-		prev = NULL;
-		cur = sh->env;
-		while (cur)
+		previous_node = NULL;
+		current_node = shell->env;
+		while (current_node)
 		{
-			next = cur->next;
-			if (key_match((char *)cur->content, argv[i]))
+			next_node = current_node->next;
+			if (key_match((char *)current_node->content, args[arg_index]))
 			{
-				if (prev)
-					prev->next = next;
+				if (previous_node)
+					previous_node->next = next_node;
 				else
-					sh->env = next;
-				free(cur->content);
-				free(cur);
+					shell->env = next_node;
+				free(current_node->content);
+				free(current_node);
 				break ;
 			}
-			prev = cur;
-			cur = next;
+			previous_node = current_node;
+			current_node = next_node;
 		}
-		i++;
+		arg_index++;
 	}
 	return (0);
 }
