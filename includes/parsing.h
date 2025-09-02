@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/02 10:33:23 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/02 11:07:01 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,10 @@ void			*get_or_node(t_shell_data *shell, \
 	void *left_node, t_list *tokens);
 void			*get_pipe_node(t_shell_data *shell, \
 	void *left_node, t_list *tokens);
+
+/*************************************************/
+/*                  BINARY_TREE                  */
+/*************************************************/
+void			*insert_node(t_shell_data *shell, void *root, t_list *temp);
 
 #endif
