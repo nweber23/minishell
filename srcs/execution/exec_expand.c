@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:12 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:55:17 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/02 19:54:39 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,10 @@ static int	append_copy(char ***dst_vec, int *dst_cnt, const char *word)
 static int	expand_pattern_word(const char *pattern,
 		char ***dst_vec, int *dst_cnt)
 {
-	char	**match_vec;
+	char	**match_vec = NULL;
 	int		match_cnt;
 	int		index;
 
-	**match_vec = NULL;
 	match_cnt = 0;
 	if (!build_match_list(pattern, &match_vec, &match_cnt))
 		return (0);

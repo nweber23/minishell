@@ -10,7 +10,7 @@ UTILS_SRCS = $(wildcard $(SRC_DIR)/utils/*.c)
 CLEANUP_SRCS = $(wildcard $(SRC_DIR)/cleanup/*.c)
 BUILTINS_SRCS = $(wildcard $(SRC_DIR)/builtins/*.c)
 EXECUTIONS_SRCS = $(wildcard $(SRC_DIR)/execution/*.c)
-SRCS = $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(BUILTINS_SRCS) $(EXECUTIONS_SRCS)
+SRCS =$(UTILS_SRCS) $(CLEANUP_SRCS) $(BUILTINS_SRCS) $(EXECUTIONS_SRCS)
 
 OBJ_DIR = obj
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
