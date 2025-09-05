@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/24 19:50:24 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/05 12:24:44 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,25 @@ typedef struct s_and_point
 	t_node_type	type;
 	void		*left;
 	void		*right;
-}				t_and_type;
+}				t_and_point;
+
+// ABT node for pipe operations with left and right operands
+typedef struct s_pipe
+{
+	t_node_type	type;
+	void		*left;
+	void		*right;
+}				t_pipe;
+
+// ABT node for command execution with command, arguments, and redirections
+typedef struct s_exec
+{
+	t_node_type	type;
+	char		*command;
+	char		**argv;
+	t_list		*infile;
+	t_list		*outfile;
+}				t_exec;
 
 // Token parsing states for quote handling and expansion
 typedef enum e_token_state
@@ -84,5 +102,30 @@ typedef struct s_token
 	t_token_state	state;
 	t_token_type	type;
 }					t_token;
+
+typedef enum e_inf
+{
+	INF,
+	HERE,
+}	t_inf;
+
+typedef struct s_infile
+{
+	t_inf	type;
+	char	*eof;
+	char	*name;
+}			t_infile;
+
+typedef enum e_outf
+{
+	APP,
+	ADD,
+}	t_outf;
+
+typedef struct s_outfile
+{
+	t_outf	type;
+	char	*name;
+}			t_outfile;
 
 #endif

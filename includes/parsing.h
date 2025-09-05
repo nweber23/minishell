@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/26 10:30:37 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/05 17:16:18 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,25 @@ bool			is_quote(char c);
 bool			is_space(char c);
 bool			is_meta(char c);
 bool			is_expandable(char	*token);
+bool			is_parenthesis(t_list *node);
 bool			is_wildcard(char **argv);
+bool			token_check(t_list *node);
 bool			error_redirect(char *str, int *i, int len);
 void			set_token_position(t_list *list);
+void			clear_sublist(t_list *new);
 void			quote_toggling(char c, bool *double_q, bool *single_q);
+t_list			*remove_parenthesis(t_list *temp);
+t_list			*remove_direct(t_list *temp);
+t_list			*remove_goto_next(t_list *temp);
+t_list			*get_name(t_list *tokens);
+t_list			*get_infiles(t_shell_data *shell, \
+	t_list *tokens, t_list **infile);
+t_list			*get_outfiles(t_shell_data *shell, \
+	t_list *tokens, t_list **outfile);
+t_list			*new_token(t_list *temp);
+t_list			*create_new_sublist(t_list *tokens);
+t_list			*word_check(t_list **tokens, char **argv, int *i);
+t_list			*arg_check(t_list *tokens, int *count);
 t_token_type	get_type(char *str);
 
 /*************************************************/
@@ -61,5 +76,33 @@ bool			quote_check(char *str);
 bool			quote_position_check(char *str);
 bool			redirect_check(char *str);
 bool			parenthesis_check(char *str);
+
+/*************************************************/
+/*                   LOGIC_TREE                  */
+/*************************************************/
+void			*build_subtree(t_shell_data *shell, t_list *tokens);
+void			*build_tree(t_shell_data *shell, t_list *tokens);
+void			*create_and(t_shell_data *shell, void *left, void *right);
+void			*create_or(t_shell_data *shell, void *left, void *right);
+void			*create_pipe(t_shell_data *shell, void *left, void *right);
+void			*create_parenthesis(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
+void			*insert_nodes(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
+void			*get_and_node(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
+void			*get_or_node(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
+void			*get_pipe_node(t_shell_data *shell, \
+	void *left_node, t_list *tokens);
+
+/*************************************************/
+/*                  BINARY_TREE                  */
+/*************************************************/
+void			*insert_node(t_shell_data *shell, void *root, t_list *temp);
+void			*build_binary_tree(t_shell_data *shell, t_list	*tokens);
+void			*create_execution(t_shell_data *shell, t_list *tokens);
+char			**get_argv(t_shell_data *shell, t_list *tokens);
+int				count_args(t_list *tokens);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:58:41 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/21 13:51:15 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/01 10:13:05 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,27 @@ void	free_shell(t_shell_data *shell)
 		free(shell->input);
 		free(shell);
 	}
+}
+
+void	free_logic_tree(void *root)
+{
+	t_node_type	node;
+
+	if (!root)
+		return ;
+	node = *(t_node_type *)root;
+	if (node == N_AND)
+	{
+		free_logic_tree(((t_and_point *)root)->left);
+		free_logic_tree(((t_and_point *)root)->right);
+	}
+	if (node == N_OR)
+	{
+		free_logic_tree(((t_or_point *)root)->left);
+		free_logic_tree(((t_or_point *)root)->right);
+	}
+	if (node != N_AND && node != N_OR)
+		free_binary((t_pipe *)root);
+	else if (node == N_AND || node == N_OR)
+		free(root);
 }
