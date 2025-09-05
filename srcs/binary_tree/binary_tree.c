@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:32:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/02 12:14:51 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/05 17:17:44 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	*build_binary_tree(t_shell_data *shell, t_list	*tokens)
 			temp = remove_direct(temp);
 		else
 			temp = remove_goto_next(temp);
-
 	}
 	return (root);
 }
@@ -70,7 +69,7 @@ void	*create_execution(t_shell_data *shell, t_list *tokens)
 	if (current)
 	{
 		exec->command = ((t_token *)current)->value;
-		exec->argv = get_arguments(shell, tokens);
+		exec->argv = get_argv(shell, tokens);
 	}
 	return (exec);
 }

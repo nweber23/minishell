@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/29 16:48:15 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/05 12:24:44 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,30 @@ typedef struct s_token
 	t_token_state	state;
 	t_token_type	type;
 }					t_token;
+
+typedef enum e_inf
+{
+	INF,
+	HERE,
+}	t_inf;
+
+typedef struct s_infile
+{
+	t_inf	type;
+	char	*eof;
+	char	*name;
+}			t_infile;
+
+typedef enum e_outf
+{
+	APP,
+	ADD,
+}	t_outf;
+
+typedef struct s_outfile
+{
+	t_outf	type;
+	char	*name;
+}			t_outfile;
 
 #endif
