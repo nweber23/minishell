@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/01 10:17:35 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/05 19:30:06 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <string.h>
 # include <stdbool.h>
 # include <fcntl.h>
+# include <signal.h>
 # include <sys/wait.h>
 
 /*************************************************/

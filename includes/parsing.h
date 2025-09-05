@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/05 17:16:18 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/05 19:43:02 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,17 @@ void			*build_binary_tree(t_shell_data *shell, t_list	*tokens);
 void			*create_execution(t_shell_data *shell, t_list *tokens);
 char			**get_argv(t_shell_data *shell, t_list *tokens);
 int				count_args(t_list *tokens);
+
+/*************************************************/
+/*                    SIGNALS                    */
+/*************************************************/
+void			reset_child_signals(void);
+void			interavtive_signals(void);
+void			init_signals(void);
+void			ignore_pipe(int sig);
+void			handle_sigint(int sig);
+void			trap_heredoc(void);
+void			break_heredoc(int sig);
+t_shell_data	*global_shell(t_shell_data *shell, int check);
 
 #endif
