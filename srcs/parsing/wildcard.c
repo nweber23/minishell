@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 13:46:28 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/22 10:09:12 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/06 15:50:05 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,14 @@ bool	is_wildcard(char **argv)
 			return (true);
 		i++;
 	}
+	return (false);
+}
+
+bool	is_valid_wildcard(char *str)
+{
+	if (ft_strcmp(str, "*") == 0)
+		return (true);
+	if (ft_strchr(str, '*'))
+		return (true);
 	return (false);
 }
