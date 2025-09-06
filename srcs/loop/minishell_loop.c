@@ -6,11 +6,21 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/06 19:17:10 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/06 19:58:30 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	end_process(int value)
+{
+	static int	code = 0;
+
+	if (value == -1)
+		return (code);
+	code = value;
+	return (code);
+}
 
 void	minishell_loop(t_shell_data *shell, char **envp)
 {
