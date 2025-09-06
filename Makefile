@@ -8,16 +8,16 @@ LIBFT       = $(LIBFT_DIR)/libft.a
 
 PARSING_SRCS = parsing/check_parenthesis.c parsing/check_pipe.c parsing/check_quote.c parsing/check_quotes.c \
 				parsing/check_redirect.c parsing/handling.c parsing/parenthesis_handling.c parsing/redirect.c \
-				parsing/tokenizer.c parsing/utils.c parsing/validate_input.c wildcard.c
+				parsing/tokenizer.c parsing/utils.c parsing/validate_input.c parsing/wildcard.c
 UTILS_SRCS = utils/checker.c
 CLEANUP_SRCS = cleanup/error_exit.c cleanup/error_free.c cleanup/error_print.c cleanup/free_binary_tree.c
-LOGIC_TREE_SRCS = logic_tree/get_node.c logic_tree/logic_tree_parenthesis logic_tree/logic_tree.c \
+LOGIC_TREE_SRCS = logic_tree/get_node.c logic_tree/logic_tree_parenthesis.c logic_tree/logic_tree.c \
 				logic_tree/logic_tree_utils.c
 BINARY_TREE_SRCS = binary_tree/binary_tree.c binary_tree/binary_tree_utils.c binary_tree/binary_tree_getter.c
 LOOP_SRCS = loop/minishell_loop.c
 SIGNAL_SRCS = signal/signal.c signal/signal1.c
 
-SRCS = $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS) $(LOOP_SRCS) main.c
+SRCS = $(addprefix $(SRC_DIR)/, $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS) $(LOOP_SRCS) main.c)
 
 OBJ_DIR = obj
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
