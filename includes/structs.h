@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/06 15:26:23 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/06 18:55:04 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_shell_data
 	char	*trimmed;
 	char	*command_path;
 	char	**env_array;
+	char	*cwd;
 	t_list	*env;
 	t_list	*path;
 	t_list	*tokens;
@@ -131,5 +132,13 @@ typedef struct s_outfile
 	t_outf	type;
 	char	*name;
 }			t_outfile;
+
+typedef struct s_env
+{
+	char	*value;
+	char	*content;
+	bool	exported;
+	bool	printed;
+}			t_env;
 
 #endif

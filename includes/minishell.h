@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/05 19:30:06 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/06 19:03:44 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <stdbool.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/wait.h>
 
 /*************************************************/
@@ -39,6 +41,7 @@ void	free_exec(t_exec *exec);
 void	error_malloc(char *function, t_shell_data *shell);
 int		exit_code(int code);
 bool	error_message(char *str);
+void	exit_msg(void);
 void	balance_message(int balance);
 
 #endif

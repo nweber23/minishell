@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/06 15:23:12 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/06 19:05:19 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ bool			quote_check(char *str);
 bool			quote_position_check(char *str);
 bool			redirect_check(char *str);
 bool			parenthesis_check(char *str);
+void			lexer(t_shell_data *shell, char *input);
 
 /*************************************************/
 /*                   LOGIC_TREE                  */
