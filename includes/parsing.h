@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/05 19:43:02 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/06 19:05:19 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ bool			is_meta(char c);
 bool			is_expandable(char	*token);
 bool			is_parenthesis(t_list *node);
 bool			is_wildcard(char **argv);
+bool			is_valid_wildcard(char *str);
 bool			token_check(t_list *node);
 bool			error_redirect(char *str, int *i, int len);
 void			set_token_position(t_list *list);
@@ -76,6 +77,7 @@ bool			quote_check(char *str);
 bool			quote_position_check(char *str);
 bool			redirect_check(char *str);
 bool			parenthesis_check(char *str);
+void			lexer(t_shell_data *shell, char *input);
 
 /*************************************************/
 /*                   LOGIC_TREE                  */

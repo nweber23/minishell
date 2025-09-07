@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/05 12:24:44 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/06 18:55:04 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_shell_data
 	char	*trimmed;
 	char	*command_path;
 	char	**env_array;
+	char	*cwd;
 	t_list	*env;
 	t_list	*path;
 	t_list	*tokens;
@@ -103,12 +104,14 @@ typedef struct s_token
 	t_token_type	type;
 }					t_token;
 
+// Input redirection kind: INF = file, HERE = heredoc
 typedef enum e_inf
 {
 	INF,
 	HERE,
 }	t_inf;
 
+// Input redirection struct: type, heredoc delimiter (eof), or filename (name)
 typedef struct s_infile
 {
 	t_inf	type;
@@ -116,16 +119,26 @@ typedef struct s_infile
 	char	*name;
 }			t_infile;
 
+// Output redirection kind: APP = overwrite, ADD = append
 typedef enum e_outf
 {
 	APP,
 	ADD,
 }	t_outf;
 
+// Output redirection struct: type and target filename
 typedef struct s_outfile
 {
 	t_outf	type;
 	char	*name;
 }			t_outfile;
+
+typedef struct s_env
+{
+	char	*value;
+	char	*content;
+	bool	exported;
+	bool	printed;
+}			t_env;
 
 #endif
