@@ -26,7 +26,6 @@ static bool	handle_redirect(char *str, int *i, int len)
 bool	redirect_check(char *str)
 {
 	int		i;
-	int		len;
 	bool	double_q;
 	bool	single_q;
 
@@ -41,9 +40,13 @@ bool	redirect_check(char *str)
 			i++;
 			continue ;
 		}
-		len = is_redirect(&str[i]);
-		if (len > 0 && !handle_redirect(str, &i, len))
-			return (false);
+		int len = is_redirect(&str[i]);
+		if (len > 0)
+		{
+			if (!handle_redirect(str, &i, len))
+				return (false);
+			continue ;
+		}
 		i++;
 	}
 	return (true);

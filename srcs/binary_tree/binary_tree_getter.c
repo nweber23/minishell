@@ -36,7 +36,7 @@ char	**get_argv(t_shell_data *shell, t_list *tokens)
 			break ;
 		tokens = tokens->next->next;
 	}
-	argv[argc] = '\0';
+	argv[argc] = NULL;
 	return (argv);
 }
 
@@ -76,19 +76,29 @@ t_list	*get_infiles(t_shell_data *shell, t_list *tokens, t_list **infile)
 	inf = NULL;
 	while (tokens && ((t_token *)tokens->content)->type != PIPE)
 	{
-		if (tokens && (((t_token *)tokens->content)->type == HERE_DOC \
+		if (tokens && ((((t_token *)tokens->content)->type == HERE_DOC) \
 		|| ((t_token *)tokens->content)->type == INFILE))
 		{
-			inf = malloc(sizeof(t_infile));
-			if (!infile)
+			inf = (t_infile *)malloc(sizeof(t_infile));
+			if (!inf)
 				error_malloc("get_infiles", shell);
+			inf->eof = NULL;
+			inf->name = NULL;
 			if (((t_token *)tokens->content)->type == INFILE)
+			{
 				inf->type = INF;
+				if (tokens->next && ((t_token *)tokens->next->content)->type == WORD)
+					inf->name = ft_strdup(((t_token *)tokens->next->content)->value);
+			}
 			else
+			{
 				inf->type = HERE;
-			inf->eof = ft_strdup(((t_token *)tokens->content)->value);
+				if (tokens->next && ((t_token *)tokens->next->content)->type == WORD)
+					inf->eof = ft_strdup(((t_token *)tokens->next->content)->value);
+			}
 			ft_lstadd_back(infile, ft_lstnew(inf));
-			tokens = tokens->next->next;
+			// skip operator and its operand
+			tokens = tokens->next ? tokens->next->next : NULL;
 			continue ;
 		}
 		tokens = tokens->next;
@@ -105,19 +115,21 @@ t_list	*get_outfiles(t_shell_data *shell, t_list *tokens, t_list **outfile)
 	outf = NULL;
 	while (tokens && ((t_token *)tokens->content)->type != PIPE)
 	{
-		if (tokens && (((t_token *)tokens->content)->type == APPEND \
+		if (tokens && ((((t_token *)tokens->content)->type == APPEND) \
 		|| ((t_token *)tokens->content)->type == OUTFILE))
 		{
-			outf = malloc(sizeof(t_outfile));
-			if (!outfile)
+			outf = (t_outfile *)malloc(sizeof(t_outfile));
+			if (!outf)
 				error_malloc("get_outfiles", shell);
+			outf->name = NULL;
 			if (((t_token *)tokens->content)->type == OUTFILE)
 				outf->type = ADD;
 			else
 				outf->type = APP;
-			outf->name = ft_strdup(((t_token *)tokens->content)->value);
+			if (tokens->next && ((t_token *)tokens->next->content)->type == WORD)
+				outf->name = ft_strdup(((t_token *)tokens->next->content)->value);
 			ft_lstadd_back(outfile, ft_lstnew(outf));
-			tokens = tokens->next->next;
+			tokens = tokens->next ? tokens->next->next : NULL;
 			continue ;
 		}
 		tokens = tokens->next;

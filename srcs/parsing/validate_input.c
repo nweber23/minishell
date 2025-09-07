@@ -37,22 +37,37 @@ bool	validate_input(t_shell_data *shell)
 bool	error_redirect(char *str, int *i, int len)
 {
 	char	*error_msg;
+	size_t	slen;
+	int		pos;
 
-	if (str[*i + 1] == '|')
-		return (error_message(PIPE_MSG), false);
-	*i += len;
-	while (str[*i] && is_space(str[*i]))
-		(*i)++;
-	if (is_redirect(str) || is_meta(str[*i]))
+	if (!str || !i)
+		return (false);
+	slen = ft_strlen(str);
+	pos = *i;
+	if ((size_t)pos < slen)
 	{
-		if (str[*i] == '>' && str[*i + 1] == '>')
+		size_t	peek = (size_t)pos + (size_t)len;
+		if (peek < slen && str[peek] == '|')
+			return (error_message(PIPE_MSG), false);
+	}
+	*i += len;
+	while ((size_t)(*i) < slen && is_space(str[*i]))
+		(*i)++;
+	if ((size_t)(*i) >= slen)
+		return (error_message(REDIRECT_MSG), false);
+	if (is_meta(str[*i]))
+	{
+		if (str[*i] == '>' && str[*i + 1] && str[*i + 1] == '>')
 			error_msg = "syntax error near unexpected token `>>'";
+		else if (str[*i] == '<' && str[*i + 1] && str[*i + 1] == '<')
+			error_msg = "syntax error near unexpected token `<<'";
 		else if (str[*i] == '<')
 			error_msg = "syntax error near unexpected token `<'";
-		else
+		else if (str[*i] == '>')
 			error_msg = "syntax error near unexpected token `>'";
-		error_message(error_msg);
-		return (false);
+		else
+			error_msg = "syntax error near unexpected token `newline'";
+		return (error_message(error_msg), false);
 	}
 	return (true);
 }

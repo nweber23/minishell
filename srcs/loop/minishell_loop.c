@@ -24,6 +24,7 @@ void	minishell_loop(t_shell_data *shell, char **envp)
 	{
 		free_shell(shell);
 		minishell_loop(shell, envp);
+		return ;
 	}
 	if (shell->input == NULL || !ft_strcmp(shell->trimmed, "exit"))
 	{
@@ -39,6 +40,7 @@ void	minishell_loop(t_shell_data *shell, char **envp)
 	free_shell(shell);
 	end_process(0);
 	minishell_loop(shell, envp);
+	return ;
 }
 
 int	end_process(int value)
@@ -54,23 +56,19 @@ int	end_process(int value)
 void	input(t_shell_data *shell)
 {
 	char	*cwd;
-	char	*temp;
-	char	*prompt;
-	char	*code;
+	char	*prompt1;
+	char	*prompt2;
 
-	code = ft_itoa(exit_code(-1));
 	cwd = getcwd(NULL, 0);
-	prompt = "LECK_EIER$";
-	temp = ft_strjoin(prompt, code);
-	free(code);
-	if (!temp)
+	if (!cwd)
 		error_malloc("input", shell);
-	temp = ft_strjoin(temp, cwd);
-	if (!temp)
-		error_malloc("input", shell);
-	temp = ft_strjoin(temp, ">");
-	if (!temp)
-		error_malloc("input", shell);
-	shell->cwd = temp;
+	prompt1 = ft_strjoin("LECK_EIER_SHELL$ ", cwd);
 	free(cwd);
+	if (!prompt1)
+		error_malloc("input", shell);
+	prompt2 = ft_strjoin(prompt1, ">");
+	free(prompt1);
+	if (!prompt2)
+		error_malloc("input", shell);
+	shell->cwd = prompt2;
 }
