@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 17:15:11 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 16:17:54 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/07 16:21:57 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	shell_lvl(t_shell_data *shell)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_shell_data	shell;
+	t_shell_data	shell = {0}; // remove {0} when env actually is init
 
 	(void)argv;
 	if (argc > 1)

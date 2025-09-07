@@ -28,7 +28,7 @@ CFLAGS = -Wall -Wextra -Werror -I $(INC_DIR) -I $(LIBFT_DIR)/includes
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -fsanitize=address -lreadline -lncurses -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -lncurses -o $(NAME)
 	@echo "\033[1;33m"
 	@echo "                      A long time ago in a galaxy far, far away..." ; sleep 0.6
 	@echo "" ; sleep 0.3

@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:32:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/05 17:17:44 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/07 17:17:22 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*build_binary_tree(t_shell_data *shell, t_list	*tokens)
 	while (token_check(temp))
 	{
 		root = insert_node(shell, root, temp);
-		if (((t_token *)temp)->type != PIPE)
+		if (((t_token *)temp->content)->type != PIPE)
 			temp = remove_direct(temp);
 		else
 			temp = remove_goto_next(temp);

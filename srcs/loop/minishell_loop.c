@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 16:08:31 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/07 17:01:38 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	input(t_shell_data *shell)
 
 	code = ft_itoa(exit_code(-1));
 	cwd = getcwd(NULL, 0);
-	prompt = "LECK_EIER$>";
+	prompt = "LECK_EIER$";
 	temp = ft_strjoin(prompt, code);
 	free(code);
 	if (!temp)
@@ -68,7 +68,9 @@ void	input(t_shell_data *shell)
 	temp = ft_strjoin(temp, cwd);
 	if (!temp)
 		error_malloc("input", shell);
+	temp = ft_strjoin(temp, ">");
+	if (!temp)
+		error_malloc("input", shell);
 	shell->cwd = temp;
-	free(temp);
 	free(cwd);
 }
