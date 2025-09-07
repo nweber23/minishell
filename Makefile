@@ -14,10 +14,10 @@ CLEANUP_SRCS = cleanup/error_exit.c cleanup/error_free.c cleanup/error_print.c c
 LOGIC_TREE_SRCS = logic_tree/get_node.c logic_tree/logic_tree_parenthesis.c logic_tree/logic_tree.c \
 				logic_tree/logic_tree_utils.c
 BINARY_TREE_SRCS = binary_tree/binary_tree.c binary_tree/binary_tree_utils.c binary_tree/binary_tree_getter.c
-LOOP_SRCS = loop/minishell_loop.c
+LOOP_SRCS = loop/minishell_loop.c loop/loop_utils.c
 SIGNAL_SRCS = signal/signal.c signal/signal1.c
 
-SRCS = $(addprefix $(SRC_DIR)/, $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS) $(LOOP_SRCS) main.c)
+SRCS = $(addprefix $(SRC_DIR)/, $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS) $(SIGNAL_SRCS) $(LOOP_SRCS) main.c)
 
 OBJ_DIR = obj
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -28,7 +28,7 @@ CFLAGS = -Wall -Wextra -Werror -I $(INC_DIR) -I $(LIBFT_DIR)/includes
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -fsanitize=address -lreadline -lncurses -o $(NAME)
 	@echo "\033[1;33m"
 	@echo "                      A long time ago in a galaxy far, far away..." ; sleep 0.6
 	@echo "" ; sleep 0.3

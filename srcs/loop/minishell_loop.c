@@ -6,21 +6,11 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/06 19:58:30 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/07 16:08:31 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	end_process(int value)
-{
-	static int	code = 0;
-
-	if (value == -1)
-		return (code);
-	code = value;
-	return (code);
-}
 
 void	minishell_loop(t_shell_data *shell, char **envp)
 {
@@ -42,11 +32,43 @@ void	minishell_loop(t_shell_data *shell, char **envp)
 		return ;
 	}
 	lexer(shell, shell->trimmed);
-	shell->env_array = env_array(shell);
-	shell->path = path(shell, envp);
+	// shell->env_array = env_array(shell); // Builtin -> yyudi
+	// shell->path = path(shell, envp); // Builtin -> yyudi
 	shell->root = build_tree(shell, shell->tokens);
 	// execution of ltree
 	free_shell(shell);
 	end_process(0);
 	minishell_loop(shell, envp);
+}
+
+int	end_process(int value)
+{
+	static int	code = 0;
+
+	if (value == -1)
+		return (code);
+	code = value;
+	return (code);
+}
+
+void	input(t_shell_data *shell)
+{
+	char	*cwd;
+	char	*temp;
+	char	*prompt;
+	char	*code;
+
+	code = ft_itoa(exit_code(-1));
+	cwd = getcwd(NULL, 0);
+	prompt = "LECK_EIER$>";
+	temp = ft_strjoin(prompt, code);
+	free(code);
+	if (!temp)
+		error_malloc("input", shell);
+	temp = ft_strjoin(temp, cwd);
+	if (!temp)
+		error_malloc("input", shell);
+	shell->cwd = temp;
+	free(temp);
+	free(cwd);
 }

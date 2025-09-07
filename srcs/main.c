@@ -6,32 +6,34 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 17:15:11 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/06 17:38:40 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/07 16:17:54 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	shell_lvl(t_shell_data shell)
+void	shell_lvl(t_shell_data *shell)
 {
 	t_list	*temp;
 	int		value;
 	char	*str_value;
 
-	temp = shell.env;
+	if (!shell)
+		return ;
+	temp = shell->env;
 	while (temp)
 	{
-		if (ft_strcmp(((t_env *)temp)->value, "SHELL_LVL=") == 0)
+		if (ft_strcmp(((t_env *)temp->content)->value, "SHELL_LVL=") == 0)
 		{
-			value = ft_atoi(((t_env *)temp)->content);
+			value = ft_atoi(((t_env *)temp->content)->content);
 			value++;
 			str_value = ft_itoa(value);
 			free(((t_env *)temp->content)->content);
-			((t_env *)temp)->content = str_value;
+			((t_env *)temp->content)->content = str_value;
+			break;
 		}
 		temp = temp->next;
 	}
-	shell.env = temp;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -44,8 +46,8 @@ int	main(int argc, char **argv, char **envp)
 		ft_putendl_fd("i dont want arguments", 2);
 		exit(EXIT_FAILURE);
 	}
-	create_env_list(&shell, envp);
-	shell_lvl(shell);
+	// create_env_list(&shell, envp); // Builtin -> yyudi
+	shell_lvl(&shell);
 	minishell_loop(&shell, envp);
 	free_env(shell.env);
 	return (0);
