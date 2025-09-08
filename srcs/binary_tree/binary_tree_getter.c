@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   binary_tree_getter.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:20:19 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 17:16:38 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 17:09:46 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	**get_argv(t_shell_data *shell, t_list *tokens)
 			break ;
 		tokens = tokens->next->next;
 	}
-	argv[argc] = '\0';
+	argv[argc] = NULL;
 	return (argv);
 }
 

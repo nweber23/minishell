@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_binary_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 16:40:46 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/01 10:19:26 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 16:58:08 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void	free_binary(void *root)
 	if (!root)
 		return ;
 	node = *(t_node_type *)root;
-	if (node == N_PIPE)
+	if (node == ND_PIPE)
 		free_pipe((t_pipe *)root);
-	else if (node == N_EXEC)
+	else if (node == ND_EXEC)
 		free_exec((t_exec *)root);
-	else if (node == N_AND)
+	else if (node == ND_AND)
 		free_logic_tree((t_and_point *)root);
-	else if (node == N_OR)
+	else if (node == ND_OR)
 		free_logic_tree((t_or_point *)root);
 }
 

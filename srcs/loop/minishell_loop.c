@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_loop.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 17:01:38 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 15:13:49 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,10 @@ void	minishell_loop(t_shell_data *shell, char **envp)
 		return ;
 	}
 	lexer(shell, shell->trimmed);
-	// shell->env_array = env_array(shell); // Builtin -> yyudi
-	// shell->path = path(shell, envp); // Builtin -> yyudi
+	shell->env_array = env_list_to_array(shell->env);
 	shell->root = build_tree(shell, shell->tokens);
-	// execution of ltree
 	free_shell(shell);
-	end_process(0);
+	end_process(exec_line(shell, shell->root));
 	minishell_loop(shell, envp);
 }
 

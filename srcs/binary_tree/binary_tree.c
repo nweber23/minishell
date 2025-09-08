@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   binary_tree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:32:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 17:17:22 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 16:58:51 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	*create_execution(t_shell_data *shell, t_list *tokens)
 	exec = malloc(sizeof(t_exec));
 	if (!exec)
 		error_malloc("create_execution", shell);
-	exec->type = N_EXEC;
+	exec->type = ND_EXEC;
 	exec->argv = NULL;
 	exec->command = NULL;
 	exec->infile = NULL;

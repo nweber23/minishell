@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logic_tree_parenthesis.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 18:38:48 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/02 10:36:55 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 17:08:15 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_parenthesis(t_list *node)
 {
-	return (node && ((t_token *)node->content)->type != PARENTHESIS);
+	return (node && ((t_token *)node->content)->type == PARENTHESIS);
 }
 
 t_list	*remove_parenthesis(t_list *temp)

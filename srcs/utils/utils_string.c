@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 13:46:28 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 17:59:59 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/08 17:03:41 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,3 @@ char	*ft_str3var(const char *s1, const char *s2, const char *s3)
 	return (res);
 }
 
-bool	is_valid_wildcard(char *str)
-{
-	if (ft_strcmp(str, "*") == 0)
-		return (true);
-	if (ft_strchr(str, '*'))
-		return (true);
-	return (false);
-}

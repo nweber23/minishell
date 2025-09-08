@@ -9,21 +9,22 @@ LIBFT       = $(LIBFT_DIR)/libft.a
 PARSING_SRCS = parsing/check_parenthesis.c parsing/check_pipe.c parsing/check_quote.c parsing/check_quotes.c \
 				parsing/check_redirect.c parsing/handling.c parsing/parenthesis_handling.c parsing/redirect.c \
 				parsing/tokenizer.c parsing/utils.c parsing/validate_input.c parsing/wildcard.c
-UTILS_SRCS = utils/checker.c
+UTILS_SRCS = utils/checker.c utils/utils_env.c utils/utils_string.c
 CLEANUP_SRCS = cleanup/error_exit.c cleanup/error_free.c cleanup/error_print.c cleanup/free_binary_tree.c
 LOGIC_TREE_SRCS = logic_tree/get_node.c logic_tree/logic_tree_parenthesis.c logic_tree/logic_tree.c \
 				logic_tree/logic_tree_utils.c
 BINARY_TREE_SRCS = binary_tree/binary_tree.c binary_tree/binary_tree_utils.c binary_tree/binary_tree_getter.c
 LOOP_SRCS = loop/minishell_loop.c loop/loop_utils.c
 SIGNAL_SRCS = signal/signal.c signal/signal1.c
+BUILTIN_SRCS = builtins/bi_cd.c builtins/bi_echo.c builtins/bi_env.c builtins/bi_exit.c builtins/bi_export.c \
+				builtins/bi_pwd.c builtins/bi_unset.c
+EXECUTION_SRCS = execution/exec_ast_nodes.c  execution/exec_tokstream.c execution/exec_builtin_dispatch.c \
+				execution/exec_parse_group.c execution/exec_parse_pipeline.c execution/exec_parse_andor.c \
+				execution/exec_parse_command.c execution/exec_argv_redir.c execution/exec_redirs.c\
+				execution/exec_heredoc.c execution/exec_path.c execution/exec_expand.c \
+				execution/exec_run_exec.c execution/exec_run_pipe.c execution/exec_run_node.c
 
-SRCS = $(addprefix $(SRC_DIR)/, $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS) $(SIGNAL_SRCS) $(LOOP_SRCS) main.c)
-PARSING_SRCS = $(wildcard $(SRC_DIR)/parsing/*.c)
-UTILS_SRCS = $(wildcard $(SRC_DIR)/utils/*.c)
-CLEANUP_SRCS = $(wildcard $(SRC_DIR)/cleanup/*.c)
-BUILTINS_SRCS = $(wildcard $(SRC_DIR)/builtins/*.c)
-EXECUTIONS_SRCS = $(wildcard $(SRC_DIR)/execution/*.c)
-SRCS =$(UTILS_SRCS) $(CLEANUP_SRCS) $(BUILTINS_SRCS) $(EXECUTIONS_SRCS)
+SRCS = $(addprefix $(SRC_DIR)/, $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS) $(SIGNAL_SRCS) $(LOOP_SRCS) $(BUILTIN_SRCS) $(EXECUTION_SRCS) main.c)
 
 OBJ_DIR = obj
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

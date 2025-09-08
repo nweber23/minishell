@@ -63,8 +63,8 @@ typedef struct s_tokarr
 }   t_tokarr;
 
 /* ===== Public build/exec API ===== */
-t_node		*build_tree(t_shell_data *sh, t_list *tokens);
-void		free_tree(t_node *n);
+// t_node		*build_tree(t_shell_data *shell, t_list *tokens);
+// void		free_tree(t_node *n);
 int			exec_line(t_shell_data *sh, t_node *root);
 int			exec_builtin(t_shell_data *sh, char **argv);
 int			is_builtin(const char *name);
@@ -106,7 +106,7 @@ t_node		*parse_and_or(t_shell_data *sh, t_tokarr *ta);
 int			apply_redirs_files(t_cmd *c, int *fdin, int *fdout);
 int			apply_redirs_heredoc(t_cmd *c, int *fdin);
 char		*find_in_path(t_shell_data *sh, const char *cmd);
-int			run_exec_node(t_shell_data *sh, t_node *n, int *fds, int is_top);
+int			run_exec_node(t_shell_data *sh, t_node *n, int fds[2], int is_top);
 int			run_pipe(t_shell_data *sh, t_node *n, int is_top);
 int			run_node(t_shell_data *sh, t_node *n, int is_top);
 
