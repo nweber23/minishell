@@ -6,13 +6,13 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 17:01:38 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 14:01:30 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	minishell_loop(t_shell_data *shell, char **envp)
+int	minishell_loop(t_shell_data *shell, char **envp)
 {
 	reset_shell(shell);
 	interavtive_signals();
@@ -21,16 +21,13 @@ void	minishell_loop(t_shell_data *shell, char **envp)
 	if (shell->input && shell->input[0] != '\0')
 		add_history(shell->input);
 	if (shell->input && validate_input(shell))
-	{
-		free_shell(shell);
-		minishell_loop(shell, envp);
-	}
-	if (shell->input == NULL || !ft_strcmp(shell->trimmed, "exit"))
-	{
-		exit_msg();
-		free_shell(shell);
-		return ;
-	}
+		return (free_shell(shell), minishell_loop(shell, envp));
+	if (shell->input == NULL)
+		return (exit_msg(), free_shell(shell), 0);
+	if (!shell->trimmed || shell->trimmed[0] == '\0')
+		return (free_shell(shell), minishell_loop(shell, envp));
+	if (!ft_strcmp(shell->trimmed, "exit"))
+		return (exit_msg(), free_shell(shell), 0);
 	lexer(shell, shell->trimmed);
 	// shell->env_array = env_array(shell); // Builtin -> yyudi
 	// shell->path = path(shell, envp); // Builtin -> yyudi
@@ -38,7 +35,7 @@ void	minishell_loop(t_shell_data *shell, char **envp)
 	// execution of ltree
 	free_shell(shell);
 	end_process(0);
-	minishell_loop(shell, envp);
+	return (minishell_loop(shell, envp));
 }
 
 int	end_process(int value)
@@ -54,23 +51,19 @@ int	end_process(int value)
 void	input(t_shell_data *shell)
 {
 	char	*cwd;
-	char	*temp;
-	char	*prompt;
-	char	*code;
+	char	*prompt1;
+	char	*prompt2;
 
-	code = ft_itoa(exit_code(-1));
 	cwd = getcwd(NULL, 0);
-	prompt = "LECK_EIER$";
-	temp = ft_strjoin(prompt, code);
-	free(code);
-	if (!temp)
+	if (!cwd)
 		error_malloc("input", shell);
-	temp = ft_strjoin(temp, cwd);
-	if (!temp)
-		error_malloc("input", shell);
-	temp = ft_strjoin(temp, ">");
-	if (!temp)
-		error_malloc("input", shell);
-	shell->cwd = temp;
+	prompt1 = ft_strjoin("STARSHELL$ ", cwd);
 	free(cwd);
+	if (!prompt1)
+		error_malloc("input", shell);
+	prompt2 = ft_strjoin(prompt1, ">");
+	free(prompt1);
+	if (!prompt2)
+		error_malloc("input", shell);
+	shell->cwd = prompt2;
 }

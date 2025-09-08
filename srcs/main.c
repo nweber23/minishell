@@ -30,7 +30,7 @@ void	shell_lvl(t_shell_data *shell)
 			str_value = ft_itoa(value);
 			free(((t_env *)temp->content)->content);
 			((t_env *)temp->content)->content = str_value;
-			break;
+			break ;
 		}
 		temp = temp->next;
 	}

@@ -19,5 +19,5 @@ int	ft_arrlen(char **argv)
 	i = 0;
 	while (argv && argv[i])
 		i++;
-	return (0);
+	return (i);
 }

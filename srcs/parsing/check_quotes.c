@@ -26,6 +26,7 @@ int	join_quotes(t_shell_data *shell, char **value, char *str, int i)
 	char	*joined;
 	char	quote_char;
 	int		start;
+	char	*old;
 
 	quote_char = str[i];
 	start = i++;
@@ -34,8 +35,10 @@ int	join_quotes(t_shell_data *shell, char **value, char *str, int i)
 	joined = ft_substr(str, start + 1, i - start - 1);
 	if (!joined)
 		error_malloc("join_quotes", shell);
-	*value = ft_strjoin(*value, joined);
+	old = *value;
+	*value = ft_strjoin(old, joined);
 	free(joined);
+	free(old);
 	if (!*value)
 		error_malloc("join_quotes", shell);
 	return (i + 1);
@@ -45,6 +48,7 @@ int	join_no_quotes(t_shell_data *shell, char **value, char *str, int i)
 {
 	char	*joined;
 	int		start;
+	char	*old;
 
 	start = i;
 	while (str[i] && !is_space(str[i]) && !is_meta(str[i]) && !is_quote(str[i]))
@@ -52,8 +56,10 @@ int	join_no_quotes(t_shell_data *shell, char **value, char *str, int i)
 	joined = ft_substr(str, start, i - start);
 	if (!joined)
 		error_malloc("join_no_quotes", shell);
-	*value = ft_strjoin(*value, joined);
+	old = *value;
+	*value = ft_strjoin(old, joined);
 	free(joined);
+	free(old);
 	if (!*value)
 		error_malloc("join_no_quotes", shell);
 	return (i);

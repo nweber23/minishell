@@ -14,7 +14,7 @@
 
 bool	is_parenthesis(t_list *node)
 {
-	return (node && ((t_token *)node->content)->type != PARENTHESIS);
+	return (node && ((t_token *)node->content)->type == PARENTHESIS);
 }
 
 t_list	*remove_parenthesis(t_list *temp)
