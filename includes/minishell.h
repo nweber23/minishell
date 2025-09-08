@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/01 10:00:02 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/07 17:58:01 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 # include <string.h>
 # include <stdbool.h>
 # include <fcntl.h>
+# include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/wait.h>
 
 /*************************************************/
@@ -32,9 +35,22 @@
 void	free_shell(t_shell_data *shell);
 void	free_env(t_list *env);
 void	free_token(void *content);
+void	free_logic_tree(void *root);
+void	free_binary(void *root);
+void	free_pipe(t_pipe *pipe);
+void	free_exec(t_exec *exec);
 void	error_malloc(char *function, t_shell_data *shell);
 int		exit_code(int code);
 bool	error_message(char *str);
+void	exit_msg(void);
 void	balance_message(int balance);
+
+/*************************************************/
+/*                     LOOP                      */
+/*************************************************/
+void	reset_shell(t_shell_data *shell);
+int		end_process(int value);
+void	input(t_shell_data *shell);
+void	minishell_loop(t_shell_data *shell, char **envp);
 
 #endif

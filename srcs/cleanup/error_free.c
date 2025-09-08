@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:58:41 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/21 13:51:15 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/06 20:03:09 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,48 @@ void	free_env(t_list *env)
 
 void	free_shell(t_shell_data *shell)
 {
-	if (shell)
+	int	i;
+
+	ft_lstclear(&shell->tokens, free_token);
+	i = -1;
+	if (shell->env_array)
 	{
-		ft_lstclear(&shell->tokens, free_token);
-		free(shell->input);
-		free(shell);
+		while (shell->env_array[++i])
+			free(shell->env_array[i]);
+		free(shell->env_array);
 	}
+	ft_lstclear(&shell->path, free);
+	if (shell->cwd)
+		free(shell->cwd);
+	if (shell->input)
+		free(shell->input);
+	if (shell->trimmed)
+		free(shell->trimmed);
+	if (shell->command_path)
+		free(shell->command_path);
+	if (shell->root)
+		free(shell->root);
+}
+
+void	free_logic_tree(void *root)
+{
+	t_node_type	node;
+
+	if (!root)
+		return ;
+	node = *(t_node_type *)root;
+	if (node == N_AND)
+	{
+		free_logic_tree(((t_and_point *)root)->left);
+		free_logic_tree(((t_and_point *)root)->right);
+	}
+	if (node == N_OR)
+	{
+		free_logic_tree(((t_or_point *)root)->left);
+		free_logic_tree(((t_or_point *)root)->right);
+	}
+	if (node != N_AND && node != N_OR)
+		free_binary((t_pipe *)root);
+	else if (node == N_AND || node == N_OR)
+		free(root);
 }

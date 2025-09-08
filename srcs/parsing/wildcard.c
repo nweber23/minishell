@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_print.c                                      :+:      :+:    :+:   */
+/*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/25 17:10:31 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/06 19:17:24 by nweber           ###   ########.fr       */
+/*   Created: 2025/08/21 13:46:28 by nweber            #+#    #+#             */
+/*   Updated: 2025/09/06 15:50:05 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	error_message(char *str)
+bool	is_wildcard(char **argv)
 {
-	if (str)
-		ft_putendl_fd(str, 2);
-	return (true);
+	int	i;
+
+	i = 0;
+	if (!argv || !argv[i])
+		return (false);
+	while (argv[i])
+	{
+		if (ft_strchr(argv[i], '*') && (ft_strcmp(argv[i], "*") == 0))
+			return (true);
+		i++;
+	}
+	return (false);
 }
 
-void	balance_message(int balance)
+bool	is_valid_wildcard(char *str)
 {
-	if (balance < 0)
-		ft_putendl_fd(CLOSE_MSG, 2);
-	else if (balance > 0)
-		ft_putendl_fd(OPEN_MSG, 2);
-}
-
-void	exit_msg(void)
-{
-	static int	value = 0;
-
-	if (value == 0)
-		ft_putendl_fd("exit", 1);
-	value++;
+	if (ft_strcmp(str, "*") == 0)
+		return (true);
+	if (ft_strchr(str, '*'))
+		return (true);
+	return (false);
 }

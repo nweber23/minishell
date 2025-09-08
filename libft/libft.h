@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 12:48:40 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/22 15:04:15 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/06 17:08:56 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int		ft_isprint(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
 int		ft_sqrt(int n);
+int		ft_arrlen(char **argv);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int		ft_strcmp(const char *s1, const char *s2);

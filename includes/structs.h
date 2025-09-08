@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/02 09:06:34 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/07 17:58:12 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_shell_data
 	char	*trimmed;
 	char	*command_path;
 	char	**env_array;
+	char	*cwd;
 	t_list	*env;
 	t_list	*path;
 	t_list	*tokens;
@@ -52,7 +53,25 @@ typedef struct s_and_point
 	t_node_type	type;
 	void		*left;
 	void		*right;
-}				t_and_type;
+}				t_and_point;
+
+// ABT node for pipe operations with left and right operands
+typedef struct s_pipe
+{
+	t_node_type	type;
+	void		*left;
+	void		*right;
+}				t_pipe;
+
+// ABT node for command execution with command, arguments, and redirections
+typedef struct s_exec
+{
+	t_node_type	type;
+	char		*command;
+	char		**argv;
+	t_list		*infile;
+	t_list		*outfile;
+}				t_exec;
 
 // Token parsing states for quote handling and expansion
 typedef enum e_token_state
@@ -85,5 +104,42 @@ typedef struct s_token
 	t_token_state	state;
 	t_token_type	type;
 }					t_token;
+
+// Input redirection kind: INF = file, HERE = heredoc
+typedef enum e_inf
+{
+	INF,
+	HERE,
+}	t_inf;
+
+// Input redirection struct: type, heredoc delimiter (eof), or filename (name)
+typedef struct s_infile
+{
+	t_inf	type;
+	char	*eof;
+	char	*name;
+}			t_infile;
+
+// Output redirection kind: APP = overwrite, ADD = append
+typedef enum e_outf
+{
+	APP,
+	ADD,
+}	t_outf;
+
+// Output redirection struct: type and target filename
+typedef struct s_outfile
+{
+	t_outf	type;
+	char	*name;
+}			t_outfile;
+
+typedef struct s_env
+{
+	char	*value;
+	char	*content;
+	bool	exported;
+	bool	printed;
+}			t_env;
 
 #endif

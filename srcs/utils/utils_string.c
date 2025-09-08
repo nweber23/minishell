@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_string.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/31 11:20:35 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/01 09:53:51 by yyudi            ###   ########.fr       */
+/*   Created: 2025/08/21 13:46:28 by nweber            #+#    #+#             */
+/*   Updated: 2025/09/07 17:59:59 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,13 @@ char	*ft_str3var(const char *s1, const char *s2, const char *s3)
 	res = ft_strjoin(tmp, s3);
 	free(tmp);
 	return (res);
+}
+
+bool	is_valid_wildcard(char *str)
+{
+	if (ft_strcmp(str, "*") == 0)
+		return (true);
+	if (ft_strchr(str, '*'))
+		return (true);
+	return (false);
 }
