@@ -8,7 +8,8 @@ LIBFT       = $(LIBFT_DIR)/libft.a
 
 PARSING_SRCS = parsing/check_parenthesis.c parsing/check_pipe.c parsing/check_quote.c parsing/check_quotes.c \
 				parsing/check_redirect.c parsing/handling.c parsing/parenthesis_handling.c parsing/redirect.c \
-				parsing/tokenizer.c parsing/utils.c parsing/validate_input.c parsing/wildcard.c
+				parsing/tokenizer.c parsing/utils.c parsing/validate_input.c parsing/wildcard.c \
+				parsing/token_state.c
 UTILS_SRCS = utils/checker.c
 CLEANUP_SRCS = cleanup/error_exit.c cleanup/error_free.c cleanup/error_print.c cleanup/free_binary_tree.c \
 				cleanup/free_shell.c

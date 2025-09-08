@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 17:37:02 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/29 13:48:24 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 19:33:05 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,22 @@ void	lexer(t_shell_data *shell, char *input)
 {
 	shell->tokens = NULL;
 	create_token(shell, input);
+}
+
+t_token_state	detect_state(char *str, int start, int end)
+{
+	bool	started_single;
+	bool	started_double;
+	bool	expand;
+
+	started_single = (str[start] == '\'');
+	started_double = (str[start] == '"');
+	expand = scan_for_expand(str, start, end);
+	if (started_single && !expand)
+		return (SINGLE_Q);
+	else if (started_double && !expand)
+		return (DOUBLE_Q);
+	else if (expand)
+		return (EXPAND);
+	return (GENERAL);
 }
