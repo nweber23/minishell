@@ -6,13 +6,13 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 17:01:38 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 10:30:47 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	minishell_loop(t_shell_data *shell, char **envp)
+int	minishell_loop(t_shell_data *shell, char **envp)
 {
 	reset_shell(shell);
 	interavtive_signals();
@@ -21,17 +21,9 @@ void	minishell_loop(t_shell_data *shell, char **envp)
 	if (shell->input && shell->input[0] != '\0')
 		add_history(shell->input);
 	if (shell->input && validate_input(shell))
-	{
-		free_shell(shell);
-		minishell_loop(shell, envp);
-		return ;
-	}
+		return (free_shell(shell), minishell_loop(shell, envp));
 	if (shell->input == NULL || !ft_strcmp(shell->trimmed, "exit"))
-	{
-		exit_msg();
-		free_shell(shell);
-		return ;
-	}
+		return (exit_msg(), free_shell(shell), 0);
 	lexer(shell, shell->trimmed);
 	// shell->env_array = env_array(shell); // Builtin -> yyudi
 	// shell->path = path(shell, envp); // Builtin -> yyudi
@@ -39,8 +31,7 @@ void	minishell_loop(t_shell_data *shell, char **envp)
 	// execution of ltree
 	free_shell(shell);
 	end_process(0);
-	minishell_loop(shell, envp);
-	return ;
+	return (minishell_loop(shell, envp));
 }
 
 int	end_process(int value)

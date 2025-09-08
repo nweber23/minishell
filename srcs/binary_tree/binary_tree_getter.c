@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:20:19 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 17:16:38 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 10:35:10 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,74 +67,4 @@ t_list	*get_name(t_list *tokens)
 			break ;
 	}
 	return (word);
-}
-
-t_list	*get_infiles(t_shell_data *shell, t_list *tokens, t_list **infile)
-{
-	t_infile	*inf;
-
-	inf = NULL;
-	while (tokens && ((t_token *)tokens->content)->type != PIPE)
-	{
-		if (tokens && ((((t_token *)tokens->content)->type == HERE_DOC) \
-		|| ((t_token *)tokens->content)->type == INFILE))
-		{
-			inf = (t_infile *)malloc(sizeof(t_infile));
-			if (!inf)
-				error_malloc("get_infiles", shell);
-			inf->eof = NULL;
-			inf->name = NULL;
-			if (((t_token *)tokens->content)->type == INFILE)
-			{
-				inf->type = INF;
-				if (tokens->next && ((t_token *)tokens->next->content)->type == WORD)
-					inf->name = ft_strdup(((t_token *)tokens->next->content)->value);
-			}
-			else
-			{
-				inf->type = HERE;
-				if (tokens->next && ((t_token *)tokens->next->content)->type == WORD)
-					inf->eof = ft_strdup(((t_token *)tokens->next->content)->value);
-			}
-			ft_lstadd_back(infile, ft_lstnew(inf));
-			// skip operator and its operand
-			tokens = tokens->next ? tokens->next->next : NULL;
-			continue ;
-		}
-		tokens = tokens->next;
-		if (token_check(tokens))
-			break ;
-	}
-	return (tokens);
-}
-
-t_list	*get_outfiles(t_shell_data *shell, t_list *tokens, t_list **outfile)
-{
-	t_outfile	*outf;
-
-	outf = NULL;
-	while (tokens && ((t_token *)tokens->content)->type != PIPE)
-	{
-		if (tokens && ((((t_token *)tokens->content)->type == APPEND) \
-		|| ((t_token *)tokens->content)->type == OUTFILE))
-		{
-			outf = (t_outfile *)malloc(sizeof(t_outfile));
-			if (!outf)
-				error_malloc("get_outfiles", shell);
-			outf->name = NULL;
-			if (((t_token *)tokens->content)->type == OUTFILE)
-				outf->type = ADD;
-			else
-				outf->type = APP;
-			if (tokens->next && ((t_token *)tokens->next->content)->type == WORD)
-				outf->name = ft_strdup(((t_token *)tokens->next->content)->value);
-			ft_lstadd_back(outfile, ft_lstnew(outf));
-			tokens = tokens->next ? tokens->next->next : NULL;
-			continue ;
-		}
-		tokens = tokens->next;
-		if (token_check(tokens))
-			break ;
-	}
-	return (tokens);
 }

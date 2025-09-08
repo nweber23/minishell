@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 15:41:55 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 10:28:09 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ void	balance_message(int balance);
 void	reset_shell(t_shell_data *shell);
 int		end_process(int value);
 void	input(t_shell_data *shell);
-void	minishell_loop(t_shell_data *shell, char **envp);
+int		minishell_loop(t_shell_data *shell, char **envp);
 
 #endif

@@ -23,7 +23,7 @@ int	check_quotes(t_shell_data *shell, char **value, char *str, int i)
 
 int	join_quotes(t_shell_data *shell, char **value, char *str, int i)
 {
-char	*joined;
+	char	*joined;
 	char	quote_char;
 	int		start;
 	char	*old;
