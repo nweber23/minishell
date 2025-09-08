@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 10:30:47 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 14:01:30 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ int	minishell_loop(t_shell_data *shell, char **envp)
 		add_history(shell->input);
 	if (shell->input && validate_input(shell))
 		return (free_shell(shell), minishell_loop(shell, envp));
-	if (shell->input == NULL || !ft_strcmp(shell->trimmed, "exit"))
+	if (shell->input == NULL)
+		return (exit_msg(), free_shell(shell), 0);
+	if (!shell->trimmed || shell->trimmed[0] == '\0')
+		return (free_shell(shell), minishell_loop(shell, envp));
+	if (!ft_strcmp(shell->trimmed, "exit"))
 		return (exit_msg(), free_shell(shell), 0);
 	lexer(shell, shell->trimmed);
 	// shell->env_array = env_array(shell); // Builtin -> yyudi
@@ -53,7 +57,7 @@ void	input(t_shell_data *shell)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		error_malloc("input", shell);
-	prompt1 = ft_strjoin("LECK_EIER_SHELL$ ", cwd);
+	prompt1 = ft_strjoin("STARSHELL$ ", cwd);
 	free(cwd);
 	if (!prompt1)
 		error_malloc("input", shell);
