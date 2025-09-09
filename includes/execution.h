@@ -37,6 +37,7 @@ typedef struct s_redir
 {
 	t_rdrtype		type;
 	char			*word; /* filename or delimiter */
+	int             quoted_delim;
 	struct s_redir 	*next;
 }   t_redir;
 
@@ -90,6 +91,8 @@ int			is_rparen(t_token *t);
 t_token		*peek(t_tokarr *ta);
 t_token		*next(t_tokarr *ta);
 int			is_cmd_end(t_token *t);
+int			heredoc_to_fd(t_redir *r);
+char		*expand_line_env(t_shell_data *sh, char *line);
 
 /* argv/redirect assembly */
 int			append_word(char ***argv, int *argc, char *w);
@@ -103,8 +106,7 @@ t_node		*parse_pipeline(t_shell_data *sh, t_tokarr *ta);
 t_node		*parse_and_or(t_shell_data *sh, t_tokarr *ta);
 
 /* redirections + path + exec */
-int			apply_redirs_files(t_cmd *c, int *fdin, int *fdout);
-int			apply_redirs_heredoc(t_cmd *c, int *fdin);
+int			apply_all_redirs(t_cmd *cmd, int *fdin, int *fdout);
 char		*find_in_path(t_shell_data *sh, const char *cmd);
 int			run_exec_node(t_shell_data *sh, t_node *n, int fds[2], int is_top);
 int			run_pipe(t_shell_data *sh, t_node *n, int is_top);

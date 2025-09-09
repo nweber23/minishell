@@ -10,7 +10,7 @@ static void create_env_list(t_shell_data *sh, char **envp)
         char *eq = ft_strchr(envp[i], '=');
         if (eq)
         {
-            size_t klen = (size_t)(ezq - envp[i]);
+            size_t klen = (size_t)(eq - envp[i]);
             char  *key  = ft_substr(envp[i], 0, klen);
             char  *val  = ft_strdup(eq + 1);
             if (!key || !val || env_set(sh, key, val) != 0)

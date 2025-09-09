@@ -3,14 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   exec_run_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 10:03:26 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/08 21:01:33 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+void	fdpack_init(t_fdpack *p)
+{
+	p->in = -1;
+	p->out = -1;
+	p->save_in = -1;
+	p->save_out = -1;
+}
+
+void	fd_apply_inout(t_fdpack *p)
+{
+	if (p->in != -1)
+	{
+		p->save_in = dup(STDIN_FILENO);
+		dup2(p->in, STDIN_FILENO);
+		close(p->in);
+	}
+	if (p->out != -1)
+	{
+		p->save_out = dup(STDOUT_FILENO);
+		dup2(p->out, STDOUT_FILENO);
+		close(p->out);
+	}
+}
+
+void	fd_restore(t_fdpack *p)
+{
+	if (p->save_in != -1)
+	{
+		dup2(p->save_in, STDIN_FILENO);
+		close(p->save_in);
+	}
+	if (p->save_out != -1)
+	{
+		dup2(p->save_out, STDOUT_FILENO);
+		close(p->save_out);
+	}
+}
+
 
 static int	exec_external(t_shell_data *sh, t_cmd *cmd)
 {
@@ -40,87 +79,48 @@ static int	exec_external(t_shell_data *sh, t_cmd *cmd)
 	return (126);
 }
 
-static int	apply_all_redirs(t_cmd *cmd, int *fdin, int *fdout)
+static int run_builtin_parent(t_shell_data *sh, t_cmd *cmd)
 {
-	if (apply_redirs_files(cmd, fdin, fdout))
-		return (1);
-	if (apply_redirs_heredoc(cmd, fdin))
-		return (1);
-	return (0);
+    t_fdpack p;
+    int status;
+
+    fdpack_init(&p);
+    if (apply_all_redirs(cmd, &p.in, &p.out) != 0)
+    {
+        fd_restore(&p);
+        return (1);
+    }
+    fd_apply_inout(&p);
+    status = exec_builtin(sh, cmd->argv);
+    fd_restore(&p);
+    return (status);
 }
 
-static void	fdpack_init(t_fdpack *pack)
-{
-	pack->in = -1;
-	pack->out = -1;
-	pack->save_in = -1;
-	pack->save_out = -1;
-}
 
-static void	fd_restore(t_fdpack *pack)
-{
-	if (pack->save_in != -1)
-	{
-		dup2(pack->save_in, STDIN_FILENO);
-		close(pack->save_in);
-	}
-	if (pack->save_out != -1)
-	{
-		dup2(pack->save_out, STDOUT_FILENO);
-		close(pack->save_out);
-	}
-}
-
-static int	run_builtin_parent(t_shell_data *sh, t_cmd *cmd)
-{
-	t_fdpack	pack;
-	int			status;
-
-	fdpack_init(&pack);
-	if (apply_all_redirs(cmd, &pack.in, &pack.out))
-		return (1);
-	if (pack.in != -1)
-	{
-		pack.save_in = dup(STDIN_FILENO);
-		dup2(pack.in, STDIN_FILENO);
-		close(pack.in);
-	}
-	if (pack.out != -1)
-	{
-		pack.save_out = dup(STDOUT_FILENO);
-		dup2(pack.out, STDOUT_FILENO);
-		close(pack.out);
-	}
-	status = exec_builtin(sh, cmd->argv);
-	fd_restore(&pack);
-	return (status);
-}
-
+/* exec_run_exec.c — child path */
 static void	child_exec(t_shell_data *sh, t_node *node, int fds[2])
 {
-	t_fdpack	pack;
-	char		**expanded_argv;
+	t_fdpack	p;
+	char		**expanded;
 
-	fdpack_init(&pack);
-	if (apply_all_redirs(node->cmd, &pack.in, &pack.out))
-		_exit(1);
-	if (pack.in != -1 && dup2(pack.in, STDIN_FILENO) < 0)
-		_exit(1);
-	if (pack.out != -1 && dup2(pack.out, STDOUT_FILENO) < 0)
-		_exit(1);
-	if (fds[0] != -1 && fds[0] != STDIN_FILENO)
-		if (dup2(fds[0], STDIN_FILENO) < 0)
-			_exit(1);
-	if (fds[1] != -1 && fds[1] != STDOUT_FILENO)
-		if (dup2(fds[1], STDOUT_FILENO) < 0)
-			_exit(1);
-	expanded_argv = expand_argv_if_needed(node->cmd->argv);
-	if (expanded_argv)
-		node->cmd->argv = expanded_argv;
-	if (node->cmd->argv && node->cmd->argv[0] && is_builtin(node->cmd->argv[0]))
-		_exit(exec_builtin(sh, node->cmd->argv));
-	_exit(exec_external(sh, node->cmd));
+	reset_child_signals();
+	fdpack_init(&p);
+	p.in = fds[0];
+	p.out = fds[1];
+	/* gabungkan redir command ke p.in/p.out (last wins) */
+	if (apply_all_redirs(node->cmd, &p.in, &p.out) != 0)
+		exit(1);
+	/* aktifkan redir di child */
+	fd_apply_inout(&p);
+	/* setelah dup2, sumbernya ditutup di fd_apply_inout() */
+	expanded = expand_argv_if_needed(node->cmd->argv);
+	if (expanded != NULL)
+		node->cmd->argv = expanded;
+	exec_external(sh, node->cmd);
+	/* jika gagal execve: tulis error ke fd=2, exit 126/127 */
+	exit(127);
 }
+
 
 static int	wait_and_status(pid_t pid)
 {

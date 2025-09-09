@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 19:50:47 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/08 20:05:44 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	minishell_loop(t_shell_data *shell, char **envp)
 	shell->root = build_tree(shell, shell->tokens);
 	free_shell(shell);
 	end_process(exec_line(shell, shell->root));
-	minishell_loop(shell, envp);
+	return (minishell_loop(shell, envp));
 }
 
 int	end_process(int value)
