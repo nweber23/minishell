@@ -98,6 +98,9 @@ char		*expand_line_env(t_shell_data *sh, char *line);
 int			append_word(char ***argv, int *argc, char *w);
 int			add_redir(t_redir **lst, t_redir *node);
 t_rdrtype	map_rdr(t_token_type tt);
+void		fdpack_init(t_fdpack *p);
+void		fd_apply_inout(t_fdpack *p);
+void		fd_restore(t_fdpack *p);
 
 /* parser pieces */
 t_node		*parse_group(t_shell_data *sh, t_tokarr *ta);
