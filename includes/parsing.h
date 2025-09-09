@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 19:33:12 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 19:53:16 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int				pipe_handling(t_shell_data *shell, char *str, int i);
 int				redirect_handling(t_shell_data *shell, char *str, int i);
 int				words_handling(t_shell_data *shell, char *str, int i);
 int				parenthesis_handling(t_shell_data *shell, char *str, int i);
+bool			scan_for_expand(char *str, int start, int end);
 
 /*************************************************/
 /*                    PARSING                    */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:58:41 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 10:21:35 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/09 10:19:31 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,18 @@ void	free_logic_tree(void *root)
 	if (!root)
 		return ;
 	node = *(t_node_type *)root;
-	if (node == N_AND)
+	if (node == ND_AND)
 	{
 		free_logic_tree(((t_and_point *)root)->left);
 		free_logic_tree(((t_and_point *)root)->right);
 	}
-	if (node == N_OR)
+	if (node == ND_OR)
 	{
 		free_logic_tree(((t_or_point *)root)->left);
 		free_logic_tree(((t_or_point *)root)->right);
 	}
-	if (node != N_AND && node != N_OR)
+	if (node != ND_AND && node != ND_OR)
 		free_binary((t_pipe *)root);
-	else if (node == N_AND || node == N_OR)
+	else if (node == ND_AND || node == ND_OR)
 		free(root);
 }

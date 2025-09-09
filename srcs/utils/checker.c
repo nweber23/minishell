@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 14:53:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/24 20:07:44 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 17:08:53 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	is_redirect(char *str)
 	}
 	if (str[0] == '>')
 	{
-		if (str[0] == '>')
+		if (str[1] == '>')
 			return (2);
 		return (1);
 	}

@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_exit.c                                       :+:      :+:    :+:   */
+/*   bi_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/20 11:58:51 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:44 by yyudi            ###   ########.fr       */
+/*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
+/*   Updated: 2025/09/07 18:03:57 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "execution.h"
 
-void	error_malloc(char *function, t_shell_data *shell)
+int	bi_env(t_shell_data *shell)
 {
-	ft_putstr_fd("Error: Memory allocation failed in ", STDERR_FILENO);
-	ft_putendl_fd(function, STDERR_FILENO);
-	free_env(shell->env);
-	free_shell(shell);
-	exit(1);
-}
+	t_list	*node;
 
-int	exit_code(int code)
-{
-	static int	new = 0;
-
-	if (code == -1)
-		return (0);
-	new = code;
-	return (new);
+	node = shell->env;
+	while (node)
+	{
+		ft_putendl_fd((char *)node->content, STDOUT_FILENO);
+		node = node->next;
+	}
+	return (0);
 }

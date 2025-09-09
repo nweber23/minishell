@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logic_tree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:19:18 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/02 10:30:22 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 15:43:36 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	*create_and(t_shell_data *shell, void *left, void *right)
 	node = malloc(sizeof(t_and_point));
 	if (!node)
 		error_malloc("create_and", shell);
-	node->type = N_AND;
+	node->type = ND_AND;
 	node->left = left;
 	node->right = right;
 	return (node);
@@ -86,7 +86,7 @@ void	*create_or(t_shell_data *shell, void *left, void *right)
 	node = malloc(sizeof(t_or_point));
 	if (!node)
 		error_malloc("create_or", shell);
-	node->type = N_OR;
+	node->type = ND_OR;
 	node->left = left;
 	node->right = right;
 	return (node);
@@ -99,7 +99,7 @@ void	*create_pipe(t_shell_data *shell, void *left, void *right)
 	node = malloc(sizeof(t_pipe));
 	if (!node)
 		error_malloc("create_pipe", shell);
-	node->type = N_PIPE;
+	node->type = ND_PIPE;
 	node->left = left;
 	node->right = right;
 	return (node);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_state.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 19:08:44 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 19:33:21 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 19:52:57 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	advance_word_end(t_shell_data *shell, char *str,
 	return (i);
 }
 
-static bool	scan_for_expand(char *str, int start, int end)
+bool	scan_for_expand(char *str, int start, int end)
 {
 	bool	double_q;
 	bool	single_q;

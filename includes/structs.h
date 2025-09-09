@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/06 18:55:04 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/07 18:04:07 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ typedef struct s_shell_data
 // ABT node types for different command operations
 typedef enum e_node_type
 {
-	N_PIPE,
-	N_EXEC,
-	N_AND,
-	N_OR,
+	ND_EXEC,
+	ND_PIPE,
+	ND_AND,
+	ND_OR,
+	ND_GROUP
 }	t_node_type;
 
 // ABT node for logical OR operations with left and right operands
