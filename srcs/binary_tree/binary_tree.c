@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   binary_tree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:32:06 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 16:58:51 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 11:22:39 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	*insert_node(t_shell_data *shell, void *root, t_list *temp)
 	if (is_parenthesis(temp->next))
 	{
 		current = create_new_sublist(temp->next);
-		pipe = create_pipe(shell, root, build_tree(shell, current));
+		pipe = create_pipe(shell, root, build_tree_legacy(shell, current));
 		clear_sublist(current);
 	}
 	else

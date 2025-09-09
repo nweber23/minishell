@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logic_tree_parenthesis.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 18:38:48 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 17:08:15 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 11:22:27 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void	*create_parenthesis(t_shell_data *shell,
 	new = create_new_sublist(tokens);
 	token = (t_token *)tokens->content;
 	if (!left_node)
-		left_node = build_tree(shell, new);
+		left_node = build_tree_legacy(shell, new);
 	if (token->type == AND)
-		left_node = create_and(shell, left_node, build_tree(shell, new));
+		left_node = create_and(shell, left_node, build_tree_legacy(shell, new));
 	if (token->type == OR)
-		left_node = create_or(shell, left_node, build_tree(shell, new));
+		left_node = create_or(shell, left_node, build_tree_legacy(shell, new));
 	clear_sublist(new);
 	return (left_node);
 }

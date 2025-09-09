@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 19:53:16 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 11:21:27 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void			lexer(t_shell_data *shell, char *input);
 /*                   LOGIC_TREE                  */
 /*************************************************/
 void			*build_subtree(t_shell_data *shell, t_list *tokens);
-void			*build_tree(t_shell_data *shell, t_list *tokens);
+void			*build_tree_legacy(t_shell_data *shell, t_list *tokens);
 void			*create_and(t_shell_data *shell, void *left, void *right);
 void			*create_or(t_shell_data *shell, void *left, void *right);
 void			*create_pipe(t_shell_data *shell, void *left, void *right);
