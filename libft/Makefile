@@ -1,4 +1,5 @@
 # Project Configuration
+MAKEFLAGS += -s
 NAME = libft.a
 
 # Directory structure
