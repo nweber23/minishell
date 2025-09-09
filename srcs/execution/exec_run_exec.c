@@ -6,48 +6,61 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/09 12:26:47 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 12:59:34 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-void	fdpack_init(t_fdpack *p)
+static void	print_cmd_not_found(const char *name)
 {
-	p->in = -1;
-	p->out = -1;
-	p->save_in = -1;
-	p->save_out = -1;
+	ft_putstr_fd("minishell: ", 2);
+	if (name != NULL)
+		ft_putstr_fd((char *)name, 2);
+	ft_putendl_fd(": command not found", 2);
 }
 
-void	fd_apply_inout(t_fdpack *p)
+static char	*resolve_program_path(t_shell_data *sh, const char *name)
 {
-	if (p->in != -1)
+	char	*program_path;
+
+	program_path = NULL;
+	if (name == NULL)
+		return (NULL);
+	if (ft_strchr(name, '/'))
+		program_path = ft_strdup(name);
+	else
+		program_path = find_in_path(sh, name);
+	return (program_path);
+}
+
+static void	apply_dup_and_close(int from_fd, int to_fd)
+{
+	if (from_fd != -1)
 	{
-		p->save_in = dup(STDIN_FILENO);
-		dup2(p->in, STDIN_FILENO);
-		close(p->in);
-	}
-	if (p->out != -1)
-	{
-		p->save_out = dup(STDOUT_FILENO);
-		dup2(p->out, STDOUT_FILENO);
-		close(p->out);
+		dup2(from_fd, to_fd);
+		close(from_fd);
 	}
 }
 
-void	fd_restore(t_fdpack *p)
+static void	close_pair_if_set(int fds[2])
 {
-	if (p->save_in != -1)
-	{
-		dup2(p->save_in, STDIN_FILENO);
-		close(p->save_in);
-	}
-	if (p->save_out != -1)
-	{
-		dup2(p->save_out, STDOUT_FILENO);
-		close(p->save_out);
-	}
+	if (fds == NULL)
+		return ;
+	if (fds[0] != -1)
+		close(fds[0]);
+	if (fds[1] != -1)
+		close(fds[1]);
+}
+
+static char	**maybe_expand_argv(char **argv)
+{
+	char	**expanded;
+
+	expanded = expand_argv_if_needed(argv);
+	if (expanded != NULL)
+		return (expanded);
+	return (argv);
 }
 
 static int	exec_external(t_shell_data *sh, t_cmd *cmd)
@@ -55,21 +68,11 @@ static int	exec_external(t_shell_data *sh, t_cmd *cmd)
 	char	*program_path;
 	char	**env_array;
 
-	program_path = NULL;
-	env_array = NULL;
-	if (!cmd->argv || !cmd->argv[0])
+	if (cmd == NULL || cmd->argv == NULL || cmd->argv[0] == NULL)
 		return (0);
-	if (ft_strchr(cmd->argv[0], '/'))
-		program_path = ft_strdup(cmd->argv[0]);
-	else
-		program_path = find_in_path(sh, cmd->argv[0]);
-	if (!program_path)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->argv[0], 2);
-		ft_putendl_fd(": command not found", 2);
-		return (127);
-	}
+	program_path = resolve_program_path(sh, cmd->argv[0]);
+	if (program_path == NULL)
+		return (print_cmd_not_found(cmd->argv[0]), 127);
 	env_array = env_list_to_array(sh->env);
 	execve(program_path, cmd->argv, env_array);
 	perror("execve");
@@ -78,48 +81,52 @@ static int	exec_external(t_shell_data *sh, t_cmd *cmd)
 	return (126);
 }
 
-static int run_builtin_parent(t_shell_data *sh, t_cmd *cmd)
+static int	exec_builtin_in_parent(t_shell_data *sh, t_cmd *cmd)
 {
-    t_fdpack p;
-    int status;
+	t_fdpack	fd_pack;
+	int			exit_status;
 
-    fdpack_init(&p);
-    if (apply_all_redirs(cmd, &p.in, &p.out) != 0)
-    {
-        fd_restore(&p);
-        return (1);
-    }
-    fd_apply_inout(&p);
-    status = exec_builtin(sh, cmd->argv);
-    fd_restore(&p);
-    return (status);
+	fdpack_init(&fd_pack);
+	if (apply_all_redirs(cmd, &fd_pack.in, &fd_pack.out) != 0)
+	{
+		fd_restore(&fd_pack);
+		return (1);
+	}
+	fd_apply_inout(&fd_pack);
+	cmd->argv = maybe_expand_argv(cmd->argv);
+	exit_status = exec_builtin(sh, cmd->argv);
+	fd_restore(&fd_pack);
+	return (exit_status);
 }
 
-static void	child_exec(t_shell_data *sh, t_node *node, int fds[2])
+static void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 {
-	t_fdpack	p;
-	char		**expanded;
+	t_fdpack	fd_pack;
+	int			exit_status;
 
 	reset_child_signals();
-	fdpack_init(&p);
-	p.in = fds[0];
-	p.out = fds[1];
-	if (apply_all_redirs(node->cmd, &p.in, &p.out) != 0)
+	fdpack_init(&fd_pack);
+	fd_pack.in = in_fd;
+	fd_pack.out = out_fd;
+	if (apply_all_redirs(node->cmd, &fd_pack.in, &fd_pack.out) != 0)
 		exit(1);
-	fd_apply_inout(&p);
-	expanded = expand_argv_if_needed(node->cmd->argv);
-	if (expanded != NULL)
-		node->cmd->argv = expanded;
-	exec_external(sh, node->cmd);
-	exit(127);
+	apply_dup_and_close(fd_pack.in, STDIN_FILENO);
+	apply_dup_and_close(fd_pack.out, STDOUT_FILENO);
+	node->cmd->argv = maybe_expand_argv(node->cmd->argv);
+	if (node->cmd->argv != NULL && is_builtin(node->cmd->argv[0]) != 0)
+	{
+		exit_status = exec_builtin(sh, node->cmd->argv);
+		exit(exit_status);
+	}
+	exit_status = exec_external(sh, node->cmd);
+	exit(exit_status);
 }
 
-
-static int	wait_and_status(pid_t pid)
+static int	wait_and_status(pid_t child_pid)
 {
 	int	status;
 
-	if (waitpid(pid, &status, 0) == -1)
+	if (waitpid(child_pid, &status, 0) == -1)
 		return (perror("waitpid"), 1);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
@@ -128,26 +135,38 @@ static int	wait_and_status(pid_t pid)
 	return (1);
 }
 
-int	run_exec_node(t_shell_data *sh, t_node *node, int fds[2], int is_top)
+static void	select_inout_from_pair(int pair[2], int *in_fd, int *out_fd)
 {
-	pid_t		pid;
-	const char	*name;
+	*in_fd = -1;
+	*out_fd = -1;
+	if (pair == NULL)
+		return ;
+	if (pair[0] != -1)
+		*in_fd = pair[0];
+	if (pair[1] != -1)
+		*out_fd = pair[1];
+}
 
-	if (!node->cmd)
+int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)
+{
+	pid_t		child_pid;
+	const char	*cmd_name;
+	int			in_fd;
+	int			out_fd;
+
+	if (node == NULL || node->cmd == NULL)
 		return (1);
-	name = NULL;
-	if (node->cmd->argv)
-		name = node->cmd->argv[0];
-	if (is_top && name && is_builtin(name))
-		return (run_builtin_parent(sh, node->cmd));
-	pid = fork();
-	if (pid == -1)
+	cmd_name = NULL;
+	if (node->cmd->argv != NULL)
+		cmd_name = node->cmd->argv[0];
+	if (is_top != 0 && cmd_name != NULL && is_builtin(cmd_name) != 0)
+		return (exec_builtin_in_parent(sh, node->cmd));
+	select_inout_from_pair(pipe_fds, &in_fd, &out_fd);
+	child_pid = fork();
+	if (child_pid == -1)
 		return (perror("fork"), 1);
-	if (pid == 0)
-		child_exec(sh, node, fds);
-	if (fds[0] != -1 && fds[0] != STDIN_FILENO)
-		close(fds[0]);
-	if (fds[1] != -1 && fds[1] != STDOUT_FILENO)
-		close(fds[1]);
-	return (wait_and_status(pid));
+	if (child_pid == 0)
+		child_exec(sh, node, in_fd, out_fd);
+	close_pair_if_set(pipe_fds);
+	return (wait_and_status(child_pid));
 }
