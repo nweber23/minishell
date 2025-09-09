@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:07:13 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 18:04:08 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/08 19:49:12 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ bool			is_wildcard(char **argv);
 bool			is_valid_wildcard(char *str);
 bool			token_check(t_list *node);
 bool			error_redirect(char *str, int *i, int len);
+char			*get_empty_value(t_shell_data *shell);
 void			set_token_position(t_list *list);
 void			clear_sublist(t_list *new);
 void			quote_toggling(char c, bool *double_q, bool *single_q);
@@ -56,6 +57,7 @@ t_list			*create_new_sublist(t_list *tokens);
 t_list			*word_check(t_list **tokens, char **argv, int *i);
 t_list			*arg_check(t_list *tokens, int *count);
 t_token_type	get_type(char *str);
+t_token_state	detect_state(char *str, int start, int end);
 
 /*************************************************/
 /*                  TOKENIZER                    */

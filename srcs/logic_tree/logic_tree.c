@@ -47,7 +47,7 @@ void	*insert_nodes(t_shell_data *shell, void *left_node, t_list *tokens)
 	if (token->type == PARENTHESIS)
 		return (create_parenthesis(shell, left_node, tokens));
 	if (!left_node)
-		build_subtree(shell, tokens);
+		left_node = build_subtree(shell, tokens);
 	if (token->type == AND && !is_parenthesis(tokens->next))
 		left_node = create_and(shell, left_node, \
 			build_subtree(shell, tokens->next));

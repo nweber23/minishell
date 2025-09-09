@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 17:42:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/28 17:43:23 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 10:22:48 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ static bool	handle_redirect(char *str, int *i, int len)
 bool	redirect_check(char *str)
 {
 	int		i;
-	int		len;
 	bool	double_q;
 	bool	single_q;
+	int		len;
 
-	i = 0;
+	i = -1;
 	double_q = false;
 	single_q = false;
-	while (str[i])
+	while (str[++i])
 	{
 		quote_toggling(str[i], &double_q, &single_q);
 		if (single_q || double_q)
@@ -42,9 +42,12 @@ bool	redirect_check(char *str)
 			continue ;
 		}
 		len = is_redirect(&str[i]);
-		if (len > 0 && !handle_redirect(str, &i, len))
-			return (false);
-		i++;
+		if (len > 0)
+		{
+			if (!handle_redirect(str, &i, len))
+				return (false);
+			continue ;
+		}
 	}
 	return (true);
 }

@@ -40,17 +40,41 @@ void	free_pipe(t_pipe *pipe)
 	free(pipe);
 }
 
+static void	free_infile_node(void *content)
+{
+	t_infile	*in;
+
+	in = (t_infile *)content;
+	if (!in)
+		return ;
+	if (in->eof)
+		free(in->eof);
+	if (in->name)
+		free(in->name);
+	free(in);
+}
+
+static void	free_outfile_node(void *content)
+{
+	t_outfile	*out;
+
+	out = (t_outfile *)content;
+	if (!out)
+		return ;
+	if (out->name)
+		free(out->name);
+	free(out);
+}
+
 void	free_exec(t_exec *exec)
 {
 	if (!exec)
 		return ;
-	if (exec->command)
-		free(exec->command);
 	if (exec->argv)
-		ft_array_free(exec->argv);
+		free(exec->argv);
 	if (exec->infile)
-		ft_lstclear(&exec->infile, free);
+		ft_lstclear(&exec->infile, free_infile_node);
 	if (exec->outfile)
-		ft_lstclear(&exec->outfile, free);
+		ft_lstclear(&exec->outfile, free_outfile_node);
 	free(exec);
 }

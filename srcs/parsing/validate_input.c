@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:15:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/29 09:28:02 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/08 10:24:52 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,47 @@ bool	validate_input(t_shell_data *shell)
 	return (false);
 }
 
-bool	error_redirect(char *str, int *i, int len)
+static bool	error_redirect_after_skip(char *str, int *i, size_t slen)
 {
 	char	*error_msg;
 
-	if (str[*i + 1] == '|')
-		return (error_message(PIPE_MSG), false);
-	*i += len;
-	while (str[*i] && is_space(str[*i]))
+	while ((size_t)(*i) < slen && is_space(str[*i]))
 		(*i)++;
-	if (is_redirect(str) || is_meta(str[*i]))
+	if ((size_t)(*i) >= slen)
+		return (error_message(REDIRECT_MSG), false);
+	if (is_meta(str[*i]))
 	{
-		if (str[*i] == '>' && str[*i + 1] == '>')
+		if (str[*i] == '>' && str[*i + 1] && str[*i + 1] == '>')
 			error_msg = "syntax error near unexpected token `>>'";
+		else if (str[*i] == '<' && str[*i + 1] && str[*i + 1] == '<')
+			error_msg = "syntax error near unexpected token `<<'";
 		else if (str[*i] == '<')
 			error_msg = "syntax error near unexpected token `<'";
-		else
+		else if (str[*i] == '>')
 			error_msg = "syntax error near unexpected token `>'";
-		error_message(error_msg);
-		return (false);
+		else
+			error_msg = "syntax error near unexpected token `newline'";
+		return (error_message(error_msg), false);
 	}
 	return (true);
+}
+
+bool	error_redirect(char *str, int *i, int len)
+{
+	size_t	slen;
+	size_t	peek;
+	int		pos;
+
+	if (!str || !i)
+		return (false);
+	slen = ft_strlen(str);
+	pos = *i;
+	if ((size_t)pos < slen)
+	{
+		peek = (size_t)pos + (size_t)len;
+		if (peek < slen && str[peek] == '|')
+			return (error_message(PIPE_MSG), false);
+	}
+	*i += len;
+	return (error_redirect_after_skip(str, i, slen));
 }

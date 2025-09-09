@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:58:41 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 16:57:47 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 10:19:31 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,31 +35,6 @@ void	free_env(t_list *env)
 		free(env);
 		env = next;
 	}
-}
-
-void	free_shell(t_shell_data *shell)
-{
-	int	i;
-
-	ft_lstclear(&shell->tokens, free_token);
-	i = -1;
-	if (shell->env_array)
-	{
-		while (shell->env_array[++i])
-			free(shell->env_array[i]);
-		free(shell->env_array);
-	}
-	ft_lstclear(&shell->path, free);
-	if (shell->cwd)
-		free(shell->cwd);
-	if (shell->input)
-		free(shell->input);
-	if (shell->trimmed)
-		free(shell->trimmed);
-	if (shell->command_path)
-		free(shell->command_path);
-	if (shell->root)
-		free(shell->root);
 }
 
 void	free_logic_tree(void *root)
