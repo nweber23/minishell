@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/09 10:42:25 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 11:30:22 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	bi_echo(char **args)
 	int	index;
 	int	print_newline;
 
-	index = 1;
+	index = 0;
 	print_newline = 1;
 	while (args[index] && is_n_option(args[index]))
 	{

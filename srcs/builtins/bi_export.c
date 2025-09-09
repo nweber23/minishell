@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/09 10:47:01 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 12:13:21 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ int	bi_export(t_shell_data *shell, char **args)
 {
 	int	arg_index;
 
-	if (!args || !args[1])
+	if (!args || !args[0])
 		return (bi_env(shell));
-	arg_index = 1;
+	arg_index = 0;
 	while (args[arg_index])
 	{
 		if (!valid_key(args[arg_index]))

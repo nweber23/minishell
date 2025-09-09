@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/09 10:46:34 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 12:12:20 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	bi_cd(t_shell_data *shell, char **args)
 
 	if (!getcwd(old_pwd, sizeof(old_pwd)))
 		return (perror("cd:getcwd"), 1);
-	if (!args || !args[1] || args[1][0] == '\0')
+	if (!args || !args[0] || args[0][0] == '\0')
 	{
 		target_directory = env_get(shell->env, "HOME");
 		if (!target_directory)
@@ -43,7 +43,7 @@ int	bi_cd(t_shell_data *shell, char **args)
 			return (perror("cd"), 1);
 		return (update_pwd_vars(shell, old_pwd));
 	}
-	if (chdir(args[1]) == -1)
+	if (chdir(args[0]) == -1)
 		return (perror("cd"), 1);
 	return (update_pwd_vars(shell, old_pwd));
 }

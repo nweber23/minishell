@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/09 10:48:35 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 12:13:01 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,20 @@ int	bi_exit(t_shell_data *shell, char **args)
 
 	(void)shell;
 	ft_putendl_fd("exit", 2);
-	if (!args[1])
+	if (!args[0])
 		exit(0);
-	if (!is_num(args[1]))
+	if (!is_num(args[0]))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(args[1], 2);
+		ft_putstr_fd(args[0], 2);
 		ft_putendl_fd(": numeric argument required", 2);
 		exit(2);
 	}
-	if (args[2])
+	if (args[1])
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		return (1);
 	}
-	exit_code_value = ft_atoi(args[1]);
+	exit_code_value = ft_atoi(args[0]);
 	exit(exit_code_value);
 }
