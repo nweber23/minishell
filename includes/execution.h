@@ -64,8 +64,8 @@ typedef struct s_tokarr
 }   t_tokarr;
 
 /* ===== Public build/exec API ===== */
-// t_node		*build_tree(t_shell_data *shell, t_list *tokens);
-// void		free_tree(t_node *n);
+t_node		*build_tree(t_shell_data *shell, t_list *tokens);
+void		free_tree(t_node *n);
 int			exec_line(t_shell_data *sh, t_node *root);
 int			exec_builtin(t_shell_data *sh, char **argv);
 int			is_builtin(const char *name);

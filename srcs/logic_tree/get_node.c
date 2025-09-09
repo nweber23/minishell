@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_node.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 12:40:21 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:38 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/09 11:21:59 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	*get_and_node(t_shell_data *shell, void *left_node, t_list *tokens)
 
 	new = NULL;
 	new = create_new_sublist(tokens->next);
-	left_node = create_and(shell, left_node, build_tree(shell, new));
+	left_node = create_and(shell, left_node, build_tree_legacy(shell, new));
 	clear_sublist(new);
 	return (left_node);
 }
@@ -71,7 +71,7 @@ void	*get_or_node(t_shell_data *shell, void *left_node, t_list *tokens)
 
 	new = NULL;
 	new = create_new_sublist(tokens->next);
-	left_node = create_or(shell, left_node, build_tree(shell, new));
+	left_node = create_or(shell, left_node, build_tree_legacy(shell, new));
 	clear_sublist(new);
 	return (left_node);
 }
@@ -82,7 +82,7 @@ void	*get_pipe_node(t_shell_data *shell, void *left_node, t_list *tokens)
 
 	new = NULL;
 	new = create_new_sublist(tokens->next);
-	left_node = create_pipe(shell, left_node, build_tree(shell, new));
+	left_node = create_pipe(shell, left_node, build_tree_legacy(shell, new));
 	clear_sublist(new);
 	return (left_node);
 }
