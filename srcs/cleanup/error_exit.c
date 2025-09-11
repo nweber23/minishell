@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:58:51 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:44 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/11 17:54:05 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	exit_code(int code)
 	static int	new = 0;
 
 	if (code == -1)
-		return (0);
+		return (new);
 	new = code;
 	return (new);
 }

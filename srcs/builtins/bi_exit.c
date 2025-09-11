@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/09 12:13:01 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/11 17:30:30 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	bi_exit(t_shell_data *shell, char **args)
 	int	exit_code_value;
 
 	(void)shell;
-	ft_putendl_fd("exit", 2);
+	if (isatty(STDIN_FILENO))
+        ft_putendl_fd("exit", 1);
 	if (!args[0])
 		exit(0);
 	if (!is_num(args[0]))

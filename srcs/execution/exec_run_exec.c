@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_run_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/09 12:59:34 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/11 18:05:56 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,32 +53,82 @@ static void	close_pair_if_set(int fds[2])
 		close(fds[1]);
 }
 
-static char	**maybe_expand_argv(char **argv)
-{
-	char	**expanded;
-
-	expanded = expand_argv_if_needed(argv);
-	if (expanded != NULL)
-		return (expanded);
-	return (argv);
-}
-
 static int	exec_external(t_shell_data *sh, t_cmd *cmd)
 {
-	char	*program_path;
-	char	**env_array;
+    char	*program_path;
+    char	**env_array;
+    int		err;
 
-	if (cmd == NULL || cmd->argv == NULL || cmd->argv[0] == NULL)
-		return (0);
-	program_path = resolve_program_path(sh, cmd->argv[0]);
-	if (program_path == NULL)
-		return (print_cmd_not_found(cmd->argv[0]), 127);
-	env_array = env_list_to_array(sh->env);
-	execve(program_path, cmd->argv, env_array);
-	perror("execve");
-	ft_array_free(env_array);
-	free(program_path);
-	return (126);
+    if (cmd == NULL || cmd->argv == NULL || cmd->argv[0] == NULL)
+        return (0);
+    program_path = resolve_program_path(sh, cmd->argv[0]);
+    if (program_path == NULL)
+        return (print_cmd_not_found(cmd->argv[0]), 127);
+    env_array = env_list_to_array(sh->env);
+    execve(program_path, cmd->argv, env_array);
+    err = errno;
+    ft_array_free(env_array);
+    ft_putstr_fd("minishell: ", 2);
+    ft_putstr_fd(cmd->argv[0], 2);
+    ft_putstr_fd(": ", 2);
+    ft_putendl_fd(strerror(err), 2);
+    free(program_path);
+    if (err == ENOENT)
+        return (127);
+    return (126);
+}
+
+static void	free_argv_vec(char **argv)
+{
+    int	i;
+
+    if (!argv)
+        return ;
+    i = 0;
+    while (argv[i])
+    {
+        free(argv[i]);
+        i++;
+    }
+    free(argv);
+}
+
+static void	restore_masked_stars(char *s)
+{
+    int i = 0;
+    if (!s) return;
+    while (s[i])
+    {
+        if (s[i] == '\a')
+            s[i] = '*';
+        i++;
+    }
+}
+
+static void	expand_argv_inplace(t_cmd *cmd)
+{
+    char	**orig;
+    char	**expanded;
+    int     i;
+
+    if (!cmd)
+        return ;
+    if (cmd->argv)
+    {
+        i = 0;
+        while (cmd->argv[i])
+        {
+            restore_masked_stars(cmd->argv[i]);
+            i++;
+        }
+    }
+    orig = cmd->argv;
+    expanded = expand_argv_if_needed(orig);
+    if (expanded && expanded != orig)
+    {
+        free_argv_vec(orig);
+        cmd->argv = expanded;
+    }
 }
 
 static int	exec_builtin_in_parent(t_shell_data *sh, t_cmd *cmd)
@@ -93,7 +143,7 @@ static int	exec_builtin_in_parent(t_shell_data *sh, t_cmd *cmd)
 		return (1);
 	}
 	fd_apply_inout(&fd_pack);
-	cmd->argv = maybe_expand_argv(cmd->argv);
+	expand_argv_inplace(cmd);
 	exit_status = exec_builtin(sh, cmd->argv);
 	fd_restore(&fd_pack);
 	return (exit_status);
@@ -112,7 +162,7 @@ static void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 		exit(1);
 	apply_dup_and_close(fd_pack.in, STDIN_FILENO);
 	apply_dup_and_close(fd_pack.out, STDOUT_FILENO);
-	node->cmd->argv = maybe_expand_argv(node->cmd->argv);
+	expand_argv_inplace(node->cmd);
 	if (node->cmd->argv != NULL && is_builtin(node->cmd->argv[0]) != 0)
 	{
 		exit_status = exec_builtin(sh, node->cmd->argv);
