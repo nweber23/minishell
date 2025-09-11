@@ -6,13 +6,13 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 11:00:41 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 19:02:03 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/11 19:06:15 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	key_matches(const char *entry, const char *key, size_t key_len)
+int	key_matches(const char *entry, const char *key, size_t key_len)
 {
 	if (ft_strncmp(entry, key, key_len) != 0)
 		return (0);
