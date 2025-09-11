@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loop_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 19:58:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:32 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/11 16:10:40 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	reset_shell(t_shell_data *shell)
 	shell->env_array = NULL;
 	shell->input = NULL;
 	shell->path = NULL;
-	shell->root = NULL;
 	shell->tokens = NULL;
 	shell->trimmed = NULL;
 }

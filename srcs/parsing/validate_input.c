@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 15:15:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 10:24:52 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/11 17:18:26 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ static bool	error_redirect_after_skip(char *str, int *i, size_t slen)
 			error_msg = "syntax error near unexpected token `>'";
 		else
 			error_msg = "syntax error near unexpected token `newline'";
-		return (error_message(error_msg), false);
+		error_message(error_msg);
+		exit_code(2);
+		return (false);
 	}
 	return (true);
 }

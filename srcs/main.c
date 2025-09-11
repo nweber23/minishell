@@ -55,6 +55,9 @@ int main(int ac, char **av, char **envp)
     create_env_list(&sh, envp);
     bump_shlvl(&sh);
     minishell_loop(&sh, envp);
+    if (sh.env_array)
+        ft_array_free(sh.env_array);
+    free_shell(&sh);
     free_env(sh.env);
     return (0);
 }
