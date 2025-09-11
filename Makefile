@@ -11,10 +11,6 @@ PARSING_SRCS = parsing/check_parenthesis.c parsing/check_pipe.c parsing/check_qu
 				parsing/tokenizer.c parsing/utils.c parsing/validate_input.c parsing/wildcard.c parsing/token_state.c
 UTILS_SRCS = utils/checker.c utils/utils_env.c utils/utils_string.c
 CLEANUP_SRCS = cleanup/error_exit.c cleanup/error_free.c cleanup/error_print.c cleanup/free_binary_tree.c cleanup/free_shell.c
-LOGIC_TREE_SRCS = logic_tree/get_node.c logic_tree/logic_tree_parenthesis.c logic_tree/logic_tree.c \
-				logic_tree/logic_tree_utils.c
-BINARY_TREE_SRCS = binary_tree/binary_tree.c binary_tree/binary_tree_utils.c binary_tree/binary_tree_getter.c \
-				binary_tree/get_infile.c binary_tree/get_outfile.c
 LOOP_SRCS = loop/minishell_loop.c loop/loop_utils.c
 SIGNAL_SRCS = signal/signal.c signal/signal1.c
 BUILTIN_SRCS = builtins/bi_cd.c builtins/bi_echo.c builtins/bi_env.c builtins/bi_exit.c builtins/bi_export.c \
