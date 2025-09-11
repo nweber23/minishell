@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:14 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/08 20:36:28 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/11 20:38:31 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int	open_pipe_pair(int p[2])
+static int	open_pipe_pair(int pipe_fd[2])
 {
-	if (pipe(p) == -1)
+	if (pipe(pipe_fd) == -1)
 		return (-1);
 	return (0);
 }
 
 static int	write_line_fd(int wfd, const char *s)
 {
-	ssize_t	n;
+	ssize_t	written;
 	size_t	len;
 
 	if (s == NULL)
 		return (0);
 	len = ft_strlen(s);
-	n = write(wfd, s, len);
-	if (n < 0)
+	written = write(wfd, s, len);
+	if (written < 0)
 		return (-1);
-	n = write(wfd, "\n", 1);
-	if (n < 0)
+	written = write(wfd, "\n", 1);
+	if (written < 0)
 		return (-1);
 	return (0);
 }
@@ -45,12 +45,13 @@ static int	line_is_delim(const char *line, const char *delim)
 	return (0);
 }
 
-/* opsional: expand env pada line (hanya jika delim tidak di-quote) */
-static char	*expand_line_if_needed(t_shell_data *sh, char *line, int quoted)
+static char	*expand_line_if_needed(t_shell_data *sh,
+									char *line,
+									int quoted_limiter)
 {
 	char	*expanded;
 
-	if (quoted != 0)
+	if (quoted_limiter != 0)
 		return (line);
 	expanded = expand_line_env(sh, line);
 	if (expanded == NULL)
@@ -59,40 +60,48 @@ static char	*expand_line_if_needed(t_shell_data *sh, char *line, int quoted)
 	return (expanded);
 }
 
-/* Kembalikan read-end fd untuk dipakai sebagai STDIN command */
-int	heredoc_to_fd(t_redir *r)
+static int	heredoc_loop(t_shell_data *sh, t_redir *redir, int wfd)
 {
-	int				p[2];
-	char			*line;
-	t_shell_data	*sh;
+	char	*line;
 
-	if (r == NULL || r->word == NULL)
-		return (-1);
-	if (open_pipe_pair(p) != 0)
-		return (-1);
-	trap_heredoc();
-	sh = global_shell(NULL, 0);
 	line = NULL;
 	while (1)
 	{
 		line = readline("> ");
 		if (line == NULL)
-			break ;
-		if (line_is_delim(line, r->word) == 1)
+			return (0);
+		if (line_is_delim(line, redir->word) == 1)
 		{
 			free(line);
-			break ;
+			return (0);
 		}
-		line = expand_line_if_needed(sh, line, r->quoted_delim);
-		if (write_line_fd(p[1], line) != 0)
+		line = expand_line_if_needed(sh, line, redir->quoted_delim);
+		if (write_line_fd(wfd, line) != 0)
 		{
 			free(line);
-			close(p[1]);
-			close(p[0]);
 			return (-1);
 		}
 		free(line);
 	}
-	close(p[1]);
-	return (p[0]);
+}
+
+int	heredoc_to_fd(t_redir *redir)
+{
+	int				pipe_fd[2];
+	t_shell_data	*sh;
+
+	if (redir == NULL || redir->word == NULL)
+		return (-1);
+	if (open_pipe_pair(pipe_fd) != 0)
+		return (-1);
+	trap_heredoc();
+	sh = global_shell(NULL, 0);
+	if (heredoc_loop(sh, redir, pipe_fd[1]) != 0)
+	{
+		close(pipe_fd[1]);
+		close(pipe_fd[0]);
+		return (-1);
+	}
+	close(pipe_fd[1]);
+	return (pipe_fd[0]);
 }

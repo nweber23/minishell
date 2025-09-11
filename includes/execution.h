@@ -36,7 +36,7 @@ typedef enum e_rdrtype
 typedef struct s_redir
 {
 	t_rdrtype		type;
-	char			*word; /* filename or delimiter */
+	char			*word;
 	int             quoted_delim;
 	struct s_redir 	*next;
 }   t_redir;
@@ -52,10 +52,9 @@ typedef struct s_node
 	t_node_type		type;
 	struct s_node	*left;
 	struct s_node	*right;
-	t_cmd			*cmd; /* used when type == ND_EXEC */
+	t_cmd			*cmd;
 }   t_node;
 
-/* token stream view */
 typedef struct s_tokarr
 {
 	t_token	**v;
@@ -65,7 +64,6 @@ typedef struct s_tokarr
 
 /* ===== Public build/exec API ===== */
 t_node		*build_tree(t_shell_data *shell, t_list *tokens);
-void		free_tree(t_node *n);
 int			exec_line(t_shell_data *sh, t_node *root);
 int			exec_builtin(t_shell_data *sh, char **argv);
 int			is_builtin(const char *name);
@@ -98,9 +96,11 @@ char		*expand_line_env(t_shell_data *sh, char *line);
 int			append_word(char ***argv, int *argc, char *w);
 int			add_redir(t_redir **lst, t_redir *node);
 t_rdrtype	map_rdr(t_token_type tt);
-void		fdpack_init(t_fdpack *p);
-void		fd_apply_inout(t_fdpack *p);
-void		fd_restore(t_fdpack *p);
+int			is_redir_tok(t_token *token);
+int			argv_len(char **vector);
+void		mask_quoted_stars(char *s);
+char		*expand_token_value(t_shell_data *sh, t_token *tok);
+int			append_word_simple(char ***argv, char *word_copy);
 
 /* parser pieces */
 t_node		*parse_group(t_shell_data *sh, t_tokarr *ta);
@@ -114,6 +114,19 @@ char		*find_in_path(t_shell_data *sh, const char *cmd);
 int			run_exec_node(t_shell_data *sh, t_node *n, int fds[2], int is_top);
 int			run_pipe(t_shell_data *sh, t_node *n, int is_top);
 int			run_node(t_shell_data *sh, t_node *n, int is_top);
+int			wait_status(pid_t pid);
+
+/*Execution*/
+void		print_cmd_not_found(const char *name);
+char		*resolve_program_path(t_shell_data *sh, const char *name);
+void		apply_dup_and_close(int from_fd, int to_fd);
+void		close_pair_if_set(int fds[2]);
+int			exec_external(t_shell_data *sh, t_cmd *cmd);
+void		free_argv_vec(char **argv);
+void		restore_masked_stars(char *s);
+void		child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd);
+void		expand_argv_inplace(t_cmd *cmd);
+int			exec_builtin_in_parent(t_shell_data *sh, t_cmd *cmd);
 
 // utils env helpers (header)
 char		*env_get(t_list *env, const char *key);
@@ -124,4 +137,29 @@ char		**env_list_to_array(t_list *env);
 void		ft_array_free(char **array);
 char		*ft_str3var(const char *s1, const char *s2, const char *s3);
 
+/*Build Tree Utils*/
+void		free_string_array(char **argv);
+void		free_command_node(t_cmd *cmd);
+void		free_subtrees(t_node *node);
+void		free_tree(t_node *node);
+
+/*Expand Utils*/
+int			has_star(const char *pattern);
+int			glob_match(const char *pattern, const char *name);
+int			should_skip_hidden(const char *pattern, const char *name);
+char		*exp_join_n(char *acc, const char *s, size_t n);
+char		*exp_join(char *acc, const char *s);
+size_t		exp_scan_name(const char *line, size_t pos);
+char		*exp_status_str(t_shell_data *sh);
+char		*exp_env_value_dup(t_shell_data *sh, \
+			const char *line, size_t *i);
+
+/*Utils File Directory*/
+void		fdpack_init(t_fdpack *p);
+void		fd_apply_inout(t_fdpack *p);
+void		fd_restore(t_fdpack *p);
+int			open_infile(const char *path);
+int			open_out_trunc(const char *path);
+int			open_out_append(const char *path);
+int			open_heredoc_fd(t_redir *redir);
 #endif
