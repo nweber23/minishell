@@ -3,31 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 19:26:32 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:27 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 11:45:34 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static volatile sig_atomic_t	g_readline_active = 0;
+
+void	set_readline_active(int active)
+{
+	if (active)
+		g_readline_active = 1;
+	else
+		g_readline_active = 0;
+}
 
 void	handle_sigint(int sig)
 {
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
 		exit_code(130);
+		if (g_readline_active)
+		{
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
 	}
-}
-
-void	ignore_pipe(int sig)
-{
-	if (sig == SIGPIPE)
-		return ;
 }
 
 void	init_signals(void)

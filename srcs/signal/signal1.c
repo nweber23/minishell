@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 19:37:19 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:26 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 11:45:28 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,10 @@ void	trap_heredoc(void)
 {
 	signal(SIGINT, break_heredoc);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	ignore_pipe(int sig)
+{
+	if (sig == SIGPIPE)
+		return ;
 }

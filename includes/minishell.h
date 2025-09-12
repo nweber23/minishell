@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/11 19:06:22 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 11:44:38 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,10 @@ void	reset_shell(t_shell_data *shell);
 int		end_process(int value);
 void	input(t_shell_data *shell);
 int		minishell_loop(t_shell_data *shell, char **envp);
+void	setup_readline_tty_once(void);
+char	*read_line_noninteractive(void);
+int		is_interactive(void);
+void	init_iteration(t_shell_data *shell);
 
 /*************************************************/
 /*                    UTILS                      */

@@ -13,7 +13,7 @@ UTILS_SRCS = utils/checker.c utils/utils_env.c utils/utils_string.c utils/utils_
 				utils/utils_expand_line.c utils/utils_command.c utils/utils_execution.c utils/utils_fd.c \
 				utils/utils_heredoc.c utils/env_helper.c
 CLEANUP_SRCS = cleanup/error_exit.c cleanup/error_free.c cleanup/error_print.c cleanup/free_binary_tree.c cleanup/free_shell.c
-LOOP_SRCS = loop/minishell_loop.c loop/loop_utils.c
+LOOP_SRCS = loop/minishell_loop.c loop/loop_utils.c loop/interactive_mode.c
 SIGNAL_SRCS = signal/signal.c signal/signal1.c
 BUILTIN_SRCS = builtins/bi_cd.c builtins/bi_echo.c builtins/bi_env.c builtins/bi_exit.c builtins/bi_export.c \
 				builtins/bi_pwd.c builtins/bi_unset.c
