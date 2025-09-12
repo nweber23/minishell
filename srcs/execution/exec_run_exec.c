@@ -3,135 +3,72 @@
 /*                                                        :::      ::::::::   */
 /*   exec_run_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 18:05:56 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/11 21:00:23 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static void	print_cmd_not_found(const char *name)
+void	free_argv_vec(char **argv)
 {
-	ft_putstr_fd("minishell: ", 2);
-	if (name != NULL)
-		ft_putstr_fd((char *)name, 2);
-	ft_putendl_fd(": command not found", 2);
-}
+	int	i;
 
-static char	*resolve_program_path(t_shell_data *sh, const char *name)
-{
-	char	*program_path;
-
-	program_path = NULL;
-	if (name == NULL)
-		return (NULL);
-	if (ft_strchr(name, '/'))
-		program_path = ft_strdup(name);
-	else
-		program_path = find_in_path(sh, name);
-	return (program_path);
-}
-
-static void	apply_dup_and_close(int from_fd, int to_fd)
-{
-	if (from_fd != -1)
+	if (!argv)
+		return ;
+	i = 0;
+	while (argv[i])
 	{
-		dup2(from_fd, to_fd);
-		close(from_fd);
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
+}
+
+void	restore_masked_stars(char *s)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return ;
+	while (s[i])
+	{
+		if (s[i] == '\a')
+			s[i] = '*';
+		i++;
 	}
 }
 
-static void	close_pair_if_set(int fds[2])
+void	expand_argv_inplace(t_cmd *cmd)
 {
-	if (fds == NULL)
+	char	**orig;
+	char	**expanded;
+	int		i;
+
+	if (!cmd)
 		return ;
-	if (fds[0] != -1)
-		close(fds[0]);
-	if (fds[1] != -1)
-		close(fds[1]);
+	if (cmd->argv)
+	{
+		i = 0;
+		while (cmd->argv[i])
+		{
+			restore_masked_stars(cmd->argv[i]);
+			i++;
+		}
+	}
+	orig = cmd->argv;
+	expanded = expand_argv_if_needed(orig);
+	if (expanded && expanded != orig)
+	{
+		free_argv_vec(orig);
+		cmd->argv = expanded;
+	}
 }
 
-static int	exec_external(t_shell_data *sh, t_cmd *cmd)
-{
-    char	*program_path;
-    char	**env_array;
-    int		err;
-
-    if (cmd == NULL || cmd->argv == NULL || cmd->argv[0] == NULL)
-        return (0);
-    program_path = resolve_program_path(sh, cmd->argv[0]);
-    if (program_path == NULL)
-        return (print_cmd_not_found(cmd->argv[0]), 127);
-    env_array = env_list_to_array(sh->env);
-    execve(program_path, cmd->argv, env_array);
-    err = errno;
-    ft_array_free(env_array);
-    ft_putstr_fd("minishell: ", 2);
-    ft_putstr_fd(cmd->argv[0], 2);
-    ft_putstr_fd(": ", 2);
-    ft_putendl_fd(strerror(err), 2);
-    free(program_path);
-    if (err == ENOENT)
-        return (127);
-    return (126);
-}
-
-static void	free_argv_vec(char **argv)
-{
-    int	i;
-
-    if (!argv)
-        return ;
-    i = 0;
-    while (argv[i])
-    {
-        free(argv[i]);
-        i++;
-    }
-    free(argv);
-}
-
-static void	restore_masked_stars(char *s)
-{
-    int i = 0;
-    if (!s) return;
-    while (s[i])
-    {
-        if (s[i] == '\a')
-            s[i] = '*';
-        i++;
-    }
-}
-
-static void	expand_argv_inplace(t_cmd *cmd)
-{
-    char	**orig;
-    char	**expanded;
-    int     i;
-
-    if (!cmd)
-        return ;
-    if (cmd->argv)
-    {
-        i = 0;
-        while (cmd->argv[i])
-        {
-            restore_masked_stars(cmd->argv[i]);
-            i++;
-        }
-    }
-    orig = cmd->argv;
-    expanded = expand_argv_if_needed(orig);
-    if (expanded && expanded != orig)
-    {
-        free_argv_vec(orig);
-        cmd->argv = expanded;
-    }
-}
-
-static int	exec_builtin_in_parent(t_shell_data *sh, t_cmd *cmd)
+int	exec_builtin_in_parent(t_shell_data *sh, t_cmd *cmd)
 {
 	t_fdpack	fd_pack;
 	int			exit_status;
@@ -149,7 +86,7 @@ static int	exec_builtin_in_parent(t_shell_data *sh, t_cmd *cmd)
 	return (exit_status);
 }
 
-static void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
+void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 {
 	t_fdpack	fd_pack;
 	int			exit_status;
@@ -170,53 +107,4 @@ static void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 	}
 	exit_status = exec_external(sh, node->cmd);
 	exit(exit_status);
-}
-
-static int	wait_and_status(pid_t child_pid)
-{
-	int	status;
-
-	if (waitpid(child_pid, &status, 0) == -1)
-		return (perror("waitpid"), 1);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
-}
-
-static void	select_inout_from_pair(int pair[2], int *in_fd, int *out_fd)
-{
-	*in_fd = -1;
-	*out_fd = -1;
-	if (pair == NULL)
-		return ;
-	if (pair[0] != -1)
-		*in_fd = pair[0];
-	if (pair[1] != -1)
-		*out_fd = pair[1];
-}
-
-int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)
-{
-	pid_t		child_pid;
-	const char	*cmd_name;
-	int			in_fd;
-	int			out_fd;
-
-	if (node == NULL || node->cmd == NULL)
-		return (1);
-	cmd_name = NULL;
-	if (node->cmd->argv != NULL)
-		cmd_name = node->cmd->argv[0];
-	if (is_top != 0 && cmd_name != NULL && is_builtin(cmd_name) != 0)
-		return (exec_builtin_in_parent(sh, node->cmd));
-	select_inout_from_pair(pipe_fds, &in_fd, &out_fd);
-	child_pid = fork();
-	if (child_pid == -1)
-		return (perror("fork"), 1);
-	if (child_pid == 0)
-		child_exec(sh, node, in_fd, out_fd);
-	close_pair_if_set(pipe_fds);
-	return (wait_and_status(child_pid));
 }

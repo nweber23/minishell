@@ -6,11 +6,24 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:37 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 10:03:46 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/11 21:01:25 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+int	wait_status(pid_t pid)
+{
+	int	status;
+
+	if (waitpid(pid, &status, 0) == -1)
+		return (perror("waitpid"), 1);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
+}
 
 t_token	*peek(t_tokarr *ta)
 {

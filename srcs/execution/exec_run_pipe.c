@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_run_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:34 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 17:13:22 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/11 21:01:13 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,6 @@ static void	close_both(int pipe_fds[2])
 {
 	close(pipe_fds[0]);
 	close(pipe_fds[1]);
-}
-
-static int	wait_status(pid_t pid)
-{
-	int	status;
-
-	if (waitpid(pid, &status, 0) == -1)
-		return (perror("waitpid"), 1);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
 }
 
 static pid_t	fork_left(t_shell_data *sh, t_node *node, int pipe_fds[2])
