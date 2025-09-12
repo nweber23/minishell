@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 11:40:01 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 13:01:48 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	read_user_input(t_shell_data *shell)
 {
 	if (is_interactive())
 	{
-		setup_readline_tty_once();
+		setup_readline_tty_once(shell);
 		set_readline_active(1);
 		shell->input = readline(shell->cwd);
 		set_readline_active(0);

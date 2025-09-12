@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 11:18:50 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 11:20:17 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 12:59:44 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,36 @@ char	*read_line_noninteractive(void)
 	return (s);
 }
 
-void	setup_readline_tty_once(void)
+void	setup_readline_tty_once(t_shell_data *sh)
 {
 	extern FILE	*rl_outstream;
-	static int	done = 0;
-	static FILE	*tty = NULL;
+	FILE		*f;
 
-	if (done)
-		return ;
-	done = 1;
-	if (is_interactive())
+	if (!is_interactive())
+		return;
+	if (sh->rl_tty != NULL)
+		return;
+	f = fopen("/dev/tty", "w");
+	if (f != NULL)
 	{
-		tty = fopen("/dev/tty", "w");
-		if (tty)
-			rl_outstream = tty;
-		else
-			rl_outstream = stderr;
+		sh->rl_tty = f;
+		rl_outstream = sh->rl_tty;
+	}
+	else
+	{
+		rl_outstream = stderr;
+	}
+}
+
+void	cleanup_readline_tty(t_shell_data *sh)
+{
+	extern FILE	*rl_outstream;
+
+	if (sh && sh->rl_tty != NULL)
+	{
+		if (rl_outstream == sh->rl_tty)
+			rl_outstream = stdout;
+		fclose(sh->rl_tty);
+		sh->rl_tty = NULL;
 	}
 }

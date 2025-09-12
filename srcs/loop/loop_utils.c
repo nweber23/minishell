@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 19:58:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 11:32:42 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 13:00:29 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,6 @@ void	init_iteration(t_shell_data *shell)
 		interavtive_signals();
 	else
 		init_signals();
+	setup_readline_tty_once(shell);
 	input(shell);
 }

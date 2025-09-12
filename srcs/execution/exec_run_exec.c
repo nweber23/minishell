@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_run_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 21:00:23 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 13:07:10 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 	t_fdpack	fd_pack;
 	int			exit_status;
 
+	cleanup_readline_tty(sh);
 	reset_child_signals();
 	fdpack_init(&fd_pack);
 	fd_pack.in = in_fd;

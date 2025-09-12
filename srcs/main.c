@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 10:37:29 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 10:37:38 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 13:00:42 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ int	main(int ac, char **av, char **envp)
 		ft_array_free(sh.env_array);
 	free_shell(&sh);
 	free_env(sh.env);
+	cleanup_readline_tty(&sh);
 	return (ret);
 }

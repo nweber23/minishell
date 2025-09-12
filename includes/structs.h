@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 18:04:07 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 13:01:09 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+#include "stdio.h"
 
 // Main shell state containing environment, input, and parsed data
 typedef struct s_shell_data
@@ -27,6 +29,7 @@ typedef struct s_shell_data
 	t_list	*env;
 	t_list	*path;
 	t_list	*tokens;
+	FILE	*rl_tty;
 }			t_shell_data;
 
 // ABT node types for different command operations
