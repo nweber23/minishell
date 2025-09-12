@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 19:37:19 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 11:45:28 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 13:16:18 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	break_heredoc(int sig)
 	{
 		write(1, "\n", 1);
 		close(shell->fd);
+		cleanup_readline_tty((t_shell_data *)shell);
 		free_env(shell->env);
 		free_shell((t_shell_data *)shell);
 		exit_code(130);

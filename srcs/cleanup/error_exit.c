@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:58:51 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/11 17:54:05 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 13:15:30 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	error_malloc(char *function, t_shell_data *shell)
 {
 	ft_putstr_fd("Error: Memory allocation failed in ", STDERR_FILENO);
 	ft_putendl_fd(function, STDERR_FILENO);
+	cleanup_readline_tty(shell);
 	free_env(shell->env);
 	free_shell(shell);
 	exit(1);

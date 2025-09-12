@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_binary_tree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 16:40:46 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 16:58:08 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 13:11:26 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,19 @@ void	free_exec(t_exec *exec)
 	if (!exec)
 		return ;
 	if (exec->argv)
+	{
+		int i = 0;
+		while (exec->argv[i])
+		{
+			free(exec->argv[i]);
+			i++;
+		}
 		free(exec->argv);
+	}
 	if (exec->infile)
 		ft_lstclear(&exec->infile, free_infile_node);
 	if (exec->outfile)
 		ft_lstclear(&exec->outfile, free_outfile_node);
+	free(exec->command);
 	free(exec);
 }
