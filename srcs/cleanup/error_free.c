@@ -59,3 +59,10 @@ void	free_logic_tree(void *root)
 	else if (node == ND_AND || node == ND_OR)
 		free(root);
 }
+
+void	combine(t_shell_data *shell)
+{
+	free_shell(shell);
+	free_env(shell->env);
+	cleanup_readline_tty(shell);
+}

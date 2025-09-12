@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 13:01:48 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 14:26:04 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ static int	handle_empty_or_exit(t_shell_data *shell, int *code, int *recurse)
 static void	prepare_exec(t_shell_data *shell)
 {
 	lexer(shell, shell->trimmed);
-	shell->env_array = env_list_to_array(shell->env);
 	if (shell->root)
 	{
 		free_tree(shell->root);

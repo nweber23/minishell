@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 10:37:29 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 13:11:08 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 14:26:10 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ int	main(int ac, char **av, char **envp)
 	create_env_list(&sh, envp);
 	bump_shlvl(&sh);
 	ret = minishell_loop(&sh, envp);
-	if (sh.env_array)
-		ft_array_free(sh.env_array);
 	free_shell(&sh);
 	free_env(sh.env);
 	cleanup_readline_tty(&sh);

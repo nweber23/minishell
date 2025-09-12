@@ -97,15 +97,19 @@ void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 	fd_pack.in = in_fd;
 	fd_pack.out = out_fd;
 	if (apply_all_redirs(node->cmd, &fd_pack.in, &fd_pack.out) != 0)
-		exit(1);
+		_exit(1);
 	apply_dup_and_close(fd_pack.in, STDIN_FILENO);
 	apply_dup_and_close(fd_pack.out, STDOUT_FILENO);
 	expand_argv_inplace(node->cmd);
 	if (node->cmd->argv != NULL && is_builtin(node->cmd->argv[0]) != 0)
 	{
 		exit_status = exec_builtin(sh, node->cmd->argv);
-		exit(exit_status);
+		free_shell(sh);
+		free_env(sh->env);
+		cleanup_readline_tty(sh);
+		_exit(exit_status);
 	}
 	exit_status = exec_external(sh, node->cmd);
-	exit(exit_status);
+	combine(sh);
+	_exit(exit_status);
 }

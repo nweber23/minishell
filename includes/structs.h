@@ -13,7 +13,7 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-#include "stdio.h"
+# include "stdio.h"
 
 // Main shell state containing environment, input, and parsed data
 typedef struct s_shell_data

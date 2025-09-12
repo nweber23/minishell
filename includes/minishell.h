@@ -45,6 +45,7 @@ int		exit_code(int code);
 bool	error_message(char *str);
 void	exit_msg(void);
 void	balance_message(int balance);
+void	combine(t_shell_data *shell);
 
 /*************************************************/
 /*                     LOOP                      */

@@ -68,11 +68,13 @@ static void	free_outfile_node(void *content)
 
 void	free_exec(t_exec *exec)
 {
+	int	i;
+
 	if (!exec)
 		return ;
 	if (exec->argv)
 	{
-		int i = 0;
+		i = 0;
 		while (exec->argv[i])
 		{
 			free(exec->argv[i]);

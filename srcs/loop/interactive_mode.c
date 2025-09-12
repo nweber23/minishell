@@ -43,9 +43,9 @@ void	setup_readline_tty_once(t_shell_data *sh)
 	FILE		*f;
 
 	if (!is_interactive())
-		return;
+		return ;
 	if (sh->rl_tty != NULL)
-		return;
+		return ;
 	f = fopen("/dev/tty", "w");
 	if (f != NULL)
 	{
