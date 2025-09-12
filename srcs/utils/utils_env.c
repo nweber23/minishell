@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 11:00:41 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:20 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/11 19:06:15 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int key_matches(const char *entry, const char *key, size_t key_len)
+int	key_matches(const char *entry, const char *key, size_t key_len)
 {
 	if (ft_strncmp(entry, key, key_len) != 0)
 		return (0);
@@ -21,37 +21,9 @@ static int key_matches(const char *entry, const char *key, size_t key_len)
 	return (1);
 }
 
-static t_list *find_key_node(t_list *env, const char *key, size_t key_len)
+static int	append_new_kv(t_list **env, const char *kv_pair)
 {
-	char *entry;
-
-	while (env)
-	{
-		entry = (char *)env->content;
-		if (entry && key_matches(entry, key, key_len))
-			return (env);
-		env = env->next;
-	}
-	return (NULL);
-}
-
-static int replace_node_kv(t_list *node, const char *kv_pair)
-{
-	char *new_str;
-
-	if (!node)
-		return (1);
-	new_str = ft_strdup(kv_pair);
-	if (!new_str)
-		return (1);
-	free(node->content);
-	node->content = new_str;
-	return (0);
-}
-
-static int append_new_kv(t_list **env, const char *kv_pair)
-{
-	t_list  *new_node;
+	t_list	*new_node;
 	char	*dup;
 
 	dup = ft_strdup(kv_pair);
@@ -69,7 +41,7 @@ static int append_new_kv(t_list **env, const char *kv_pair)
 
 char	*env_get(t_list *env, const char *key)
 {
-	size_t  key_len;
+	size_t	key_len;
 	char	*entry;
 
 	if (!env || !key)
@@ -86,11 +58,11 @@ char	*env_get(t_list *env, const char *key)
 	return (NULL);
 }
 
-int env_set(t_shell_data *sh, const char *key, const char *value)
+int	env_set(t_shell_data *sh, const char *key, const char *value)
 {
-	size_t  key_len;
+	size_t	key_len;
 	char	*kv_pair;
-	t_list  *node;
+	t_list	*node;
 
 	if (!sh || !key || !value)
 		return (1);
@@ -110,41 +82,9 @@ int env_set(t_shell_data *sh, const char *key, const char *value)
 	return (free(kv_pair), 0);
 }
 
-static int count_env_nodes(t_list *env)
-{
-	int count;
-
-	count = 0;
-	while (env)
-	{
-		count++;
-		env = env->next;
-	}
-	return (count);
-}
-
-static int fill_env_array(t_list *env, char **array)
-{
-	int	 index;
-	char	*dup;
-
-	index = 0;
-	while (env)
-	{
-		dup = ft_strdup((char *)env->content);
-		if (!dup)
-			return (1);
-		array[index] = dup;
-		index++;
-		env = env->next;
-	}
-	array[index] = NULL;
-	return (0);
-}
-
 char	**env_list_to_array(t_list *env)
 {
-	int	 count;
+	int		count;
 	char	**array;
 
 	count = count_env_nodes(env);

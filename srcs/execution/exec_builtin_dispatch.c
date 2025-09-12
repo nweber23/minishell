@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin_dispatch.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:05 by yyudi             #+#    #+#             */
-/*   Updated: 2025/08/26 12:14:11 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/11 19:08:30 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,11 @@ int	exec_builtin(t_shell_data *sh, char **argv)
 	if (ft_strcmp(argv[0], "cd") == 0)
 		return (bi_cd(sh, argv + 1));
 	if (ft_strcmp(argv[0], "env") == 0)
+	{
+		if (argv[1] != NULL)
+			return (127);
 		return (bi_env(sh));
+	}
 	if (ft_strcmp(argv[0], "export") == 0)
 		return (bi_export(sh, argv + 1));
 	if (ft_strcmp(argv[0], "unset") == 0)
