@@ -162,4 +162,7 @@ int			open_infile(const char *path);
 int			open_out_trunc(const char *path);
 int			open_out_append(const char *path);
 int			open_heredoc_fd(t_redir *redir);
+int			hd_open_pipe(int pfd[2]);
+int			hd_loop(t_shell_data *sh, t_redir *rd, int wfd);
+int			hd_loop_tty(t_shell_data *sh, t_redir *rd,int wfd);
 #endif

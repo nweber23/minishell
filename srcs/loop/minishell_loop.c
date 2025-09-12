@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_loop.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/11 18:12:09 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 09:44:44 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static void	setup_readline_tty_once(void)
 int	minishell_loop(t_shell_data *shell, char **envp)
 {
     reset_shell(shell);
+    global_shell(shell, 0);
 
     if (is_interactive())
         interavtive_signals();
