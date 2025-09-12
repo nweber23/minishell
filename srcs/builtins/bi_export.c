@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/09 12:13:21 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/11 19:09:23 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,17 @@ static void	set_env_kv(t_shell_data *shell, const char *key_value_pair)
 int	bi_export(t_shell_data *shell, char **args)
 {
 	int	arg_index;
+	int any_error;
 
 	if (!args || !args[0])
 		return (bi_env(shell));
 	arg_index = 0;
+	any_error = 0;
 	while (args[arg_index])
 	{
 		if (!valid_key(args[arg_index]))
 		{
+			any_error = 1;
 			ft_putstr_fd("minishell: export: `", 2);
 			ft_putstr_fd(args[arg_index], 2);
 			ft_putendl_fd("': not a valid identifier", 2);
@@ -70,5 +73,5 @@ int	bi_export(t_shell_data *shell, char **args)
 			set_env_kv(shell, args[arg_index]);
 		arg_index++;
 	}
-	return (0);
+	return (any_error);
 }
