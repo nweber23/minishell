@@ -1,18 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/12 10:37:29 by nweber            #+#    #+#             */
+/*   Updated: 2025/09/12 10:37:38 by nweber           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static void create_env_list(t_shell_data *sh, char **envp)
+static void	create_env_list(t_shell_data *sh, char **envp)
 {
-	int i = 0;
+	int		i;
+	char	*eq;
+	size_t	klen;
+	char	*key;
+	char	*val;
 
+	i = 0;
 	sh->env = NULL;
 	while (envp && envp[i])
 	{
-		char *eq = ft_strchr(envp[i], '=');
+		eq = ft_strchr(envp[i], '=');
 		if (eq)
 		{
-			size_t klen = (size_t)(eq - envp[i]);
-			char  *key  = ft_substr(envp[i], 0, klen);
-			char  *val  = ft_strdup(eq + 1);
+			klen = (size_t)(eq - envp[i]);
+			key = ft_substr(envp[i], 0, klen);
+			val = ft_strdup(eq + 1);
 			if (!key || !val || env_set(sh, key, val) != 0)
 				error_malloc("create_env_list", sh);
 			free(key);
@@ -22,11 +39,11 @@ static void create_env_list(t_shell_data *sh, char **envp)
 	}
 }
 
-static void bump_shlvl(t_shell_data *sh)
+static void	bump_shlvl(t_shell_data *sh)
 {
-	const char *cur;
-	int val;
-	char *s;
+	const char	*cur;
+	int			val;
+	char		*s;
 
 	cur = env_get(sh->env, "SHLVL");
 	if (cur == NULL)
@@ -41,7 +58,7 @@ static void bump_shlvl(t_shell_data *sh)
 	free(s);
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_shell_data	sh;
 	int				ret;

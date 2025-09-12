@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 19:09:23 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 10:37:03 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	set_env_kv(t_shell_data *shell, const char *key_value_pair)
 int	bi_export(t_shell_data *shell, char **args)
 {
 	int	arg_index;
-	int any_error;
+	int	any_error;
 
 	if (!args || !args[0])
 		return (bi_env(shell));

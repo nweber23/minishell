@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_loop.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 09:44:44 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 10:37:23 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,96 +14,96 @@
 
 static int	is_interactive(void)
 {
-    return (isatty(STDIN_FILENO) != 0);
+	return (isatty(STDIN_FILENO) != 0);
 }
 
-// Read a line from stdin without echo/prompt; strip trailing '\n'
 static char	*read_line_noninteractive(void)
 {
-    char	buffer[4096];
-    char	*s;
+	char	buffer[4096];
+	char	*s;
+	size_t	n;
 
-    if (fgets(buffer, sizeof(buffer), stdin) == NULL)
-        return (NULL);
-    s = ft_strdup(buffer);
-    if (!s)
-        return (NULL);
-    if (s[0] != '\0')
-    {
-        size_t n = ft_strlen(s);
-        if (n > 0 && s[n - 1] == '\n')
-            s[n - 1] = '\0';
-    }
-    return (s);
+	if (fgets(buffer, sizeof(buffer), stdin) == NULL)
+		return (NULL);
+	s = ft_strdup(buffer);
+	if (!s)
+		return (NULL);
+	if (s[0] != '\0')
+	{
+		n = ft_strlen(s);
+		if (n > 0 && s[n - 1] == '\n')
+			s[n - 1] = '\0';
+	}
+	return (s);
 }
 
 static void	setup_readline_tty_once(void)
 {
-    extern FILE *rl_outstream;
-    static int done = 0;
-    static FILE *tty = NULL;
+	extern FILE	*rl_outstream;
+	static int	done = 0;
+	static FILE	*tty = NULL;
 
-    if (done) return;
-    done = 1;
-    if (is_interactive())
-    {
-        tty = fopen("/dev/tty", "w");
-        if (tty)
-            rl_outstream = tty;
-        else
-            rl_outstream = stderr;
-    }
+	if (done)
+		return ;
+	done = 1;
+	if (is_interactive())
+	{
+		tty = fopen("/dev/tty", "w");
+		if (tty)
+			rl_outstream = tty;
+		else
+			rl_outstream = stderr;
+	}
 }
 
 int	minishell_loop(t_shell_data *shell, char **envp)
 {
-    reset_shell(shell);
-    global_shell(shell, 0);
+	int	code;
 
-    if (is_interactive())
-        interavtive_signals();
-    else
-        init_signals();
-
-    input(shell);
-    if (is_interactive())
-    {
-        setup_readline_tty_once();
-        shell->input = readline(shell->cwd);
-        if (shell->input && shell->input[0] != '\0')
-            add_history(shell->input);
-    }
-    else
-        shell->input = read_line_noninteractive();
-    if (shell->input && validate_input(shell))
-        return (free_shell(shell), minishell_loop(shell, envp));
-    if (shell->input == NULL)
-    {
-        int code = exit_code(-1);
-        if (is_interactive())
-            exit_msg();
-        return (free_shell(shell), code);
-    }
-    if (!shell->trimmed || shell->trimmed[0] == '\0')
-        return (free_shell(shell), minishell_loop(shell, envp));
-
-    if (!ft_strcmp(shell->trimmed, "exit"))
-    {
-        if (is_interactive())
-            exit_msg();
-        return (free_shell(shell), exit_code(-1));
-    }
-    lexer(shell, shell->trimmed);
-    shell->env_array = env_list_to_array(shell->env);
-    if (shell->root)
-    {
-        free_tree(shell->root);
-        shell->root = NULL;
-    }
-    shell->root = build_tree(shell, shell->tokens);
-    exec_line(shell, shell->root);
-    free_shell(shell);
-    return (minishell_loop(shell, envp));
+	reset_shell(shell);
+	global_shell(shell, 0);
+	if (is_interactive())
+		interavtive_signals();
+	else
+		init_signals();
+	input(shell);
+	if (is_interactive())
+	{
+		setup_readline_tty_once();
+		shell->input = readline(shell->cwd);
+		if (shell->input && shell->input[0] != '\0')
+			add_history(shell->input);
+	}
+	else
+		shell->input = read_line_noninteractive();
+	if (shell->input && validate_input(shell))
+		return (free_shell(shell), minishell_loop(shell, envp));
+	if (shell->input == NULL)
+	{
+		code = exit_code(-1);
+		if (is_interactive())
+			exit_msg();
+		return (free_shell(shell), code);
+	}
+	if (!shell->trimmed || shell->trimmed[0] == '\0')
+		return (free_shell(shell), minishell_loop(shell, envp));
+	if (!ft_strcmp(shell->trimmed, "exit"))
+	{
+		if (is_interactive())
+			exit_msg();
+		return (free_shell(shell), exit_code(-1));
+	}
+	lexer(shell, shell->trimmed);
+	shell->env_array = env_list_to_array(shell->env);
+	if (shell->root)
+	{
+		free_tree(shell->root);
+		shell->root = NULL;
+	}
+	shell->root = build_tree(shell, shell->tokens);
+	exec_line(shell, shell->root);
+	free_shell(shell);
+	return (minishell_loop(shell, envp));
 }
 
 int	end_process(int value)

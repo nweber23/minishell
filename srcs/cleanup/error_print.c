@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 17:10:31 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/11 17:31:18 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 10:37:47 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	exit_msg(void)
 {
 	static int	value = 0;
 
-    if (isatty(STDIN_FILENO) && value == 0)
+	if (isatty(STDIN_FILENO) && value == 0)
 	{
-        ft_putendl_fd("exit", 1);
+		ft_putendl_fd("exit", 1);
 	}
 	value++;
 }

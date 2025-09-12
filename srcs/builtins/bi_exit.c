@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 17:30:30 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 10:36:34 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	bi_exit(t_shell_data *shell, char **args)
 
 	(void)shell;
 	if (isatty(STDIN_FILENO))
-        ft_putendl_fd("exit", 1);
+		ft_putendl_fd("exit", 1);
 	if (!args[0])
 		exit(0);
 	if (!is_num(args[0]))

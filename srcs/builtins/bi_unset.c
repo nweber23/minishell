@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 19:10:20 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 10:36:53 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	unlink_env_node(t_shell_data *shell,
 
 static int	is_valid_key(const char *s)
 {
-	int i;
+	int	i;
 
 	if (!s || !(ft_isalpha((unsigned char)s[0]) || s[0] == '_'))
 		return (0);
@@ -78,7 +78,7 @@ static void	remove_key_once(t_shell_data *shell, const char *key_to_remove)
 int	bi_unset(t_shell_data *shell, char **argument_vector)
 {
 	int	argument_index;
-	int any_error;
+	int	any_error;
 
 	if (!argument_vector)
 		return (0);
