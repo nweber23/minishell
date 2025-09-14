@@ -6,43 +6,55 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:23 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:59:41 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 18:10:51 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static t_node	*parse_factor(t_shell_data *sh, t_tokarr *ta)
+static int	is_pipe_token(t_token *t)
 {
-	t_token	*token;
+	return (t && t->type == PIPE);
+}
 
-	token = peek(ta);
-	if (is_lparen(token))
-		return (parse_group(sh, ta));
-	return (parse_command(sh, ta));
+static int	advance_and_peek(t_tokarr *ta, t_token **t)
+{
+	(void)next(ta);
+	*t = peek(ta);
+	return (*t != NULL);
+}
+
+static t_node	*make_pipe_node(t_node *left, t_node *right)
+{
+	t_node	*n;
+
+	n = nd_new(ND_PIPE);
+	if (!n)
+		return (left);
+	n->left = left;
+	n->right = right;
+	return (n);
 }
 
 t_node	*parse_pipeline(t_shell_data *sh, t_tokarr *ta)
 {
-	t_node	*left_node;
-	t_node	*pipe_node;
-	t_token	*token;
+	t_node	*left;
+	t_node	*right;
+	t_token	*t;
 
-	left_node = parse_factor(sh, ta);
-	if (!left_node)
-		return (NULL);
-	while (1)
+	left = parse_factor(sh, ta);
+	t = peek(ta);
+	while (left && is_pipe_token(t))
 	{
-		token = peek(ta);
-		if (!token || token->type != PIPE)
-			break ;
-		next(ta);
-		pipe_node = nd_new(ND_PIPE);
-		if (!pipe_node)
-			return (left_node);
-		pipe_node->left = left_node;
-		pipe_node->right = parse_factor(sh, ta);
-		left_node = pipe_node;
+		if (!advance_and_peek(ta, &t))
+			return (pipeline_syntax_eof());
+		if (!starts_command(t) || is_rparen(t))
+			return (pipeline_syntax_err());
+		right = parse_factor(sh, ta);
+		if (!right)
+			return (pipeline_syntax_err());
+		left = make_pipe_node(left, right);
+		t = peek(ta);
 	}
-	return (left_node);
+	return (left);
 }

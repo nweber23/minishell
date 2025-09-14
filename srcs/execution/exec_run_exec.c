@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_run_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 13:07:10 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/14 13:02:43 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,10 @@ void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 		_exit(1);
 	apply_dup_and_close(fd_pack.in, STDIN_FILENO);
 	apply_dup_and_close(fd_pack.out, STDOUT_FILENO);
+	if (node->cmd->argv == NULL || node->cmd->argv[0] == NULL)
+		exit(0);
 	expand_argv_inplace(node->cmd);
-	if (node->cmd->argv != NULL && is_builtin(node->cmd->argv[0]) != 0)
+	if (is_builtin(node->cmd->argv[0]) != 0)
 	{
 		exit_status = exec_builtin(sh, node->cmd->argv);
 		free_shell(sh);

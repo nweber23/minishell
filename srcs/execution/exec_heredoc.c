@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:14 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 09:40:26 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 17:49:00 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,23 +76,25 @@ int	hd_loop(t_shell_data *sh, t_redir *rd, int wfd)
 	}
 }
 
-int	heredoc_to_fd(t_redir *rd)
+int	heredoc_to_fd(t_redir *r)
 {
 	int				pfd[2];
+	int				status;
 	t_shell_data	*sh;
 
-	if (rd == NULL || rd->word == NULL)
-		return (-1);
+	sh = global_shell(NULL, 1);
 	if (hd_open_pipe(pfd) != 0)
 		return (-1);
 	trap_heredoc();
-	sh = global_shell(NULL, 1);
-	if (hd_loop_tty(sh, rd, pfd[1]) != 0)
+	if (isatty(STDIN_FILENO))
+		status = hd_loop_tty(sh, r, pfd[1]);
+	else
+		status = hd_loop(sh, r, pfd[1]);
+	close(pfd[1]);
+	if (status != 0)
 	{
-		close(pfd[1]);
 		close(pfd[0]);
 		return (-1);
 	}
-	close(pfd[1]);
 	return (pfd[0]);
 }

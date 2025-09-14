@@ -6,17 +6,45 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:33 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 21:00:33 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 18:09:45 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
+int	wait_and_status(pid_t child_pid)
+{
+	int	status;
+
+	if (waitpid(child_pid, &status, 0) == -1)
+	{
+		perror("waitpid");
+		return (1);
+	}
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
+}
+
+void	select_inout_from_pair(int pair[2], int *in_fd, int *out_fd)
+{
+	*in_fd = -1;
+	*out_fd = -1;
+	if (pair == NULL)
+		return ;
+	if (pair[0] != -1)
+		*in_fd = pair[0];
+	if (pair[1] != -1)
+		*out_fd = pair[1];
+}
+
 int	run_node(t_shell_data *sh, t_node *node, int is_top)
 {
 	int	status;
 
-	if (!node)
+	if (node == NULL)
 		return (1);
 	if (node->type == ND_EXEC)
 		return (run_exec_node(sh, node, NULL, is_top));
@@ -43,36 +71,11 @@ int	run_node(t_shell_data *sh, t_node *node, int is_top)
 
 int	exec_line(t_shell_data *sh, t_node *root)
 {
-	int	status;
-
-	status = run_node(sh, root, 1);
-	exit_code(status);
-	return (status);
-}
-
-static int	wait_and_status(pid_t child_pid)
-{
-	int	status;
-
-	if (waitpid(child_pid, &status, 0) == -1)
-		return (perror("waitpid"), 1);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
-}
-
-static void	select_inout_from_pair(int pair[2], int *in_fd, int *out_fd)
-{
-	*in_fd = -1;
-	*out_fd = -1;
-	if (pair == NULL)
-		return ;
-	if (pair[0] != -1)
-		*in_fd = pair[0];
-	if (pair[1] != -1)
-		*out_fd = pair[1];
+	if (root == NULL)
+		return (0);
+	if (prepare_heredocs_tree(root, sh) != 0)
+		return (exit_code(1));
+	return (run_node(sh, root, 1));
 }
 
 int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)
@@ -92,7 +95,10 @@ int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)
 	select_inout_from_pair(pipe_fds, &in_fd, &out_fd);
 	child_pid = fork();
 	if (child_pid == -1)
-		return (perror("fork"), 1);
+	{
+		perror("fork");
+		return (1);
+	}
 	if (child_pid == 0)
 		child_exec(sh, node, in_fd, out_fd);
 	close_pair_if_set(pipe_fds);
