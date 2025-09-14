@@ -99,7 +99,8 @@ int	minishell_loop(t_shell_data *shell, char **envp)
 		return (code);
 	}
 	prepare_exec(shell);
-	exec_line(shell, shell->root);
+	code = exec_line(shell, shell->root);
+	exit_code(code);
 	free_shell(shell);
 	return (minishell_loop(shell, envp));
 }

@@ -15,9 +15,20 @@
 int	wait_status(pid_t pid)
 {
 	int	status;
+	int	rc;
 
-	if (waitpid(pid, &status, 0) == -1)
-		return (perror("waitpid"), 1);
+	status = 0;
+	while (1)
+	{
+		rc = waitpid(pid, &status, 0);
+		if (rc == -1)
+		{
+			if (errno == EINTR)
+				continue;
+			return (1);
+		}
+		break ;
+	}
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
