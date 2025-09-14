@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:34 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 21:01:13 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 18:13:40 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static pid_t	fork_left(t_shell_data *sh, t_node *node, int pipe_fds[2])
 {
 	pid_t	pid;
 	int		fds_left[2];
+	int		devnull_fd;
 
 	pid = fork();
 	if (pid == -1)
@@ -36,8 +37,16 @@ static pid_t	fork_left(t_shell_data *sh, t_node *node, int pipe_fds[2])
 	if (pid == 0)
 	{
 		close(pipe_fds[0]);
-		fds_left[0] = -1;
 		fds_left[1] = pipe_fds[1];
+		if (right_is_redir_only(node->right))
+		{
+			devnull_fd = open("/dev/null", O_RDONLY);
+			if (devnull_fd == -1)
+				_exit(1);
+			fds_left[0] = devnull_fd;
+		}
+		else
+			fds_left[0] = -1;
 		_exit(run_exec_node(sh, node->left, fds_left, 0));
 	}
 	return (pid);

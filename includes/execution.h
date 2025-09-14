@@ -16,6 +16,11 @@
 # include "minishell.h"
 # include <dirent.h>
 
+# ifdef __APPLE__
+#  define FD_PREFIX "/dev/fd/"
+# else
+#  define FD_PREFIX "/proc/self/fd/"
+# endif
 
 typedef struct s_fdpack
 {
@@ -101,12 +106,14 @@ int			argv_len(char **vector);
 void		mask_quoted_stars(char *s);
 char		*expand_token_value(t_shell_data *sh, t_token *tok);
 int			append_word_simple(char ***argv, char *word_copy);
+t_node		*parse_factor(t_shell_data *sh, t_tokarr *ta);
 
 /* parser pieces */
 t_node		*parse_group(t_shell_data *sh, t_tokarr *ta);
 t_node		*parse_command(t_shell_data *sh, t_tokarr *ta);
 t_node		*parse_pipeline(t_shell_data *sh, t_tokarr *ta);
 t_node		*parse_and_or(t_shell_data *sh, t_tokarr *ta);
+t_node		*pipeline_syntax_err(void);
 
 /* redirections + path + exec */
 int			apply_all_redirs(t_cmd *cmd, int *fdin, int *fdout);
@@ -115,6 +122,10 @@ int			run_exec_node(t_shell_data *sh, t_node *n, int fds[2], int is_top);
 int			run_pipe(t_shell_data *sh, t_node *n, int is_top);
 int			run_node(t_shell_data *sh, t_node *n, int is_top);
 int			wait_status(pid_t pid);
+int			starts_command(t_token *t);
+t_node		*pipeline_syntax_eof(void);
+t_node		*pipeline_syntax_err(void);	
+int			right_is_redir_only(t_node *right);
 
 /*Execution*/
 void		print_cmd_not_found(const char *name);
@@ -127,6 +138,7 @@ void		restore_masked_stars(char *s);
 void		child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd);
 void		expand_argv_inplace(t_cmd *cmd);
 int			exec_builtin_in_parent(t_shell_data *sh, t_cmd *cmd);
+int			prepare_heredocs_tree(t_node *n, t_shell_data *sh);
 
 // utils env helpers (header)
 char		*env_get(t_list *env, const char *key);
