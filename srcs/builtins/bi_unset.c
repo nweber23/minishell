@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 10:36:53 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/14 13:29:18 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ int	bi_unset(t_shell_data *shell, char **argument_vector)
 		if (!is_valid_key(argument_vector[argument_index]))
 			any_error = 1;
 		else
+		{
+			export_remove_key(shell, argument_vector[argument_index]);
 			remove_key_once(shell, argument_vector[argument_index]);
+		}
 		argument_index++;
 	}
 	return (any_error);
