@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/09/14 13:00:22 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/14 13:11:59 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,38 +81,6 @@ int	env_set(t_shell_data *sh, const char *key, const char *value)
 	if (append_new_kv(&sh->env, kv_pair))
 		return (free(kv_pair), 1);
 	return (free(kv_pair), 0);
-}
-
-static int	count_env_nodes(t_list *env)
-{
-	int	count;
-
-	count = 0;
-	while (env)
-	{
-		count++;
-		env = env->next;
-	}
-	return (count);
-}
-
-static int	fill_env_array(t_list *env, char **array)
-{
-	int		index;
-	char	*dup;
-
-	index = 0;
-	while (env)
-	{
-		dup = ft_strdup((char *)env->content);
-		if (!dup)
-			return (1);
-		array[index] = dup;
-		index++;
-		env = env->next;
-	}
-	array[index] = NULL;
-	return (0);
 }
 
 char	**env_list_to_array(t_list *env)
