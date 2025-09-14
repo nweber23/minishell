@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:23:03 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 13:01:09 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/14 13:20:56 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_shell_data
 	t_list	*path;
 	t_list	*tokens;
 	FILE	*rl_tty;
+	t_list  *export_list;
 }			t_shell_data;
 
 // ABT node types for different command operations

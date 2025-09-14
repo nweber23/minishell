@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:57 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/14 13:21:50 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 int	bi_env(t_shell_data *shell)
 {
 	t_list	*node;
+	char	*s;
 
 	node = shell->env;
 	while (node)
 	{
-		ft_putendl_fd((char *)node->content, STDOUT_FILENO);
+		s = (char *)node->content;
+		if (s && ft_strchr(s, '='))
+			ft_putendl_fd(s, STDOUT_FILENO);
 		node = node->next;
 	}
 	return (0);

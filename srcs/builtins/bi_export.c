@@ -3,75 +3,86 @@
 /*                                                        :::      ::::::::   */
 /*   bi_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 10:37:03 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/14 13:30:38 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static int	valid_key(const char *s)
+static int	is_valid_identifier(const char *s)
 {
 	int	i;
 
-	if (!s || !(ft_isalpha(*s) || *s == '_'))
+	if (!s || !(ft_isalpha((unsigned char)s[0]) || s[0] == '_'))
 		return (0);
 	i = 1;
 	while (s[i] && s[i] != '=')
 	{
-		if (!(ft_isalnum(s[i]) || s[i] == '_'))
+		if (!(ft_isalnum((unsigned char)s[i]) || s[i] == '_'))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-static void	set_env_kv(t_shell_data *shell, const char *key_value_pair)
+static int has_equal(const char *s)
 {
-	t_list	*node;
-	size_t	key_length;
-
-	key_length = 0;
-	while (key_value_pair[key_length] && key_value_pair[key_length] != '=')
-		key_length++;
-	node = shell->env;
-	while (node)
+	while (*s)
 	{
-		if (ft_strncmp((char *)node->content, key_value_pair, key_length) == 0
-			&& ((char *)node->content)[key_length] == '=')
-		{
-			free(node->content);
-			node->content = ft_strdup(key_value_pair);
-			return ;
-		}
-		node = node->next;
+		if (*s == '=')
+			return (1);
+		s++;
 	}
-	ft_lstadd_back(&shell->env, ft_lstnew(ft_strdup(key_value_pair)));
+	return (0);
 }
 
-int	bi_export(t_shell_data *shell, char **args)
+static int	set_from_assignment(t_shell_data *sh, const char *arg)
 {
-	int	arg_index;
-	int	any_error;
+	size_t		klen;
+	char		*key;
+	const char	*val;
+	int			err;
 
-	if (!args || !args[0])
-		return (bi_env(shell));
-	arg_index = 0;
-	any_error = 0;
-	while (args[arg_index])
+	klen = 0;
+	while (arg[klen] && arg[klen] != '=')
+		klen++;
+	key = ft_substr(arg, 0, klen);
+	if (!key)
+		return (1);
+	val = arg + klen + 1;
+	err = env_set(sh, key, val);
+	if (!err)
+		err = export_add_key(sh, key);
+	free(key);
+	return (err);
+}
+
+int	bi_export(t_shell_data *sh, char **argv)
+{
+	int	i;
+	int	any_err;
+
+	if (!argv || !argv[0])
+		return (print_export_list(sh));
+	i = 0;
+	any_err = 0;
+	while (argv[i])
 	{
-		if (!valid_key(args[arg_index]))
+		if (!is_valid_identifier(argv[i]))
 		{
-			any_error = 1;
+			any_err = 1;
 			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(args[arg_index], 2);
+			ft_putstr_fd(argv[i], 2);
 			ft_putendl_fd("': not a valid identifier", 2);
 		}
+		else if (has_equal(argv[i]))
+			any_err |= (set_from_assignment(sh, argv[i]) != 0);
 		else
-			set_env_kv(shell, args[arg_index]);
-		arg_index++;
+			any_err |= (export_add_key(sh, argv[i]) != 0);
+		i++;
 	}
-	return (any_error);
+	return (any_err != 0);
 }
