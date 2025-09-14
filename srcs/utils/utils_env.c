@@ -5,48 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/31 11:00:41 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 18:16:44 by yyudi            ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/09/14 13:00:22 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "minishell.h"
 
-static int	key_matches(const char *entry, const char *key, size_t key_len)
+int	key_matches(const char *entry, const char *key, size_t key_len)
 {
 	if (ft_strncmp(entry, key, key_len) != 0)
 		return (0);
 	if (entry[key_len] != '=')
 		return (0);
 	return (1);
-}
-
-static t_list	*find_key_node(t_list *env, const char *key, size_t key_len)
-{
-	char	*entry;
-
-	while (env)
-	{
-		entry = (char *)env->content;
-		if (entry && key_matches(entry, key, key_len))
-			return (env);
-		env = env->next;
-	}
-	return (NULL);
-}
-
-static int	replace_node_kv(t_list *node, const char *kv_pair)
-{
-	char	*new_str;
-
-	if (!node)
-		return (1);
-	new_str = ft_strdup(kv_pair);
-	if (!new_str)
-		return (1);
-	free(node->content);
-	node->content = new_str;
-	return (0);
 }
 
 static int	append_new_kv(t_list **env, const char *kv_pair)

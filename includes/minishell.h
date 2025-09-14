@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 18:00:25 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/11 17:55:13 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/12 12:59:01 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int		exit_code(int code);
 bool	error_message(char *str);
 void	exit_msg(void);
 void	balance_message(int balance);
+void	combine(t_shell_data *shell);
 
 /*************************************************/
 /*                     LOOP                      */
@@ -53,5 +54,19 @@ void	reset_shell(t_shell_data *shell);
 int		end_process(int value);
 void	input(t_shell_data *shell);
 int		minishell_loop(t_shell_data *shell, char **envp);
+void	setup_readline_tty_once(t_shell_data *shell);
+char	*read_line_noninteractive(void);
+int		is_interactive(void);
+void	init_iteration(t_shell_data *shell);
+void	cleanup_readline_tty(t_shell_data *shell);
+
+/*************************************************/
+/*                    UTILS                      */
+/*************************************************/
+int		fill_env_array(t_list *env, char **array);
+int		count_env_nodes(t_list *env);
+int		replace_node_kv(t_list *node, const char *kv_pair);
+t_list	*find_key_node(t_list *env, const char *key, size_t key_len);
+int		key_matches(const char *entry, const char *key, size_t key_len);
 
 #endif

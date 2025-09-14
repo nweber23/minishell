@@ -6,134 +6,100 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 18:48:54 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/12 12:38:44 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/14 13:00:39 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_interactive(void)
+static void	read_user_input(t_shell_data *shell)
 {
-    return (isatty(STDIN_FILENO) != 0);
+	if (is_interactive())
+	{
+		setup_readline_tty_once(shell);
+		set_readline_active(1);
+		shell->input = readline(shell->cwd);
+		set_readline_active(0);
+		if (shell->input && shell->input[0] != '\0')
+			add_history(shell->input);
+	}
+	else
+		shell->input = read_line_noninteractive();
 }
 
-// Read a line from stdin without echo/prompt; strip trailing '\n'
-static char	*read_line_noninteractive(void)
+static int	handle_validate_or_eof(t_shell_data *shell, int *code, int *recurse)
 {
-    char	buffer[4096];
-    char	*s;
-
-    if (fgets(buffer, sizeof(buffer), stdin) == NULL)
-        return (NULL);
-    s = ft_strdup(buffer);
-    if (!s)
-        return (NULL);
-    if (s[0] != '\0')
-    {
-        size_t n = ft_strlen(s);
-        if (n > 0 && s[n - 1] == '\n')
-            s[n - 1] = '\0';
-    }
-    return (s);
+	if (shell->input && validate_input(shell))
+	{
+		free_shell(shell);
+		*recurse = 1;
+		return (1);
+	}
+	if (shell->input == NULL)
+	{
+		*code = exit_code(-1);
+		if (is_interactive())
+			exit_msg();
+		free_shell(shell);
+		return (1);
+	}
+	return (0);
 }
 
-static void	setup_readline_tty_once(void)
+static int	handle_empty_or_exit(t_shell_data *shell, int *code, int *recurse)
 {
-    extern FILE *rl_outstream;
-    static int done = 0;
-    static FILE *tty = NULL;
+	if (!shell->trimmed || shell->trimmed[0] == '\0')
+	{
+		free_shell(shell);
+		*recurse = 1;
+		return (1);
+	}
+	if (!ft_strcmp(shell->trimmed, "exit"))
+	{
+		if (is_interactive())
+			exit_msg();
+		free_shell(shell);
+		*code = exit_code(-1);
+		return (1);
+	}
+	return (0);
+}
 
-    if (done) return;
-    done = 1;
-    if (is_interactive())
-    {
-        tty = fopen("/dev/tty", "w");
-        if (tty)
-            rl_outstream = tty;
-        else
-            rl_outstream = stderr;
-    }
+static void	prepare_exec(t_shell_data *shell)
+{
+	lexer(shell, shell->trimmed);
+	if (shell->root)
+	{
+		free_tree(shell->root);
+		shell->root = NULL;
+	}
+	shell->root = build_tree(shell, shell->tokens);
 }
 
 int	minishell_loop(t_shell_data *shell, char **envp)
 {
-    reset_shell(shell);
-    global_shell(shell, 0);
+	int	code;
+	int	recurse;
 
-    if (is_interactive())
-        interavtive_signals();
-    else
-        init_signals();
-
-    input(shell);
-    if (is_interactive())
-    {
-        setup_readline_tty_once();
-        shell->input = readline(shell->cwd);
-        if (shell->input && shell->input[0] != '\0')
-            add_history(shell->input);
-    }
-    else
-        shell->input = read_line_noninteractive();
-    if (shell->input && validate_input(shell))
-        return (free_shell(shell), minishell_loop(shell, envp));
-    if (shell->input == NULL)
-    {
-        int code = exit_code(-1);
-        if (is_interactive())
-            exit_msg();
-        return (free_shell(shell), code);
-    }
-    if (!shell->trimmed || shell->trimmed[0] == '\0')
-        return (free_shell(shell), minishell_loop(shell, envp));
-
-    if (!ft_strcmp(shell->trimmed, "exit"))
-    {
-        if (is_interactive())
-            exit_msg();
-        return (free_shell(shell), exit_code(-1));
-    }
-    lexer(shell, shell->trimmed);
-    shell->env_array = env_list_to_array(shell->env);
-    if (shell->root)
-    {
-        free_tree(shell->root);
-        shell->root = NULL;
-    }
-    shell->root = build_tree(shell, shell->tokens);
-    exec_line(shell, shell->root);
-    free_shell(shell);
-    return (minishell_loop(shell, envp));
-}
-
-int	end_process(int value)
-{
-	if (value == -1)
-		return (exit_code(-1));
-	return (exit_code(value));
-}
-
-void	input(t_shell_data *shell)
-{
-	char	*cwd;
-	char	*prompt1;
-	char	*prompt2;
-
-	if (!isatty(STDIN_FILENO))
+	init_iteration(shell);
+	read_user_input(shell);
+	code = 0;
+	recurse = 0;
+	if (handle_validate_or_eof(shell, &code, &recurse))
 	{
-		shell->cwd = NULL;
-		return ;
+		if (recurse)
+			return (minishell_loop(shell, envp));
+		return (code);
 	}
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		error_malloc("input", shell);
-	prompt1 = ft_strjoin("STARSHELL$ ", cwd);
-	free(cwd);
-	if (!prompt1)
-		error_malloc("input", shell);
-	prompt2 = ft_strjoin(prompt1, ">");
-	free(prompt1);
-	if (!prompt2)
-		error_malloc("input", shell);
-	shell->cwd = prompt2;
+	recurse = 0;
+	if (handle_empty_or_exit(shell, &code, &recurse))
+	{
+		if (recurse)
+			return (minishell_loop(shell, envp));
+		return (code);
+	}
+	prepare_exec(shell);
+	exec_line(shell, shell->root);
+	free_shell(shell);
+	return (minishell_loop(shell, envp));
 }

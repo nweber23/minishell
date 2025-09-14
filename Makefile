@@ -9,9 +9,11 @@ LIBFT       = $(LIBFT_DIR)/libft.a
 PARSING_SRCS = parsing/check_parenthesis.c parsing/check_pipe.c parsing/check_quote.c parsing/check_quotes.c \
 				parsing/check_redirect.c parsing/handling.c parsing/parenthesis_handling.c parsing/redirect.c \
 				parsing/tokenizer.c parsing/utils.c parsing/validate_input.c parsing/wildcard.c parsing/token_state.c
-UTILS_SRCS = utils/checker.c utils/utils_env.c utils/utils_string.c utils/utils_tree.c utils/utils_expand.c utils/utils_expand_line.c utils/utils_command.c utils/utils_execution.c utils/utils_fd.c utils/utils_heredoc.c utils/utils_pipe.c
+UTILS_SRCS = utils/checker.c utils/utils_env.c utils/utils_string.c utils/utils_tree.c utils/utils_expand.c \
+				utils/utils_expand_line.c utils/utils_command.c utils/utils_execution.c utils/utils_fd.c \
+				utils/utils_heredoc.c utils/env_helper.c utils/utils_pipe.c
 CLEANUP_SRCS = cleanup/error_exit.c cleanup/error_free.c cleanup/error_print.c cleanup/free_binary_tree.c cleanup/free_shell.c
-LOOP_SRCS = loop/minishell_loop.c loop/loop_utils.c
+LOOP_SRCS = loop/minishell_loop.c loop/loop_utils.c loop/interactive_mode.c
 SIGNAL_SRCS = signal/signal.c signal/signal1.c
 BUILTIN_SRCS = builtins/bi_cd.c builtins/bi_echo.c builtins/bi_env.c builtins/bi_exit.c builtins/bi_export.c \
 				builtins/bi_pwd.c builtins/bi_unset.c

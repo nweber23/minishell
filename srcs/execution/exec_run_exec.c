@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:30 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 12:08:34 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/14 13:02:43 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,13 @@ void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 	t_fdpack	fd_pack;
 	int			exit_status;
 
+	cleanup_readline_tty(sh);
 	reset_child_signals();
 	fdpack_init(&fd_pack);
 	fd_pack.in = in_fd;
 	fd_pack.out = out_fd;
 	if (apply_all_redirs(node->cmd, &fd_pack.in, &fd_pack.out) != 0)
-		exit(1);
+		_exit(1);
 	apply_dup_and_close(fd_pack.in, STDIN_FILENO);
 	apply_dup_and_close(fd_pack.out, STDOUT_FILENO);
 	if (node->cmd->argv == NULL || node->cmd->argv[0] == NULL)
@@ -105,8 +106,12 @@ void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 	if (is_builtin(node->cmd->argv[0]) != 0)
 	{
 		exit_status = exec_builtin(sh, node->cmd->argv);
-		exit(exit_status);
+		free_shell(sh);
+		free_env(sh->env);
+		cleanup_readline_tty(sh);
+		_exit(exit_status);
 	}
 	exit_status = exec_external(sh, node->cmd);
-	exit(exit_status);
+	combine(sh);
+	_exit(exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 19:37:19 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:26 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/12 13:16:18 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	break_heredoc(int sig)
 	{
 		write(1, "\n", 1);
 		close(shell->fd);
+		cleanup_readline_tty((t_shell_data *)shell);
 		free_env(shell->env);
 		free_shell((t_shell_data *)shell);
 		exit_code(130);
@@ -41,4 +42,10 @@ void	trap_heredoc(void)
 {
 	signal(SIGINT, break_heredoc);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	ignore_pipe(int sig)
+{
+	if (sig == SIGPIPE)
+		return ;
 }
