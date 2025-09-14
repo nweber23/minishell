@@ -95,5 +95,6 @@ int	bi_unset(t_shell_data *shell, char **argument_vector)
 		}
 		argument_index++;
 	}
-	return (any_error);
+	(void)any_error;
+	return (0);
 }

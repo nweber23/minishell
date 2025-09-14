@@ -28,7 +28,7 @@ static int	is_valid_identifier(const char *s)
 	return (1);
 }
 
-static int has_equal(const char *s)
+static int	has_equal(const char *s)
 {
 	while (*s)
 	{

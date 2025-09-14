@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/14 13:34:23 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/14 13:49:11 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,15 +127,14 @@ int					run_node(t_shell_data *sh, t_node *n, int is_top);
 int					wait_status(pid_t pid);
 int					starts_command(t_token *t);
 t_node				*pipeline_syntax_eof(void);
-t_node				*pipeline_syntax_err(void);	
+t_node				*pipeline_syntax_err(void);
 int					right_is_redir_only(t_node *right);
 
 /*Export*/
-int					 export_add_key(t_shell_data *sh, const char *key);
-int					 export_remove_key(t_shell_data *sh, const char *key);
-int					 export_contains_key(t_list *lst, const char *key);
-int					 print_export_list(t_shell_data *sh);
-
+int					export_add_key(t_shell_data *sh, const char *key);
+int					export_remove_key(t_shell_data *sh, const char *key);
+int					export_contains_key(t_list *lst, const char *key);
+int					print_export_list(t_shell_data *sh);
 
 /*Execution*/
 void				print_cmd_not_found(const char *name);

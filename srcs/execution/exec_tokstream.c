@@ -24,7 +24,7 @@ int	wait_status(pid_t pid)
 		if (rc == -1)
 		{
 			if (errno == EINTR)
-				continue;
+				continue ;
 			return (1);
 		}
 		break ;

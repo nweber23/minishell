@@ -106,9 +106,7 @@ void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 	if (is_builtin(node->cmd->argv[0]) != 0)
 	{
 		exit_status = exec_builtin(sh, node->cmd->argv);
-		free_shell(sh);
-		free_env(sh->env);
-		cleanup_readline_tty(sh);
+		combine(sh);
 		_exit(exit_status);
 	}
 	exit_status = exec_external(sh, node->cmd);
