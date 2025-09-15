@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/14 13:49:11 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/15 19:13:46 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ int					starts_command(t_token *t);
 t_node				*pipeline_syntax_eof(void);
 t_node				*pipeline_syntax_err(void);
 int					right_is_redir_only(t_node *right);
+pid_t				fork_left(t_shell_data *sh, t_node *node, int pipe_fds[2]);
+pid_t				fork_right(t_shell_data *sh, t_node *node, int pipe_fds[2]);
 
 /*Export*/
 int					export_add_key(t_shell_data *sh, const char *key);

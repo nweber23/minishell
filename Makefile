@@ -22,7 +22,8 @@ EXECUTION_SRCS = execution/exec_ast_nodes.c  execution/exec_tokstream.c executio
 				execution/exec_parse_group.c execution/exec_parse_pipeline.c execution/exec_parse_andor.c \
 				execution/exec_parse_command.c execution/exec_argv_redir.c execution/exec_redirs.c execution/exec_fdpack.c\
 				execution/exec_heredoc.c execution/exec_path.c execution/exec_expand.c execution/exec_build_tree.c execution/exec_heredoc2.c\
-				execution/exec_run_exec.c execution/exec_run_pipe.c execution/exec_run_node.c execution/exec_expand_line.c
+				execution/exec_run_exec.c execution/exec_run_pipe.c execution/exec_run_node.c execution/exec_expand_line.c execution/exec_child.c
+
 
 SRCS = $(addprefix $(SRC_DIR)/, $(PARSING_SRCS) $(UTILS_SRCS) $(CLEANUP_SRCS) $(LOGIC_TREE_SRCS) $(BINARY_TREE_SRCS) $(SIGNAL_SRCS) $(LOOP_SRCS) $(BUILTIN_SRCS) $(EXECUTION_SRCS) main.c)
 
