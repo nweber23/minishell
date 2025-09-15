@@ -6,7 +6,7 @@
 /*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 10:20:08 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/10 15:41:45 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/15 11:17:38 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	free_shell(t_shell_data *shell)
 		shell->root = NULL;
 	}
 	ft_lstclear(&shell->tokens, free_token);
+	ft_lstclear(&shell->export_list, free);
 	shell->tokens = NULL;
 	free_shell_cleanup(shell);
 }
