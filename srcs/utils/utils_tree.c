@@ -6,22 +6,29 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 19:30:38 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 10:23:45 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/15 09:22:37 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static void	free_redirs(t_redir *redir_head)
+static void	free_redirs(t_redir *head)
 {
-	t_redir	*next_redir;
+	t_redir	*next;
 
-	while (redir_head)
+	while (head)
 	{
-		next_redir = redir_head->next;
-		free(redir_head->word);
-		free(redir_head);
-		redir_head = next_redir;
+		next = head->next;
+		if (head->word
+			&& ft_strncmp(head->word, FD_PREFIX, ft_strlen(FD_PREFIX)) == 0
+			&& head->quoted_delim > 0)
+		{
+			close(head->quoted_delim);
+			head->quoted_delim = 0;
+		}
+		free(head->word);
+		free(head);
+		head = next;
 	}
 }
 
