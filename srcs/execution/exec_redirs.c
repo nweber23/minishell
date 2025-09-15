@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:28 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 20:57:01 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/15 09:13:38 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,30 @@ static void	assign_new_fd(int *slot_fd, int new_fd)
 	*slot_fd = new_fd;
 }
 
-static int	handle_input_redir(t_redir *redir, int *fd_in)
+int	handle_input_redir(t_redir *r, int *fd_in)
 {
 	int	fd_new;
 
-	if (redir->type == R_IN)
-	{
-		fd_new = open_infile(redir->word);
-		if (fd_new < 0)
-			return (1);
-		assign_new_fd(fd_in, fd_new);
+	if (!r || !fd_in)
+		return (1);
+	fd_new = -1;
+	if (r->type == R_IN)
+		fd_new = open_infile(r->word);
+	else if (r->type == R_HEREDOC)
+		fd_new = heredoc_to_fd(r);
+	else
 		return (0);
-	}
-	if (redir->type == R_HEREDOC)
+	if (fd_new < 0)
+		return (1);
+	if (r->type == R_IN
+		&& r->word
+		&& ft_strncmp(r->word, FD_PREFIX, ft_strlen(FD_PREFIX)) == 0
+		&& r->quoted_delim > 0)
 	{
-		fd_new = heredoc_to_fd(redir);
-		if (fd_new < 0)
-			return (1);
-		assign_new_fd(fd_in, fd_new);
-		return (0);
+		close(r->quoted_delim);
+		r->quoted_delim = 0;
 	}
+	assign_new_fd(fd_in, fd_new);
 	return (0);
 }
 

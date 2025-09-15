@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:01 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/02 09:49:47 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/14 16:17:33 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_redir	*rdr_new(t_rdrtype kind, char *word)
 		return (NULL);
 	redir_node->type = kind;
 	redir_node->word = word;
+	redir_node->quoted_delim = 0;
 	redir_node->next = NULL;
 	return (redir_node);
 }

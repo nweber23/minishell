@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:08:32 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 18:10:57 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/15 09:11:09 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static int	replace_heredoc_with_procfd(t_redir *r, t_shell_data *sh)
 	fd = heredoc_to_fd(r);
 	if (fd < 0)
 		return (1);
+	r->quoted_delim = fd;
 	num = ft_itoa(fd);
 	if (num == NULL)
 		return (1);
