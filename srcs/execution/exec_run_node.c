@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_run_node.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:33 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 18:09:45 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/15 12:04:15 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)
 	cmd_name = NULL;
 	if (node->cmd->argv != NULL)
 		cmd_name = node->cmd->argv[0];
+	if ((node->cmd->argv == NULL || node->cmd->argv[0] == NULL) && is_top == 0)
+		return (select_inout_from_pair(pipe_fds, &in_fd, &out_fd), \
+		child_exec(sh, node, in_fd, out_fd), 0);
 	if (is_top != 0 && cmd_name != NULL && is_builtin(cmd_name) != 0)
 		return (exec_builtin_in_parent(sh, node->cmd));
 	select_inout_from_pair(pipe_fds, &in_fd, &out_fd);
@@ -101,6 +104,5 @@ int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)
 	}
 	if (child_pid == 0)
 		child_exec(sh, node, in_fd, out_fd);
-	close_pair_if_set(pipe_fds);
-	return (wait_and_status(child_pid));
+	return (close_pair_if_set(pipe_fds), wait_and_status(child_pid));
 }

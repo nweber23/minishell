@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:14 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 17:49:00 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/15 11:56:10 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,10 @@ int	heredoc_to_fd(t_redir *r)
 	else
 		status = hd_loop(sh, r, pfd[1]);
 	close(pfd[1]);
+	if (is_interactive())
+		interavtive_signals();
+	else
+		init_signals();
 	if (status != 0)
 	{
 		close(pfd[0]);
