@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_run_node.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:33 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/15 12:04:15 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/16 14:32:54 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,48 +38,6 @@ void	select_inout_from_pair(int pair[2], int *in_fd, int *out_fd)
 		*in_fd = pair[0];
 	if (pair[1] != -1)
 		*out_fd = pair[1];
-}
-
-int	run_node(t_shell_data *sh, t_node *node, int is_top)
-{
-	int			status;
-	t_fdpack	p;
-
-	if (node == NULL)
-		return (1);
-	if (node->type == ND_EXEC)
-		return (run_exec_node(sh, node, NULL, is_top));
-	if (node->type == ND_PIPE)
-		return (run_pipe(sh, node, is_top));
-	if (node->type == ND_AND)
-	{
-		status = run_node(sh, node->left, 0);
-		if (status == 0)
-			return (run_node(sh, node->right, 0));
-		return (status);
-	}
-	if (node->type == ND_OR)
-	{
-		status = run_node(sh, node->left, 0);
-		if (status != 0)
-			return (run_node(sh, node->right, 0));
-		return (status);
-	}
-	if (node->type == ND_GROUP)
-	{
-		if (node->cmd && node->cmd->redirs)
-		{
-			fdpack_init(&p);
-			if (apply_all_redirs(node->cmd, &p.in, &p.out) != 0)
-				return (1);
-			fd_apply_inout(&p);
-			status = run_node(sh, node->left, 0);
-			fd_restore(&p);
-			return (status);
-		}
-		return (run_node(sh, node->left, 0));
-	}
-	return (1);
 }
 
 int	exec_line(t_shell_data *sh, t_node *root)

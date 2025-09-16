@@ -18,7 +18,7 @@ LOOP_SRCS = loop/minishell_loop.c loop/loop_utils.c loop/interactive_mode.c
 SIGNAL_SRCS = signal/signal.c signal/signal1.c
 BUILTIN_SRCS = builtins/bi_cd.c builtins/bi_echo.c builtins/bi_env.c builtins/bi_exit.c builtins/bi_export.c \
 				builtins/bi_pwd.c builtins/bi_unset.c
-EXECUTION_SRCS = execution/exec_ast_nodes.c  execution/exec_tokstream.c execution/exec_builtin_dispatch.c \
+EXECUTION_SRCS = execution/exec_ast_nodes.c  execution/exec_tokstream.c execution/exec_builtin_dispatch.c  execution/exec_run_type.c \
 				execution/exec_parse_group.c execution/exec_parse_pipeline.c execution/exec_parse_andor.c \
 				execution/exec_parse_command.c execution/exec_argv_redir.c execution/exec_redirs.c execution/exec_fdpack.c\
 				execution/exec_heredoc.c execution/exec_path.c execution/exec_expand.c execution/exec_build_tree.c execution/exec_heredoc2.c\
