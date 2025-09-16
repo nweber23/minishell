@@ -42,7 +42,8 @@ void	select_inout_from_pair(int pair[2], int *in_fd, int *out_fd)
 
 int	run_node(t_shell_data *sh, t_node *node, int is_top)
 {
-	int	status;
+	int			status;
+	t_fdpack	p;
 
 	if (node == NULL)
 		return (1);
@@ -65,7 +66,19 @@ int	run_node(t_shell_data *sh, t_node *node, int is_top)
 		return (status);
 	}
 	if (node->type == ND_GROUP)
+	{
+		if (node->cmd && node->cmd->redirs)
+		{
+			fdpack_init(&p);
+			if (apply_all_redirs(node->cmd, &p.in, &p.out) != 0)
+				return (1);
+			fd_apply_inout(&p);
+			status = run_node(sh, node->left, 0);
+			fd_restore(&p);
+			return (status);
+		}
 		return (run_node(sh, node->left, 0));
+	}
 	return (1);
 }
 
@@ -91,8 +104,8 @@ int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)
 	if (node->cmd->argv != NULL)
 		cmd_name = node->cmd->argv[0];
 	if ((node->cmd->argv == NULL || node->cmd->argv[0] == NULL) && is_top == 0)
-		return (select_inout_from_pair(pipe_fds, &in_fd, &out_fd), \
-		child_exec(sh, node, in_fd, out_fd), 0);
+		return (select_inout_from_pair(pipe_fds, &in_fd, &out_fd),
+			child_exec(sh, node, in_fd, out_fd), 0);
 	if (is_top != 0 && cmd_name != NULL && is_builtin(cmd_name) != 0)
 		return (exec_builtin_in_parent(sh, node->cmd));
 	select_inout_from_pair(pipe_fds, &in_fd, &out_fd);
