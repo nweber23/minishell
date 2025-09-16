@@ -42,11 +42,22 @@ void	select_inout_from_pair(int pair[2], int *in_fd, int *out_fd)
 
 int	exec_line(t_shell_data *sh, t_node *root)
 {
+	int	code;
+
 	if (root == NULL)
-		return (0);
+	{
+		sh->exit_code = 0;
+		return (exit_code(0));
+	}
 	if (prepare_heredocs_tree(root, sh) != 0)
+	{
+		sh->exit_code = 1;
 		return (exit_code(1));
-	return (run_node(sh, root, 1));
+	}
+	code = run_node(sh, root, 1);
+	sh->exit_code = code;
+	exit_code(code);
+	return (code);
 }
 
 int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)

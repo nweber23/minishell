@@ -24,15 +24,22 @@ void	set_readline_active(int active)
 
 void	handle_sigint(int sig)
 {
+	t_shell_data	*sh;
+
 	if (sig == SIGINT)
 	{
-		write(1, "\n", 1);
-		exit_code(130);
 		if (g_readline_active)
 		{
+			write(1, "\n", 1);
 			rl_on_new_line();
 			rl_replace_line("", 0);
 			rl_redisplay();
+		}
+		exit_code(130);
+		{
+			sh = global_shell(NULL, 1);
+			if (sh)
+				sh->exit_code = 130;
 		}
 	}
 }
