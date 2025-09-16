@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 20:18:40 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 20:27:05 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/16 16:52:24 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,10 @@ char	*exp_env_value_dup(t_shell_data *sh, const char *line, size_t *i)
 	char	*val;
 	char	*dup;
 
-	if (line[*i] == '\0' || (ft_isalnum((int)line[*i]) == 0 && line[*i] != '_'))
+	if ((unsigned char)line[*i] == 0x1D)
+		return (ft_strdup(""));
+	if (line[*i] == '\0'
+		|| (ft_isalnum((int)line[*i]) == 0 && line[*i] != '_'))
 		return (ft_strdup("$"));
 	end = exp_scan_name(line, *i);
 	name = ft_substr(line, *i, end - *i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:00:14 by nweber            #+#    #+#             */
-/*   Updated: 2025/08/22 17:37:07 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/16 16:50:29 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ int	join_quotes(t_shell_data *shell, char **value, char *str, int i)
 	start = i++;
 	while (str[i] && str[i] != quote_char)
 		i++;
-	joined = ft_substr(str, start + 1, i - start - 1);
+	if (i == start + 1)
+		joined = ft_strdup("\x1D");
+	else
+		joined = ft_substr(str, start + 1, i - start - 1);
 	if (!joined)
 		error_malloc("join_quotes", shell);
 	old = *value;
