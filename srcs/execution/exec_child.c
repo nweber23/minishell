@@ -12,14 +12,25 @@
 
 #include "execution.h"
 
-static void	child_setup_fds(t_node *node, t_fdpack *fd_pack, \
-							int in_fd, int out_fd)
+static void	child_setup_fds(t_node *node, t_fdpack *fd_pack, int in_fd,
+		int out_fd)
 {
+	int	orig_in;
+	int	orig_out;
+
+	orig_in = in_fd;
+	orig_out = out_fd;
 	fdpack_init(fd_pack);
-	fd_pack->in = in_fd;
-	fd_pack->out = out_fd;
 	if (apply_all_redirs(node->cmd, &fd_pack->in, &fd_pack->out) != 0)
 		_exit(1);
+	if (fd_pack->in == -1)
+		fd_pack->in = orig_in;
+	else if (orig_in != -1)
+		close(orig_in);
+	if (fd_pack->out == -1)
+		fd_pack->out = orig_out;
+	else if (orig_out != -1)
+		close(orig_out);
 	apply_dup_and_close(fd_pack->in, STDIN_FILENO);
 	apply_dup_and_close(fd_pack->out, STDOUT_FILENO);
 }

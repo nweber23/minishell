@@ -21,8 +21,8 @@ static void	close_redir_placeholders(t_cmd *cmd)
 	r = cmd->redirs;
 	while (r)
 	{
-		if (r->word && ft_strncmp(r->word, FD_PREFIX,
-				ft_strlen(FD_PREFIX)) == 0 && r->quoted_delim > 0)
+		if (r->word && ft_strncmp(r->word, FD_PREFIX, ft_strlen(FD_PREFIX)) == 0
+			&& r->quoted_delim > 0)
 		{
 			close(r->quoted_delim);
 			r->quoted_delim = 0;
@@ -55,12 +55,6 @@ static pid_t	spawn_left(t_shell_data *sh, t_node *node, int pipe_fds[2])
 		close(pipe_fds[0]);
 		fds[1] = pipe_fds[1];
 		fds[0] = -1;
-		if (right_is_redir_only(node->right))
-		{
-			fds[0] = open("/dev/null", O_RDONLY);
-			if (fds[0] == -1)
-				_exit(1);
-		}
 		status = run_exec_node(sh, node->left, fds, 0);
 		close_pair_if_set(fds);
 		child_cleanup_and_exit(sh, node, status);
