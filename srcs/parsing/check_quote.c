@@ -61,3 +61,12 @@ bool	quote_position_check(char *str)
 	}
 	return (!found);
 }
+
+int	check_quotes(t_shell_data *shell, char **value, char *str, int i)
+{
+	if (is_quote(str[i]))
+		i = join_quotes(shell, value, str, i);
+	else
+		i = join_no_quotes(shell, value, str, i);
+	return (i);
+}

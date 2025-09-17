@@ -12,17 +12,6 @@
 
 #include "execution.h"
 
-int	is_redir_tok(t_token *token)
-{
-	if (!token)
-		return (0);
-	if (token->type == INFILE || token->type == OUTFILE)
-		return (1);
-	if (token->type == APPEND || token->type == HERE_DOC)
-		return (1);
-	return (0);
-}
-
 int	argv_len(char **vector)
 {
 	int	length;
@@ -50,6 +39,21 @@ void	mask_quoted_stars(char *s)
 	}
 }
 
+static void	restore_masked_dollars(char *s)
+{
+	int	i;
+
+	if (!s)
+		return ;
+	i = 0;
+	while (s[i])
+	{
+		if ((unsigned char)s[i] == 0x1F)
+			s[i] = '$';
+		i++;
+	}
+}
+
 char	*expand_token_value(t_shell_data *sh, t_token *tok)
 {
 	char	*dup;
@@ -59,11 +63,15 @@ char	*expand_token_value(t_shell_data *sh, t_token *tok)
 	if (!dup)
 		return (NULL);
 	if (tok->state == SINGLE_Q)
+	{
+		restore_masked_dollars(dup);
 		return (dup);
+	}
 	expanded = expand_line_env(sh, dup);
 	if (!expanded)
 		return (dup);
 	free(dup);
+	restore_masked_dollars(expanded);
 	return (expanded);
 }
 

@@ -12,39 +12,64 @@
 
 #include "minishell.h"
 
-int	check_quotes(t_shell_data *shell, char **value, char *str, int i)
+static char	*extract_quoted_content(t_shell_data *shell, char *str,
+		int start_index, int *end_index)
 {
-	if (is_quote(str[i]))
-		i = join_quotes(shell, value, str, i);
-	else
-		i = join_no_quotes(shell, value, str, i);
-	return (i);
-}
-
-int	join_quotes(t_shell_data *shell, char **value, char *str, int i)
-{
-	char	*joined;
 	char	quote_char;
-	int		start;
-	char	*old;
+	int		i;
+	char	*joined;
 
-	quote_char = str[i];
-	start = i++;
+	quote_char = str[start_index];
+	i = start_index + 1;
 	while (str[i] && str[i] != quote_char)
 		i++;
-	if (i == start + 1)
+	if (i == start_index + 1)
 		joined = ft_strdup("\x1D");
 	else
-		joined = ft_substr(str, start + 1, i - start - 1);
+		joined = ft_substr(str, start_index + 1, i - start_index - 1);
 	if (!joined)
 		error_malloc("join_quotes", shell);
+	*end_index = i;
+	return (joined);
+}
+
+static void	mask_single_quote_dollars(char *s)
+{
+	int	k;
+
+	k = 0;
+	while (s && s[k])
+	{
+		if (s[k] == '$')
+			s[k] = (char)0x1F;
+		k++;
+	}
+}
+
+static void	append_and_free(t_shell_data *shell, char **value, char *joined)
+{
+	char	*old;
+
 	old = *value;
 	*value = ft_strjoin(old, joined);
 	free(joined);
 	free(old);
 	if (!*value)
 		error_malloc("join_quotes", shell);
-	return (i + 1);
+}
+
+int	join_quotes(t_shell_data *shell, char **value, char *str, int i)
+{
+	char	quote_char;
+	char	*joined;
+	int		end;
+
+	quote_char = str[i];
+	joined = extract_quoted_content(shell, str, i, &end);
+	if (quote_char == '\'')
+		mask_single_quote_dollars(joined);
+	append_and_free(shell, value, joined);
+	return (end + 1);
 }
 
 int	join_no_quotes(t_shell_data *shell, char **value, char *str, int i)

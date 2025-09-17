@@ -26,3 +26,14 @@ char	*ft_str3var(const char *s1, const char *s2, const char *s3)
 	free(tmp);
 	return (res);
 }
+
+int	is_redir_tok(t_token *token)
+{
+	if (!token)
+		return (0);
+	if (token->type == INFILE || token->type == OUTFILE)
+		return (1);
+	if (token->type == APPEND || token->type == HERE_DOC)
+		return (1);
+	return (0);
+}
