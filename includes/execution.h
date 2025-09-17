@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/15 19:13:46 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/17 17:04:05 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,8 @@ size_t				exp_scan_name(const char *line, size_t pos);
 char				*exp_status_str(t_shell_data *sh);
 char				*exp_env_value_dup(t_shell_data *sh, const char *line,
 						size_t *i);
+int					build_match_list(const char *pattern, char ***out_vec,
+						int *out_cnt);
 
 /*Utils File Directory*/
 void				fdpack_init(t_fdpack *p);
