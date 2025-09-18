@@ -72,10 +72,10 @@ char	**expand_argv_if_needed(char **argv)
 		{
 			if (!expand_pattern_word(argv[source_index], &result_vec,
 					&result_count))
-				return (NULL);
+				return (ft_array_free(result_vec), NULL);
 		}
 		else if (!append_copy(&result_vec, &result_count, argv[source_index]))
-			return (NULL);
+			return (ft_array_free(result_vec), NULL);
 		source_index++;
 	}
 	return (result_vec);
