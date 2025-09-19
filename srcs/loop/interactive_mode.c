@@ -19,14 +19,11 @@ int	is_interactive(void)
 
 char	*read_line_noninteractive(void)
 {
-	char	buffer[4096];
 	char	*s;
 	size_t	n;
 
-	if (fgets(buffer, sizeof(buffer), stdin) == NULL)
-		return (NULL);
-	s = ft_strdup(buffer);
-	if (!s)
+	s = get_next_line(STDIN_FILENO);
+	if (s == NULL)
 		return (NULL);
 	if (s[0] != '\0')
 	{
@@ -40,22 +37,13 @@ char	*read_line_noninteractive(void)
 void	setup_readline_tty_once(t_shell_data *sh)
 {
 	extern FILE	*rl_outstream;
-	FILE		*f;
 
 	if (!is_interactive())
 		return ;
 	if (sh->rl_tty != NULL)
 		return ;
-	f = fopen("/dev/tty", "w");
-	if (f != NULL)
-	{
-		sh->rl_tty = f;
-		rl_outstream = sh->rl_tty;
-	}
-	else
-	{
-		rl_outstream = stderr;
-	}
+	sh->rl_tty = NULL;
+	rl_outstream = stderr;
 }
 
 void	cleanup_readline_tty(t_shell_data *sh)
@@ -66,7 +54,6 @@ void	cleanup_readline_tty(t_shell_data *sh)
 	{
 		if (rl_outstream == sh->rl_tty)
 			rl_outstream = stdout;
-		fclose(sh->rl_tty);
 		sh->rl_tty = NULL;
 	}
 }

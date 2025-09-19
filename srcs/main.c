@@ -76,6 +76,6 @@ int	main(int ac, char **av, char **envp)
 	free_shell(&sh);
 	free_env(sh.env);
 	cleanup_readline_tty(&sh);
-	clear_history();
+	rl_clear_history();
 	return (ret);
 }

@@ -89,7 +89,6 @@ static pid_t	spawn_right(t_shell_data *sh, t_node *node, int pipe_fds[2])
 	return (pid);
 }
 
-/* -- Orchestrator ---------------------------------------------------------- */
 int	run_pipe(t_shell_data *sh, t_node *node, int is_top)
 {
 	int		pipe_fds[2];
@@ -100,8 +99,6 @@ int	run_pipe(t_shell_data *sh, t_node *node, int is_top)
 	(void)is_top;
 	if (pipe(pipe_fds) == -1)
 		return (perror("pipe"), 1);
-	fcntl(pipe_fds[0], F_SETFD, FD_CLOEXEC);
-	fcntl(pipe_fds[1], F_SETFD, FD_CLOEXEC);
 	lpid = spawn_left(sh, node, pipe_fds);
 	if (lpid == -1)
 	{
