@@ -42,6 +42,7 @@ static int	handle_redir(t_tokarr *ta, t_cmd *cmd)
 	t_token		*op_token;
 	t_token		*arg_token;
 	t_rdrtype	rdr_kind;
+	t_redir		*rd;
 
 	op_token = peek(ta);
 	if (!op_token)
@@ -51,9 +52,14 @@ static int	handle_redir(t_tokarr *ta, t_cmd *cmd)
 	if (!arg_token || arg_token->type != WORD)
 		return (0);
 	rdr_kind = map_rdr(op_token->type);
-	if (!add_redir(&cmd->redirs, rdr_new(rdr_kind,
-				ft_strdup(arg_token->value))))
+	rd = rdr_new(rdr_kind, ft_strdup(arg_token->value));
+	if (!rd)
 		return (0);
+	if (rdr_kind == R_HEREDOC
+		&& (arg_token->state == SINGLE_Q || arg_token->state == DOUBLE_Q))
+		rd->quoted_delim = 1;
+	if (!add_redir(&cmd->redirs, rd))
+		return (free(rd->word), free(rd), 0);
 	next(ta);
 	return (1);
 }
