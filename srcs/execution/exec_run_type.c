@@ -44,15 +44,11 @@ static int	launch_group(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 			close(in_fd);
 		if (out_fd != -1)
 			close(out_fd);
-		perror("fork");
-		return (1);
+		return (perror("fork"), 1);
 	}
 	if (pid == 0)
 	{
-		cleanup_readline_tty(sh);
-		reset_child_signals();
-		apply_dup_and_close(in_fd, STDIN_FILENO);
-		apply_dup_and_close(out_fd, STDOUT_FILENO);
+		helper(sh, in_fd, out_fd);
 		status = run_node(sh, node->left, 0);
 		combine(sh);
 		_exit(status);

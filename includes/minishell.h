@@ -68,5 +68,6 @@ int		count_env_nodes(t_list *env);
 int		replace_node_kv(t_list *node, const char *kv_pair);
 t_list	*find_key_node(t_list *env, const char *key, size_t key_len);
 int		key_matches(const char *entry, const char *key, size_t key_len);
+void	helper(t_shell_data *sh, int in_fd, int out_fd);
 
 #endif

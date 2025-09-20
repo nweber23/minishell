@@ -49,3 +49,11 @@ int	open_heredoc_fd(t_redir *redir)
 	fd = heredoc_to_fd(redir);
 	return (fd);
 }
+
+void	helper(t_shell_data *sh, int in_fd, int out_fd)
+{
+	cleanup_readline_tty(sh);
+	reset_child_signals();
+	apply_dup_and_close(in_fd, STDIN_FILENO);
+	apply_dup_and_close(out_fd, STDOUT_FILENO);
+}
