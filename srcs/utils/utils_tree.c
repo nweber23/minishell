@@ -19,9 +19,8 @@ static void	free_redirs(t_redir *head)
 	while (head)
 	{
 		next = head->next;
-		if (head->word
-			&& ft_strncmp(head->word, FD_PREFIX, ft_strlen(FD_PREFIX)) == 0
-			&& head->quoted_delim > 0)
+		if (head->word && ft_strncmp(head->word, FD_PREFIX,
+				ft_strlen(FD_PREFIX)) == 0 && head->quoted_delim > 0)
 		{
 			close(head->quoted_delim);
 			head->quoted_delim = 0;
@@ -79,7 +78,10 @@ void	free_tree(t_node *node)
 	if (!node)
 		return ;
 	free_subtrees(node);
-	if (node->type == ND_EXEC && node->cmd)
+	if ((node->type == ND_EXEC || node->type == ND_GROUP) && node->cmd)
+	{
 		free_command_node(node->cmd);
+		node->cmd = NULL;
+	}
 	free(node);
 }

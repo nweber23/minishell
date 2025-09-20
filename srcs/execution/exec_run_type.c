@@ -32,22 +32,49 @@ static int	run_or_node(t_shell_data *sh, t_node *node)
 	return (status);
 }
 
+static int	launch_group(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		if (in_fd != -1)
+			close(in_fd);
+		if (out_fd != -1)
+			close(out_fd);
+		perror("fork");
+		return (1);
+	}
+	if (pid == 0)
+	{
+		cleanup_readline_tty(sh);
+		reset_child_signals();
+		apply_dup_and_close(in_fd, STDIN_FILENO);
+		apply_dup_and_close(out_fd, STDOUT_FILENO);
+		status = run_node(sh, node->left, 0);
+		combine(sh);
+		_exit(status);
+	}
+	if (in_fd != -1)
+		close(in_fd);
+	if (out_fd != -1)
+		close(out_fd);
+	return (wait_and_status(pid));
+}
+
 static int	run_group_node(t_shell_data *sh, t_node *node)
 {
-	t_fdpack	p;
-	int			status;
+	int	in_fd;
+	int	out_fd;
 
+	in_fd = -1;
+	out_fd = -1;
 	if (node->cmd && node->cmd->redirs)
-	{
-		fdpack_init(&p);
-		if (apply_all_redirs(node->cmd, &p.in, &p.out) != 0)
+		if (apply_all_redirs(node->cmd, &in_fd, &out_fd) != 0)
 			return (1);
-		fd_apply_inout(&p);
-		status = run_node(sh, node->left, 0);
-		fd_restore(&p);
-		return (status);
-	}
-	return (run_node(sh, node->left, 0));
+	return (launch_group(sh, node, in_fd, out_fd));
 }
 
 int	run_node(t_shell_data *sh, t_node *node, int is_top)
