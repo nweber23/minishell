@@ -6,13 +6,11 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:39:04 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/16 16:39:29 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/20 10:10:03 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-#define S_EMPTY ((unsigned char)0x1D)
 
 static int	is_name_start(unsigned char c)
 {
@@ -53,7 +51,7 @@ char	*exp_env_value_dup(t_shell_data *sh, const char *line, size_t *i)
 
 	if (line[*i] == '\0')
 		return (ft_strdup("$"));
-	if ((unsigned char)line[*i] == S_EMPTY)
+	if ((unsigned char)line[*i] == (unsigned char)0x1D)
 	{
 		return (ft_strdup(""));
 	}

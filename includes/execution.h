@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/17 17:04:05 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/20 10:20:17 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int					exec_line(t_shell_data *sh, t_node *root);
 int					exec_builtin(t_shell_data *sh, char **argv);
 int					is_builtin(const char *name);
 char				**expand_argv_if_needed(char **argv);
+void				select_inout_from_pair(int pair[2],
+						int *in_fd, int *out_fd);
 
 /* ===== Builtins ===== */
 int					bi_echo(char **argv);
@@ -125,6 +127,7 @@ int					run_exec_node(t_shell_data *sh, t_node *n, int fds[2],
 int					run_pipe(t_shell_data *sh, t_node *n, int is_top);
 int					run_node(t_shell_data *sh, t_node *n, int is_top);
 int					wait_status(pid_t pid);
+int					wait_and_status(pid_t child_pid);
 int					starts_command(t_token *t);
 t_node				*pipeline_syntax_eof(void);
 t_node				*pipeline_syntax_err(void);
@@ -151,6 +154,8 @@ void				child_exec(t_shell_data *sh, t_node *node, int in_fd,
 void				expand_argv_inplace(t_cmd *cmd);
 int					exec_builtin_in_parent(t_shell_data *sh, t_cmd *cmd);
 int					prepare_heredocs_tree(t_node *n, t_shell_data *sh);
+void				child_cleanup_and_exit(t_shell_data *sh,
+						t_node *node, int st);
 
 // utils env helpers (header)
 char				*env_get(t_list *env, const char *key);

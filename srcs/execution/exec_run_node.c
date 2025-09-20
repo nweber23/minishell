@@ -6,85 +6,66 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:33 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/16 14:32:54 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/20 10:22:23 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	wait_and_status(pid_t child_pid)
+static int	should_run_builtin_in_parent(t_node *node, int is_top)
 {
-	int	status;
+	const char	*name;
 
-	if (waitpid(child_pid, &status, 0) == -1)
+	if (is_top == 0 || node == NULL || node->cmd == NULL
+		|| node->cmd->argv == NULL)
+		return (0);
+	name = node->cmd->argv[0];
+	if (name == NULL)
+		return (0);
+	return (is_builtin(name) != 0);
+}
+
+static pid_t	spawn_child(t_shell_data *sh, t_node *node,
+				int in_fd, int out_fd)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		return (-1);
+	if (pid == 0)
 	{
-		perror("waitpid");
-		return (1);
+		child_exec(sh, node, in_fd, out_fd);
+		child_cleanup_and_exit(sh, node, 127);
 	}
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
+	return (pid);
+}
+
+static int	handle_fork_failure(int pair[2])
+{
+	perror("fork");
+	close_pair_if_set(pair);
 	return (1);
-}
-
-void	select_inout_from_pair(int pair[2], int *in_fd, int *out_fd)
-{
-	*in_fd = -1;
-	*out_fd = -1;
-	if (pair == NULL)
-		return ;
-	if (pair[0] != -1)
-		*in_fd = pair[0];
-	if (pair[1] != -1)
-		*out_fd = pair[1];
-}
-
-int	exec_line(t_shell_data *sh, t_node *root)
-{
-	int	code;
-
-	if (root == NULL)
-	{
-		sh->exit_code = 0;
-		return (exit_code(0));
-	}
-	if (prepare_heredocs_tree(root, sh) != 0)
-	{
-		sh->exit_code = 1;
-		return (exit_code(1));
-	}
-	code = run_node(sh, root, 1);
-	sh->exit_code = code;
-	exit_code(code);
-	return (code);
 }
 
 int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)
 {
-	pid_t		child_pid;
-	const char	*cmd_name;
-	int			in_fd;
-	int			out_fd;
+	pid_t	child_pid;
+	int		in_fd;
+	int		out_fd;
 
-	if (node == NULL || node->cmd == NULL)
+	if (node == NULL)
 		return (1);
-	cmd_name = NULL;
-	if (node->cmd->argv != NULL)
-		cmd_name = node->cmd->argv[0];
-	if ((node->cmd->argv == NULL || node->cmd->argv[0] == NULL) && is_top == 0)
-		return (select_inout_from_pair(pipe_fds, &in_fd, &out_fd),
-			child_exec(sh, node, in_fd, out_fd), 0);
-	if (is_top != 0 && cmd_name != NULL && is_builtin(cmd_name) != 0)
-		return (exec_builtin_in_parent(sh, node->cmd));
+	if (node->type == ND_PIPE)
+		return (run_pipe(sh, node, 0));
+	if (node->cmd == NULL)
+		return (1);
 	select_inout_from_pair(pipe_fds, &in_fd, &out_fd);
-	child_pid = fork();
+	if (should_run_builtin_in_parent(node, is_top))
+		return (exec_builtin_in_parent(sh, node->cmd));
+	child_pid = spawn_child(sh, node, in_fd, out_fd);
 	if (child_pid == -1)
-	{
-		perror("fork");
-		return (1);
-	}
-	if (child_pid == 0)
-		child_exec(sh, node, in_fd, out_fd);
-	return (close_pair_if_set(pipe_fds), wait_and_status(child_pid));
+		return (handle_fork_failure(pipe_fds));
+	close_pair_if_set(pipe_fds);
+	return (wait_and_status(child_pid));
 }
