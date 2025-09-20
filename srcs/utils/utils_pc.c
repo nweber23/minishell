@@ -43,17 +43,20 @@ void	select_inout_from_pair(int pair[2], int *in_fd, int *out_fd)
 int	exec_line(t_shell_data *sh, t_node *root)
 {
 	int	code;
+	int	ec;
 
 	if (root == NULL)
 	{
+		ec = exit_code(-1);
+		if (ec != 0)
+			return (sh->exit_code = ec, ec);
+		if (sh->tokens != NULL && sh->trimmed && sh->trimmed[0] != '\0')
+			return (sh->exit_code = 2, exit_code(2));
 		sh->exit_code = 0;
 		return (exit_code(0));
 	}
 	if (prepare_heredocs_tree(root, sh) != 0)
-	{
-		sh->exit_code = 1;
-		return (exit_code(1));
-	}
+		return (sh->exit_code = 1, exit_code(1));
 	code = run_node(sh, root, 1);
 	sh->exit_code = code;
 	exit_code(code);

@@ -75,7 +75,6 @@ static pid_t	spawn_right(t_shell_data *sh, t_node *node, int pipe_fds[2])
 	return (pid);
 }
 
-
 int	run_pipe(t_shell_data *sh, t_node *node, int is_top)
 {
 	int		pipe_fds[2];

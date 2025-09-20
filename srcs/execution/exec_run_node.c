@@ -29,11 +29,7 @@ int	run_exec_node(t_shell_data *sh, t_node *node, int pipe_fds[2], int is_top)
 		return (exec_builtin_in_parent(sh, node->cmd));
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("fork");
-		close_pair_if_set(pipe_fds);
-		return (1);
-	}
+		return (perror("fork"), close_pair_if_set(pipe_fds), 1);
 	if (pid == 0)
 	{
 		child_exec(sh, node, in_fd, out_fd);

@@ -32,8 +32,17 @@ static int	handle_validate_or_eof(t_shell_data *shell, int *code, int *recurse)
 	if (shell->input && validate_input(shell))
 	{
 		free_shell(shell);
-		*recurse = 1;
-		return (1);
+		if (is_interactive())
+		{
+			*recurse = 1;
+			return (1);
+		}
+		else
+		{
+			*recurse = 0;
+			*code = 2;
+			return (1);
+		}
 	}
 	if (shell->input == NULL)
 	{

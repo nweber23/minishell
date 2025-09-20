@@ -79,4 +79,3 @@ void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 	child_setup_fds(node, &fd_pack, in_fd, out_fd);
 	child_exec_cmd(sh, node);
 }
-
