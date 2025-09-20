@@ -66,15 +66,15 @@ void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 	if (node->type == ND_PIPE)
 	{
 		if (in_fd >= 0 && dup2(in_fd, STDIN_FILENO) == -1)
-			_exit(1);
+			child_cleanup_and_exit(sh, node, 1);
 		if (out_fd >= 0 && dup2(out_fd, STDOUT_FILENO) == -1)
-			_exit(1);
+			child_cleanup_and_exit(sh, node, 1);
 		if (in_fd >= 0)
 			close(in_fd);
 		if (out_fd >= 0)
 			close(out_fd);
 		status = run_pipe(sh, node, 0);
-		_exit(status);
+		child_cleanup_and_exit(sh, node, status);
 	}
 	child_setup_fds(node, &fd_pack, in_fd, out_fd);
 	child_exec_cmd(sh, node);
