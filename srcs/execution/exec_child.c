@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 18:55:54 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/15 19:10:40 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/20 14:01:34 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,24 @@ static void	child_exec_cmd(t_shell_data *sh, t_node *node)
 void	child_exec(t_shell_data *sh, t_node *node, int in_fd, int out_fd)
 {
 	t_fdpack	fd_pack;
+	int			status;
 
 	cleanup_readline_tty(sh);
 	reset_child_signals();
+	if (node->type == ND_PIPE)
+	{
+		if (in_fd >= 0 && dup2(in_fd, STDIN_FILENO) == -1)
+			_exit(1);
+		if (out_fd >= 0 && dup2(out_fd, STDOUT_FILENO) == -1)
+			_exit(1);
+		if (in_fd >= 0)
+			close(in_fd);
+		if (out_fd >= 0)
+			close(out_fd);
+		status = run_pipe(sh, node, 0);
+		_exit(status);
+	}
 	child_setup_fds(node, &fd_pack, in_fd, out_fd);
 	child_exec_cmd(sh, node);
 }
+
