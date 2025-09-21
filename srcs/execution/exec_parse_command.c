@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_parse_command.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:19 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 20:42:31 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/21 21:33:46 by nweber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,6 @@ t_node	*parse_command(t_shell_data *sh, t_tokarr *ta)
 	if (!node->cmd)
 		return (free(node), NULL);
 	if (!parse_command_loop(sh, ta, node->cmd))
-		return (free(node->cmd), free(node), NULL);
+		return (free_command_node(node->cmd), free(node), NULL);
 	return (node);
 }
