@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin_dispatch.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:05 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/11 19:08:30 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/22 12:34:07 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+int	bi_dot(char **argv)
+{
+	if (!argv[0])
+	{
+		ft_putendl_fd("minishell: .: filename argument required", 2);
+		return (2);
+	}
+	if (opendir(argv[0]) != NULL)
+	{
+		ft_putendl_fd("minishell: .: is a directory", 2);
+		return (126);
+	}
+	if (access(argv[0], F_OK) != 0)
+	{
+		perror("minishell: .");
+		return (127);
+	}
+	ft_putendl_fd("minishell: .: not implemented", 2);
+	return (2);
+}
 
 int	is_builtin(const char *name)
 {
@@ -53,5 +74,7 @@ int	exec_builtin(t_shell_data *sh, char **argv)
 		return (bi_unset(sh, argv + 1));
 	if (ft_strcmp(argv[0], "exit") == 0)
 		return (bi_exit(sh, argv + 1));
+	if (ft_strcmp(argv[0], ".") == 0)
+		return (bi_dot(argv + 1));
 	return (1);
 }
