@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 21:15:58 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/15 12:23:11 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/22 10:59:40 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,46 @@ int	hd_loop_tty(t_shell_data *sh, t_redir *rd, int wfd)
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdin);
 	return (rc);
+}
+
+void	hd_child_proc(t_shell_data *sh, t_redir *r, int *pfd)
+{
+	int	st;
+
+	reset_child_signals();
+	signal(SIGQUIT, SIG_IGN);
+	close(pfd[0]);
+	if (isatty(STDIN_FILENO))
+		st = hd_loop_tty(sh, r, pfd[1]);
+	else
+		st = hd_loop(sh, r, pfd[1]);
+	close(pfd[1]);
+	exit(st != 0);
+}
+
+int	hd_parent_proc(pid_t pid, int *pfd)
+{
+	int	st;
+
+	close(pfd[1]);
+	signal(SIGINT, SIG_IGN);
+	if (waitpid(pid, &st, 0) < 0)
+	{
+		close(pfd[0]);
+		init_signals();
+		return (-1);
+	}
+	if (is_interactive())
+		interavtive_signals();
+	else
+		init_signals();
+	if ((WIFSIGNALED(st) && WTERMSIG(st) == SIGINT)
+		|| (WIFEXITED(st) && WEXITSTATUS(st) != 0))
+	{
+		write(1, "\n", 1);
+		exit_code(130);
+		close(pfd[0]);
+		return (-1);
+	}
+	return (pfd[0]);
 }

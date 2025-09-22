@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nweber <nweber@student.42Heilbronn.de>     +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:14 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/15 11:56:10 by nweber           ###   ########.fr       */
+/*   Updated: 2025/09/22 10:59:14 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,26 +79,20 @@ int	hd_loop(t_shell_data *sh, t_redir *rd, int wfd)
 int	heredoc_to_fd(t_redir *r)
 {
 	int				pfd[2];
-	int				status;
+	pid_t			pid;
 	t_shell_data	*sh;
 
 	sh = global_shell(NULL, 1);
 	if (hd_open_pipe(pfd) != 0)
 		return (-1);
-	trap_heredoc();
-	if (isatty(STDIN_FILENO))
-		status = hd_loop_tty(sh, r, pfd[1]);
-	else
-		status = hd_loop(sh, r, pfd[1]);
-	close(pfd[1]);
-	if (is_interactive())
-		interavtive_signals();
-	else
-		init_signals();
-	if (status != 0)
+	pid = fork();
+	if (pid < 0)
 	{
 		close(pfd[0]);
+		close(pfd[1]);
 		return (-1);
 	}
-	return (pfd[0]);
+	if (pid == 0)
+		hd_child_proc(sh, r, pfd);
+	return (hd_parent_proc(pid, pfd));
 }

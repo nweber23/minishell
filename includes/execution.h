@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 10:55:00 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/20 10:20:17 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/22 11:01:54 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,4 +197,7 @@ int					open_heredoc_fd(t_redir *redir);
 int					hd_open_pipe(int pfd[2]);
 int					hd_loop(t_shell_data *sh, t_redir *rd, int wfd);
 int					hd_loop_tty(t_shell_data *sh, t_redir *rd, int wfd);
+void				hd_child_proc(t_shell_data *sh, t_redir *r, int *pfd);
+int					hd_parent_proc(pid_t pid, int *pfd);
+
 #endif
