@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 11:00:14 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/16 16:50:29 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/22 11:20:34 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,25 @@ static void	mask_single_quote_dollars(char *s)
 	}
 }
 
-static void	append_and_free(t_shell_data *shell, char **value, char *joined)
+static void	append_and_free(t_shell_data *sh, char **val, char *joined)
 {
 	char	*old;
+	char	*tmp;
 
-	old = *value;
-	*value = ft_strjoin(old, joined);
+	old = *val;
+	if (old && *old)
+	{
+		tmp = ft_strjoin(old, "\x1E");
+		if (!tmp)
+			error_malloc("join_quotes", sh);
+		free(old);
+		old = tmp;
+	}
+	*val = ft_strjoin(old, joined);
 	free(joined);
 	free(old);
-	if (!*value)
-		error_malloc("join_quotes", shell);
+	if (!*val)
+		error_malloc("join_quotes", sh);
 }
 
 int	join_quotes(t_shell_data *shell, char **value, char *str, int i)
