@@ -51,8 +51,7 @@ void	hd_child_proc(t_shell_data *sh, t_redir *r, int *pfd)
 {
 	int	st;
 
-	reset_child_signals();
-	signal(SIGQUIT, SIG_IGN);
+	trap_heredoc();
 	close(pfd[0]);
 	if (isatty(STDIN_FILENO))
 		st = hd_loop_tty(sh, r, pfd[1]);
@@ -79,10 +78,9 @@ int	hd_parent_proc(pid_t pid, int *pfd)
 		interavtive_signals();
 	else
 		init_signals();
-	if ((WIFSIGNALED(st) && WTERMSIG(st) == SIGINT)
-		|| (WIFEXITED(st) && WEXITSTATUS(st) != 0))
+	if ((WIFSIGNALED(st) && WTERMSIG(st) == SIGINT) || (WIFEXITED(st)
+			&& WEXITSTATUS(st) != 0))
 	{
-		write(1, "\n", 1);
 		exit_code(130);
 		close(pfd[0]);
 		return (-1);

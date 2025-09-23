@@ -32,11 +32,10 @@ void	break_heredoc(int sig)
 		sh = global_shell(NULL, 1);
 		if (sh)
 			sh->exit_code = 130;
+		exit_code(130);
 		if (sh && sh->fd > 0)
 			close(sh->fd);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
+		close(STDIN_FILENO);
 	}
 }
 

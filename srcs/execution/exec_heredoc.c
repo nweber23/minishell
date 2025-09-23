@@ -60,18 +60,18 @@ int	hd_loop(t_shell_data *sh, t_redir *rd, int wfd)
 	{
 		line = readline("> ");
 		if (line == NULL)
-			return (0);
-		if (hd_is_delim(line, rd->word) == 1)
 		{
-			free(line);
+			if (exit_code(-1) == 130 || (sh && sh->exit_code == 130))
+				return (-1);
 			return (0);
 		}
+		if (exit_code(-1) == 130 || (sh && sh->exit_code == 130))
+			return (free(line), -1);
+		if (hd_is_delim(line, rd->word) == 1)
+			return (free(line), 0);
 		line = hd_expand_if_needed(sh, line, rd->quoted_delim);
 		if (hd_write_line(wfd, line) != 0)
-		{
-			free(line);
-			return (-1);
-		}
+			return (free(line), -1);
 		free(line);
 	}
 }
