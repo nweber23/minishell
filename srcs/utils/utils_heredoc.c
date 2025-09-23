@@ -59,6 +59,7 @@ void	hd_child_proc(t_shell_data *sh, t_redir *r, int *pfd)
 	else
 		st = hd_loop(sh, r, pfd[1]);
 	close(pfd[1]);
+	combine(sh);
 	exit(st != 0);
 }
 
