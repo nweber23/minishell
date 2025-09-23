@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 12:01:05 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/22 12:34:07 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/23 11:16:33 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	bi_dot(char **argv)
 	if (!argv[0])
 	{
 		ft_putendl_fd("minishell: .: filename argument required", 2);
+		ft_putendl_fd(".: usage: . filename [arguments]", 2);
 		return (2);
 	}
 	if (opendir(argv[0]) != NULL)
@@ -50,6 +51,8 @@ int	is_builtin(const char *name)
 	if (ft_strcmp(name, "unset") == 0)
 		return (1);
 	if (ft_strcmp(name, "exit") == 0)
+		return (1);
+	if (ft_strcmp(name, ".") == 0)
 		return (1);
 	return (0);
 }
