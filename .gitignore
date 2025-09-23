@@ -9,3 +9,6 @@ sub.sub
 test.sh
 tmp_*
 $*
+USER
+
+out0
