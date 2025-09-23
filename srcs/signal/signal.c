@@ -35,6 +35,8 @@ void	handle_sigint(int sig)
 			rl_replace_line("", 0);
 			rl_redisplay();
 		}
+		else
+			write(1, "\n", 1);
 		exit_code(130);
 		{
 			sh = global_shell(NULL, 1);
