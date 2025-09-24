@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_state.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yyudi <yyudi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 19:08:44 by nweber            #+#    #+#             */
-/*   Updated: 2025/09/08 19:52:57 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/23 11:55:35 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ int	words_handling(t_shell_data *shell, char *str, int i)
 	token = alloc_token_or_exit(value, shell);
 	start = i;
 	end = advance_word_end(shell, str, i, &value);
+	if (str[start] == '$' && str[start + 1] == '"' && str[end - 1] == '"')
+	{
+		free(value);
+		value = ft_substr(str, start + 2, end - start - 3);
+	}
 	token->value = value;
 	token->state = detect_state(str, start, end);
 	i = append_token_and_skip(shell, token, str, end);

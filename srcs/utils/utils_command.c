@@ -6,7 +6,7 @@
 /*   By: yyudi <yyudi@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 20:39:42 by yyudi             #+#    #+#             */
-/*   Updated: 2025/09/12 10:24:07 by yyudi            ###   ########.fr       */
+/*   Updated: 2025/09/23 12:35:33 by yyudi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,17 @@ char	*expand_token_value(t_shell_data *sh, t_token *tok)
 {
 	char	*dup;
 	char	*expanded;
+	char	*no_dollar;
 
 	dup = ft_strdup(tok->value);
 	if (!dup)
 		return (NULL);
+	if (dup[0] == '$' && dup[1] == '"' && dup[ft_strlen(dup) - 1] == '"')
+	{
+		no_dollar = ft_substr(dup, 2, ft_strlen(dup) - 3);
+		free(dup);
+		return (no_dollar);
+	}
 	if (tok->state == SINGLE_Q)
 	{
 		restore_masked_dollars(dup);
@@ -97,4 +104,21 @@ int	append_word_simple(char ***argv, char *word_copy)
 		free(*argv);
 	*argv = new_vector;
 	return (1);
+}
+
+void	append_word_with_split(char ***argv, char *value, int quoted)
+{
+	char	**split;
+	int		i;
+
+	if (quoted)
+	{
+		append_word_simple(argv, value);
+		return ;
+	}
+	split = ft_split(value, ' ');
+	for (i = 0; split && split[i]; i++)
+		append_word_simple(argv, ft_strdup(split[i]));
+	ft_array_free(split);
+	free(value);
 }
