@@ -105,20 +105,3 @@ int	append_word_simple(char ***argv, char *word_copy)
 	*argv = new_vector;
 	return (1);
 }
-
-void	append_word_with_split(char ***argv, char *value, int quoted)
-{
-	char	**split;
-	int		i;
-
-	if (quoted)
-	{
-		append_word_simple(argv, value);
-		return ;
-	}
-	split = ft_split(value, ' ');
-	for (i = 0; split && split[i]; i++)
-		append_word_simple(argv, ft_strdup(split[i]));
-	ft_array_free(split);
-	free(value);
-}
